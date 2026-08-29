@@ -1,0 +1,72 @@
+---
+import { t, type Lang } from "../lib/i18n";
+import { icons } from "../lib/icons";
+
+interface Props {
+  lang?: Lang;
+  phone?: string;
+  whatsapp?: string;
+  requestHref?: string;
+}
+
+const {
+  lang = "fr",
+  phone = "+212600000000",
+  whatsapp = "+212600000000",
+  requestHref = `/${lang}/#request`,
+} = Astro.props;
+
+const waDigits = whatsapp.replace(/[^\d]/g, "");
+const waMsg = encodeURIComponent(t(lang, "whatsapp.prefix") + ".");
+---
+
+<div class="mobile-bar">
+  <a href={`https://wa.me/${waDigits}?text=${waMsg}`} target="_blank" rel="noopener" class="bar-btn bar-wa">
+    <span set:html={icons.whatsapp}></span>
+    <span>WhatsApp</span>
+  </a>
+  <a href={`tel:${phone}`} class="bar-btn bar-call">
+    <span set:html={icons.phone}></span>
+    <span>{t(lang, "mobile.call")}</span>
+  </a>
+  <a href={requestHref} class="bar-btn bar-request">
+    <span set:html={icons.send}></span>
+    <span>{t(lang, "mobile.request")}</span>
+  </a>
+</div>
+
+<style>
+  .mobile-bar {
+    display: none;
+    position: fixed;
+    inset-inline: 0;
+    bottom: 0;
+    z-index: 45;
+    background: var(--color-surface);
+    border-block-start: 1px solid var(--color-line);
+    padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
+    gap: 8px;
+    box-shadow: 0 -4px 20px rgba(15, 23, 42, 0.06);
+  }
+  .bar-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 10px;
+    border-radius: 14px;
+    font-weight: 600;
+    font-size: 0.875rem;
+    transition: transform .15s;
+  }
+  .bar-btn:active { transform: scale(0.97); }
+  .bar-btn :global(svg) { width: 18px; height: 18px; }
+  .bar-wa { background: #25D366; color: #fff; }
+  .bar-call { background: rgba(11, 94, 107, 0.08); color: var(--color-primary); }
+  .bar-request { background: var(--color-accent); color: #fff; }
+
+  @media (max-width: 768px) {
+    .mobile-bar { display: flex; }
+  }
+</style>

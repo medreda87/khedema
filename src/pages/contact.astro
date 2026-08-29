@@ -1,0 +1,715 @@
+---
+// src/pages/[lang]/contact.astro
+import Layout from "../layouts/Layout.astro";
+import { t } from "../../../lib/i18n";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+
+export interface Props {
+  lang?: "fr" | "ar";
+  currentPath?: string;
+}
+
+const { lang = "fr", currentPath = "/contact" } = Astro.props;
+
+const baseUrl = `/${lang}`;
+
+// ============================================================
+// ICON SYSTEM
+// ============================================================
+function icon(name: string, size: number = 24, className: string = ""): string {
+  const icons: Record<string, string> = {
+    phone: `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>`,
+    mail: `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>`,
+    "map-pin": `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>`,
+    "check-circle": `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>`,
+    "arrow-right": `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>`,
+  };
+  return icons[name] || "";
+}
+
+// ============================================================
+// MULTILINGUAL CONTENT
+// ============================================================
+const contactContent: Record<string, any> = {
+  fr: {
+    badge: "Contact",
+    title: "Parlons de votre besoin",
+    desc: "Une question ou besoin d'un professionnel ? Envoyez-nous votre demande et notre équipe vous répondra rapidement.",
+    formTitle: "Envoyez-nous votre demande",
+    formSubtitle: "Remplissez le formulaire et expliquez-nous ce dont vous avez besoin.",
+    name: "Nom complet",
+    namePlaceholder: "Votre nom complet",
+    phone: "Téléphone",
+    phonePlaceholder: "06 XX XX XX XX",
+    email: "Email",
+    emailPlaceholder: "votre@email.com",
+    service: "Service souhaité",
+    serviceOptions: ["Plomberie", "Électricité", "Peinture", "Carrelage", "Climatisation", "Menuiserie", "Autre"],
+    message: "Votre message",
+    messagePlaceholder: "Décrivez votre besoin ou votre problème...",
+    submit: "Envoyer ma demande",
+    success: "Votre demande a bien été envoyée !",
+    successDesc: "Nous reviendrons vers vous rapidement.",
+    error: "Une erreur est survenue. Veuillez réessayer.",
+    infoTitle: "Besoin de nous contacter ?",
+    infoDesc: "Notre équipe est disponible pour répondre à vos questions et vous accompagner dans votre recherche d'un professionnel à Tanger.",
+    phoneLabel: "Téléphone",
+    emailLabel: "Email",
+    locationLabel: "Zone d'intervention",
+    location: "Tanger, Maroc",
+    trust: "Une réponse rapide et un accompagnement simple pour votre demande.",
+  },
+  ar: {
+    badge: "اتصل بنا",
+    title: "لنتحدث عن احتياجاتك",
+    desc: "سؤال أو حاجة إلى حرفي؟ أرسل طلبك وسيرد عليك فريقنا في أقرب وقت.",
+    formTitle: "أرسل طلبك إلينا",
+    formSubtitle: "املأ النموذج واشرح لنا ما تحتاجه.",
+    name: "الاسم الكامل",
+    namePlaceholder: "اسمك الكامل",
+    phone: "رقم الهاتف",
+    phonePlaceholder: "06 XX XX XX XX",
+    email: "البريد الإلكتروني",
+    emailPlaceholder: "votre@email.com",
+    service: "الخدمة المطلوبة",
+    serviceOptions: ["السباكة", "الكهرباء", "الدهان", "التبليط", "التكييف", "النجارة", "أخرى"],
+    message: "رسالتك",
+    messagePlaceholder: "اشرح احتياجاتك أو مشكلتك...",
+    submit: "إرسال طلبي",
+    success: "تم إرسال طلبك بنجاح !",
+    successDesc: "سنعود إليك في أقرب وقت.",
+    error: "حدث خطأ. يرجى المحاولة مرة أخرى.",
+    infoTitle: "هل تحتاج للاتصال بنا؟",
+    infoDesc: "فريقنا متاح للإجابة على أسئلتك ومرافقتك في بحثك عن حرفي في طنجة.",
+    phoneLabel: "الهاتف",
+    emailLabel: "البريد الإلكتروني",
+    locationLabel: "منطقة التدخل",
+    location: "طنجة، المغرب",
+    trust: "رد سريع ومرافقة بسيطة لطلبك.",
+  },
+  en: {
+    badge: "Contact",
+    title: "Let's talk about your needs",
+    desc: "A question or need a professional? Send us your request and our team will get back to you quickly.",
+    formTitle: "Send us your request",
+    formSubtitle: "Fill out the form and tell us what you need.",
+    name: "Full name",
+    namePlaceholder: "Your full name",
+    phone: "Phone number",
+    phonePlaceholder: "06 XX XX XX XX",
+    email: "Email",
+    emailPlaceholder: "your@email.com",
+    service: "Service needed",
+    serviceOptions: ["Plumbing", "Electricity", "Painting", "Tiling", "Air conditioning", "Carpentry", "Other"],
+    message: "Your message",
+    messagePlaceholder: "Describe your needs or issue...",
+    submit: "Send my request",
+    success: "Your request has been sent successfully!",
+    successDesc: "We'll get back to you shortly.",
+    error: "An error occurred. Please try again.",
+    infoTitle: "Need to contact us?",
+    infoDesc: "Our team is available to answer your questions and help you find a professional in Tangier.",
+    phoneLabel: "Phone",
+    emailLabel: "Email",
+    locationLabel: "Service area",
+    location: "Tangier, Morocco",
+    trust: "Fast response and simple support for your request.",
+  },
+};
+
+const content = contactContent[lang] || contactContent.fr;
+const isRTL = lang === "ar";
+---
+
+<Layout lang={lang} currentPath={currentPath}>
+  <Header lang={lang} />
+
+  
+  <!-- ============================================================
+  MAIN — Form + Info
+  ============================================================ -->
+  <section class="contact-main" id="contact">
+    <div class="container">
+      <div class="contact-grid">
+        <!-- LEFT: Form -->
+        <div class="contact-form-wrapper">
+          <div class="form-card">
+            <h3 class="form-title">{content.formTitle}</h3>
+            <p class="form-subtitle">{content.formSubtitle}</p>
+
+            <form id="contactForm" data-state="idle">
+              <div class="form-group">
+                <label for="name">{content.name}</label>
+                <input type="text" id="name" placeholder={content.namePlaceholder} required />
+              </div>
+
+              <div class="form-group">
+                <label for="phone">{content.phone}</label>
+                <input type="tel" id="phone" placeholder={content.phonePlaceholder} required />
+              </div>
+
+              <div class="form-group">
+                <label for="email">{content.email}</label>
+                <input type="email" id="email" placeholder={content.emailPlaceholder} required />
+              </div>
+
+              <div class="form-group">
+                <label for="service">{content.service}</label>
+                <select id="service" required>
+                  <option value="" disabled selected>—</option>
+                  {content.serviceOptions.map((opt: string) => (
+                    <option value={opt}>{opt}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="message">{content.message}</label>
+                <textarea id="message" rows="4" placeholder={content.messagePlaceholder} required></textarea>
+              </div>
+
+              <button type="submit" class="btn btn-primary btn-submit">
+                <span class="submit-text">{content.submit}</span>
+                <span class="submit-loading" style="display:none;">…</span>
+                <span set:html={icon("arrow-right", 18)}></span>
+              </button>
+
+              <div class="form-state form-success" style="display:none;">
+                <span set:html={icon("check-circle", 28)}></span>
+                <strong>{content.success}</strong>
+                <p>{content.successDesc}</p>
+              </div>
+              <div class="form-state form-error" style="display:none;">
+                <strong>⚠️ {content.error}</strong>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- RIGHT: Contact Info -->
+        <div class="contact-info">
+          <span class="eyebrow">{content.badge}</span>
+          <h2 class="info-title">{content.infoTitle}</h2>
+          <p class="info-desc">{content.infoDesc}</p>
+
+          <div class="info-items">
+            <div class="info-item">
+              <span class="info-icon" set:html={icon("phone", 20)}></span>
+              <div>
+                <span class="info-label">{content.phoneLabel}</span>
+                <a href="tel:+2127168854" class="info-value">+212 7 16 88 54</a>
+              </div>
+            </div>
+
+            <div class="info-item">
+              <span class="info-icon" set:html={icon("mail", 20)}></span>
+              <div>
+                <span class="info-label">{content.emailLabel}</span>
+                <a href="mailto:contact@myhandy.ma" class="info-value">contact@myhandy.ma</a>
+              </div>
+            </div>
+
+            <div class="info-item">
+              <span class="info-icon" set:html={icon("map-pin", 20)}></span>
+              <div>
+                <span class="info-label">{content.locationLabel}</span>
+                <span class="info-value">{content.location}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="trust-box">
+            <span set:html={icon("check-circle", 18, "trust-icon")}></span>
+            <span>{content.trust}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Footer lang={lang} />
+
+  <!-- ============================================================
+  FORM SCRIPT
+  ============================================================ -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const form = document.getElementById("contactForm");
+      const submitBtn = form.querySelector(".btn-submit");
+      const submitText = submitBtn.querySelector(".submit-text");
+      const submitLoading = submitBtn.querySelector(".submit-loading");
+      const successState = form.querySelector(".form-success");
+      const errorState = form.querySelector(".form-error");
+      const arrowIcon = submitBtn.querySelector("svg");
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        successState.style.display = "none";
+        errorState.style.display = "none";
+        successState.classList.remove("visible");
+        errorState.classList.remove("visible");
+
+        submitText.style.display = "none";
+        submitLoading.style.display = "inline";
+        if (arrowIcon) arrowIcon.style.display = "none";
+        submitBtn.disabled = true;
+
+        try {
+          await new Promise((resolve, reject) => {
+            setTimeout(() => {
+              Math.random() < 0.9 ? resolve(true) : reject(new Error());
+            }, 1500);
+          });
+
+          form.dataset.state = "success";
+          successState.style.display = "block";
+          requestAnimationFrame(() => successState.classList.add("visible"));
+          form.reset();
+        } catch {
+          form.dataset.state = "error";
+          errorState.style.display = "block";
+          requestAnimationFrame(() => errorState.classList.add("visible"));
+        } finally {
+          submitText.style.display = "inline";
+          submitLoading.style.display = "none";
+          if (arrowIcon) arrowIcon.style.display = "inline";
+          submitBtn.disabled = false;
+          form.dataset.state = "idle";
+        }
+      });
+    });
+  </script>
+</Layout>
+
+<style>
+  /* ==============================================================
+     FONT & ROOT
+     ============================================================== */
+  @import url('https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..800&display=swap');
+
+  :root {
+    --color-primary: #2563eb;
+    --color-primary-dark: #1d4ed8;
+    --color-primary-light: #eff6ff;
+    --color-navy: #0f172a;
+    --color-text: #475569;
+    --color-slate: #64748b;
+    --color-bg: #f8fafc;
+    --color-white: #ffffff;
+    --radius-card: 22px;
+    --shadow-card: 0 4px 24px rgba(15, 23, 42, 0.06);
+    --shadow-hover: 0 12px 40px rgba(15, 23, 42, 0.10);
+    --transition: 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  }
+
+  body {
+    font-family: inherit;
+  }
+
+  .container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 28px;
+  }
+
+  /* ---- Eyebrow ---- */
+  .eyebrow {
+    display: inline-block;
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-primary);
+    background: var(--color-primary-light);
+    padding: 4px 18px;
+    border-radius: 40px;
+    margin-bottom: 14px;
+  }
+
+  /* ---- Buttons ---- */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 14px 32px;
+    border-radius: 60px;
+    font-weight: 600;
+    font-size: 16px;
+    text-decoration: none;
+    transition: all var(--transition);
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    line-height: 1.2;
+  }
+  .btn-primary {
+    background: var(--color-primary);
+    color: var(--color-white);
+    box-shadow: 0 4px 20px rgba(37, 99, 235, 0.3);
+  }
+  .btn-primary:hover {
+    background: var(--color-primary-dark);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 32px rgba(37, 99, 235, 0.4);
+  }
+  .btn-primary svg {
+    transition: transform 0.25s ease;
+  }
+  .btn-primary:hover svg {
+    transform: translateX(4px);
+  }
+
+  /* ==============================================================
+     INTRO
+     ============================================================== */
+  .contact-intro {
+    padding: 120px 0 60px;
+    background: var(--color-bg);
+    text-align: center;
+    margin-top: var(--header-h, 76px);
+    border-bottom: 1px solid rgba(15, 23, 42, 0.04);
+  }
+  .intro-content {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  .intro-title {
+    font-size: 36px;
+    font-weight: 800;
+    color: var(--color-navy);
+    margin: 0 0 12px;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+  }
+  .intro-desc {
+    font-size: 17px;
+    line-height: 1.7;
+    color: var(--color-text);
+    margin: 0;
+  }
+
+  /* ==============================================================
+     MAIN — Form + Info
+     ============================================================== */
+  .contact-main {
+    padding: 100px 100px;
+    background: var(--color-white);
+  }
+
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 48px;
+    align-items: start;
+  }
+
+  /* --- Form --- */
+  .form-card {
+    background: var(--color-white);
+    border-radius: var(--radius-card);
+    padding: 36px 32px 40px;
+    border: 1px solid rgba(15, 23, 42, 0.06);
+    box-shadow: var(--shadow-card);
+  }
+  .form-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--color-navy);
+    margin: 0 0 4px;
+  }
+  .form-subtitle {
+    font-size: 15px;
+    color: var(--color-text);
+    margin: 0 0 28px;
+    line-height: 1.6;
+  }
+
+  .form-group {
+    margin-bottom: 18px;
+  }
+  .form-group label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--color-navy);
+    margin-bottom: 5px;
+  }
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1.5px solid rgba(15, 23, 42, 0.1);
+    border-radius: 12px;
+    font-size: 15px;
+    font-family: inherit;
+    color: var(--color-navy);
+    background: var(--color-white);
+    transition: all var(--transition);
+    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+  }
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.08);
+  }
+  .form-group input::placeholder,
+  .form-group textarea::placeholder {
+    color: var(--color-slate);
+    font-size: 14px;
+  }
+  .form-group textarea {
+    resize: vertical;
+    min-height: 100px;
+  }
+  .form-group select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23475569' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+    padding-right: 40px;
+    cursor: pointer;
+  }
+
+  .btn-submit {
+    width: 100%;
+    margin-top: 4px;
+    justify-content: center;
+  }
+
+  /* Form states */
+  .form-state {
+    margin-top: 16px;
+    padding: 16px 20px;
+    border-radius: 12px;
+    text-align: center;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+  .form-state.visible {
+    opacity: 1;
+  }
+  .form-success {
+    background: #ecfdf5;
+    border: 1px solid #a7f3d0;
+    color: #065f46;
+  }
+  .form-success svg {
+    color: #059669;
+    margin-bottom: 6px;
+  }
+  .form-success strong {
+    display: block;
+    font-size: 17px;
+  }
+  .form-success p {
+    margin: 2px 0 0;
+    font-size: 14px;
+    opacity: 0.8;
+  }
+  .form-error {
+    background: #fef2f2;
+    border: 1px solid #fca5a5;
+    color: #991b1b;
+  }
+
+  /* --- Contact Info --- */
+  .contact-info {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding-top: 8px;
+  }
+  .info-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--color-navy);
+    margin: 0;
+    line-height: 1.15;
+  }
+  .info-desc {
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--color-text);
+    margin: 0;
+  }
+
+  .info-items {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin: 4px 0 8px;
+  }
+  .info-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 20px;
+    background: var(--color-bg);
+    border-radius: 16px;
+    border: 1px solid rgba(15, 23, 42, 0.04);
+    transition: all var(--transition);
+  }
+  .info-item:hover {
+    border-color: var(--color-primary);
+    box-shadow: var(--shadow-card);
+    transform: translateY(-2px);
+  }
+  .info-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: var(--color-primary-light);
+    border-radius: 12px;
+    color: var(--color-primary);
+    flex-shrink: 0;
+  }
+  .info-label {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--color-slate);
+    display: block;
+  }
+  .info-value {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--color-navy);
+    text-decoration: none;
+    display: block;
+    transition: color 0.2s ease;
+  }
+  .info-value:hover {
+    color: var(--color-primary);
+  }
+
+  /* Trust box */
+  .trust-box {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+    background: var(--color-primary-light);
+    border-radius: 16px;
+    border: 1px solid rgba(37, 99, 235, 0.08);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--color-navy);
+    line-height: 1.5;
+  }
+  .trust-icon {
+    color: var(--color-primary);
+    flex-shrink: 0;
+    stroke-width: 2.5;
+  }
+
+  /* ==============================================================
+     RESPONSIVE
+     ============================================================== */
+  @media (max-width: 1024px) {
+    .contact-grid {
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
+    .contact-info {
+      order: -1;
+    }
+    .info-title {
+      font-size: 24px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .container {
+      padding: 0 20px;
+    }
+    .contact-intro {
+      padding: 100px 0 40px;
+    }
+    .intro-title {
+      font-size: 28px;
+    }
+    .contact-main {
+      padding: 40px 0 72px;
+    }
+    .form-card {
+      padding: 28px 20px 32px;
+    }
+    .form-title {
+      font-size: 20px;
+    }
+    .btn-submit {
+      width: 100%;
+    }
+    .info-item {
+      padding: 14px 16px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .intro-title {
+      font-size: 24px;
+    }
+    .intro-desc {
+      font-size: 15px;
+    }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      font-size: 14px;
+      padding: 10px 14px;
+    }
+    .info-title {
+      font-size: 20px;
+    }
+  }
+
+  /* ==============================================================
+     RTL
+     ============================================================== */
+  [dir="rtl"] .btn-primary svg {
+    transform: rotate(180deg);
+  }
+  [dir="rtl"] .btn-primary:hover svg {
+    transform: rotate(180deg) translateX(-4px);
+  }
+  [dir="rtl"] .form-group select {
+    background-position: left 16px center;
+    padding-right: 16px;
+    padding-left: 40px;
+  }
+  [dir="rtl"] .info-item {
+    flex-direction: row-reverse;
+  }
+  [dir="rtl"] .trust-box {
+    flex-direction: row-reverse;
+  }
+
+  /* ==============================================================
+     REDUCED MOTION
+     ============================================================== */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+    .info-item:hover {
+      transform: none !important;
+    }
+    .btn-primary:hover {
+      transform: none !important;
+    }
+    .btn-primary:hover svg {
+      transform: none !important;
+    }
+  }
+</style>

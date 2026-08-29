@@ -1,0 +1,92 @@
+---
+import { t, type Lang } from "../lib/i18n";
+import { icons } from "../lib/icons";
+
+interface Props {
+  lang?: Lang;
+  phone?: string;
+  label?: string;
+  variant?: "inline" | "floating";
+}
+
+const {
+  lang = "fr",
+  phone = "+212600000000",
+  label,
+  variant = "inline",
+} = Astro.props;
+
+const displayLabel = label ?? t(lang, "cta.call");
+const displayPhone = phone;
+---
+
+{variant === "floating" ? (
+  <a href={`tel:${phone}`} class="call-float" aria-label={displayLabel}>
+    <span set:html={icons.phone}></span>
+  </a>
+) : (
+  <a href={`tel:${phone}`} class="call-btn">
+    <span class="call-icon" set:html={icons.phone}></span>
+    <span class="call-text">
+      <span class="call-label">{displayLabel}</span>
+      <span class="call-number">{displayPhone}</span>
+    </span>
+  </a>
+)}
+
+<style>
+  .call-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 22px;
+    background: var(--color-surface);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-md);
+    transition: border-color .2s, transform .2s, box-shadow .2s;
+  }
+  .call-btn:hover {
+    border-color: var(--color-primary);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+  .call-icon {
+    width: 40px; height: 40px;
+    border-radius: 12px;
+    background: rgba(11, 94, 107, 0.1);
+    color: var(--color-primary);
+    display: grid; place-items: center;
+  }
+  .call-icon :global(svg) { width: 20px; height: 20px; }
+  .call-text { display: flex; flex-direction: column; text-align: start; }
+  .call-label { font-size: 0.75rem; color: var(--color-ink-soft); font-weight: 500; }
+  .call-number { font-weight: 700; font-size: 1rem; letter-spacing: 0.01em; }
+
+  .call-float {
+    position: fixed;
+    inset-block-end: 24px;
+    inset-inline-start: 24px;
+    z-index: 40;
+    width: 54px; height: 54px;
+    border-radius: 50%;
+    background: var(--color-surface);
+    color: var(--color-primary);
+    display: grid; place-items: center;
+    border: 1px solid var(--color-line);
+    box-shadow: var(--shadow-lg);
+    transition: transform .2s, background .2s, color .2s;
+  }
+  .call-float:hover {
+    background: var(--color-primary);
+    color: #fff;
+    transform: scale(1.08);
+  }
+  .call-float :global(svg) { width: 22px; height: 22px; }
+
+  @media (max-width: 768px) {
+    .call-float {
+      inset-block-end: 88px;
+      inset-inline-start: 24px;
+    }
+  }
+</style>
