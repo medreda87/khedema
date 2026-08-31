@@ -1,5 +1,6 @@
 ---
 // src/pages/[lang]/about.astro
+
 import Layout from "../layouts/Layout.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
@@ -11,331 +12,900 @@ export interface Props {
 
 const { lang = "fr" } = Astro.props;
 
+const isRTL = lang === "ar";
+const dir = isRTL ? "rtl" : "ltr";
+
 // ============================================================
-//  TRADUCTIONS
+// TRADUCTIONS
 // ============================================================
+
 const t = {
   hero: {
-    badge: { fr: "À PROPOS DE AlloMealem", ar: "حول مايهاندي", en: "ABOUT AlloMealem" },
-    title: { fr: "Des professionnels de confiance, près de chez vous.", ar: "محترفون موثوقون، بالقرب منك.", en: "Trusted professionals, close to you." },
-    desc: { fr: "AlloMealem simplifie la recherche de professionnels qualifiés pour vos travaux et besoins à domicile à Tanger et ses environs.", ar: "AlloMealem يبسط البحث عن محترفين مؤهلين لأعمالك واحتياجاتك المنزلية في طنجة والمناطق المحيطة بها.", en: "AlloMealem simplifies the search for qualified professionals for your home projects and needs in Tangier and surrounding areas." },
-    ctaPrimary: { fr: "Trouver un professionnel", ar: "ابحث عن محترف", en: "Find a professional" },
-    ctaSecondary: { fr: "Découvrir nos services", ar: "اكتشف خدماتنا", en: "Discover our services" },
+    badge: {
+      fr: "À PROPOS DE AlloMealem",
+      ar: "حول AlloMealem",
+      en: "ABOUT AlloMealem",
+    },
+    title: {
+      fr: "Des professionnels de confiance, près de chez vous.",
+      ar: "محترفون موثوقون، بالقرب منك.",
+      en: "Trusted professionals, close to you.",
+    },
+    desc: {
+      fr: "AlloMealem simplifie la recherche de professionnels qualifiés pour vos travaux et besoins à domicile à Tanger et ses environs.",
+      ar: "AlloMealem يبسط البحث عن محترفين مؤهلين لأعمالك واحتياجاتك المنزلية في طنجة والمناطق المحيطة بها.",
+      en: "AlloMealem simplifies the search for qualified professionals for your home projects and needs in Tangier and surrounding areas.",
+    },
+    ctaPrimary: {
+      fr: "Trouver un professionnel",
+      ar: "ابحث عن محترف",
+      en: "Find a professional",
+    },
+    ctaSecondary: {
+      fr: "Découvrir nos services",
+      ar: "اكتشف خدماتنا",
+      en: "Discover our services",
+    },
   },
+
   mission: {
-    badge: { fr: "NOTRE MISSION", ar: "مهمتنا", en: "OUR MISSION" },
-    title: { fr: "Faciliter l'accès à des professionnels fiables", ar: "تسهيل الوصول إلى محترفين موثوقين", en: "Making access to reliable professionals easier" },
-    p1: { fr: "Trouver un bon professionnel ne devrait pas être compliqué. AlloMealem a été pensé pour faciliter cette recherche et permettre aux particuliers de trouver plus simplement les compétences dont ils ont besoin, au bon endroit.", ar: "العثور على محترف جيد لا ينبغي أن يكون معقداً. تم تصميم AlloMealem لتسهيل هذا البحث وتمكين الأفراد من العثور ببساطة أكبر على المهارات التي يحتاجونها، في المكان المناسب.", en: "Finding a good professional shouldn't be complicated. AlloMealem was designed to make this search easier and to allow individuals to find the skills they need, in the right place, more simply." },
-    p2: { fr: "Notre objectif est de créer une expérience simple, transparente et rassurante, aussi bien pour les clients que pour les professionnels.", ar: "هدفنا هو خلق تجربة بسيطة وشفافة ومطمئنة، سواء للعملاء أو للمحترفين.", en: "Our goal is to create a simple, transparent and reassuring experience, both for clients and professionals." },
+    badge: {
+      fr: "NOTRE MISSION",
+      ar: "مهمتنا",
+      en: "OUR MISSION",
+    },
+    title: {
+      fr: "Faciliter l'accès à des professionnels fiables",
+      ar: "تسهيل الوصول إلى محترفين موثوقين",
+      en: "Making access to reliable professionals easier",
+    },
+    p1: {
+      fr: "Trouver un bon professionnel ne devrait pas être compliqué. AlloMealem a été pensé pour faciliter cette recherche et permettre aux particuliers de trouver plus simplement les compétences dont ils ont besoin, au bon endroit.",
+      ar: "العثور على محترف جيد لا ينبغي أن يكون معقداً. تم تصميم AlloMealem لتسهيل هذا البحث وتمكين الأفراد من العثور ببساطة أكبر على المهارات التي يحتاجونها، في المكان المناسب.",
+      en: "Finding a good professional shouldn't be complicated. AlloMealem was designed to make this search easier and to allow individuals to find the skills they need, in the right place, more simply.",
+    },
+    p2: {
+      fr: "Notre objectif est de créer une expérience simple, transparente et rassurante, aussi bien pour les clients que pour les professionnels.",
+      ar: "هدفنا هو خلق تجربة بسيطة وشفافة ومطمئنة، سواء للعملاء أو للمحترفين.",
+      en: "Our goal is to create a simple, transparent and reassuring experience, both for clients and professionals.",
+    },
     cards: {
-      verified: { fr: "Professionnels vérifiés", ar: "محترفون معتمدون", en: "Verified professionals" },
-      local: { fr: "Services locaux", ar: "خدمات محلية", en: "Local services" },
-      rapid: { fr: "Réponse rapide", ar: "استجابة سريعة", en: "Rapid response" },
+      verified: {
+        fr: "Professionnels vérifiés",
+        ar: "محترفون موثوقون",
+        en: "Verified professionals",
+      },
+      local: {
+        fr: "Services locaux",
+        ar: "خدمات محلية",
+        en: "Local services",
+      },
+      rapid: {
+        fr: "Réponse rapide",
+        ar: "استجابة سريعة",
+        en: "Rapid response",
+      },
     },
   },
+
   why: {
-    title: { fr: "Pourquoi choisir AlloMealem ?", ar: "لماذا تختار AlloMealem؟", en: "Why choose AlloMealem?" },
+    title: {
+      fr: "Pourquoi choisir AlloMealem ?",
+      ar: "لماذا تختار AlloMealem؟",
+      en: "Why choose AlloMealem?",
+    },
     items: [
-      { title: { fr: "Des professionnels locaux", ar: "محترفون محليون", en: "Local professionals" }, desc: { fr: "Des artisans et professionnels disponibles à Tanger et ses environs.", ar: "حرفيون ومحترفون متوفرون في طنجة والمناطق المحيطة بها.", en: "Artisans and professionals available in Tangier and surrounding areas." } },
-      { title: { fr: "Une recherche simple", ar: "بحث بسيط", en: "Simple search" }, desc: { fr: "Trouvez rapidement le service adapté à votre besoin.", ar: "ابحث بسرعة عن الخدمة المناسبة لاحتياجك.", en: "Quickly find the service that fits your need." } },
-      { title: { fr: "Un accompagnement humain", ar: "مرافقة إنسانية", en: "Human support" }, desc: { fr: "Une équipe disponible pour vous aider lorsque vous en avez besoin.", ar: "فريق متاح لمساعدتك عندما تحتاج ذلك.", en: "A team available to help you when you need it." } },
-      { title: { fr: "Une approche basée sur la confiance", ar: "نهج قائم على الثقة", en: "Trust-based approach" }, desc: { fr: "Nous voulons construire une relation durable entre particuliers et professionnels.", ar: "نريد بناء علاقة دائمة بين الأفراد والمحترفين.", en: "We want to build a lasting relationship between individuals and professionals." } },
+      {
+        title: {
+          fr: "Des professionnels locaux",
+          ar: "محترفون محليون",
+          en: "Local professionals",
+        },
+        desc: {
+          fr: "Des artisans et professionnels disponibles à Tanger et ses environs.",
+          ar: "حرفيون ومحترفون متوفرون في طنجة والمناطق المحيطة بها.",
+          en: "Artisans and professionals available in Tangier and surrounding areas.",
+        },
+      },
+      {
+        title: {
+          fr: "Une recherche simple",
+          ar: "بحث بسيط",
+          en: "Simple search",
+        },
+        desc: {
+          fr: "Trouvez rapidement le service adapté à votre besoin.",
+          ar: "ابحث بسرعة عن الخدمة المناسبة لاحتياجك.",
+          en: "Quickly find the service that fits your need.",
+        },
+      },
+      {
+        title: {
+          fr: "Un accompagnement humain",
+          ar: "مرافقة إنسانية",
+          en: "Human support",
+        },
+        desc: {
+          fr: "Une équipe disponible pour vous aider lorsque vous en avez besoin.",
+          ar: "فريق متاح لمساعدتك عندما تحتاج ذلك.",
+          en: "A team available to help you when you need it.",
+        },
+      },
+      {
+        title: {
+          fr: "Une approche basée sur la confiance",
+          ar: "نهج قائم على الثقة",
+          en: "Trust-based approach",
+        },
+        desc: {
+          fr: "Nous voulons construire une relation durable entre particuliers et professionnels.",
+          ar: "نريد بناء علاقة دائمة بين الأفراد والمحترفين.",
+          en: "We want to build a lasting relationship between individuals and professionals.",
+        },
+      },
     ],
   },
+
   steps: {
-    title: { fr: "Simple, rapide, efficace", ar: "بسيط، سريع، فعّال", en: "Simple, fast, effective" },
+    title: {
+      fr: "Simple, rapide, efficace",
+      ar: "بسيط، سريع، فعّال",
+      en: "Simple, fast, effective",
+    },
     items: [
-      { label: "01", title: { fr: "Décrivez votre besoin", ar: "صِف احتياجك", en: "Describe your need" }, desc: { fr: "Expliquez-nous le service dont vous avez besoin.", ar: "اشرح لنا الخدمة التي تحتاجها.", en: "Tell us what service you need." } },
-      { label: "02", title: { fr: "Trouvez le bon professionnel", ar: "ابحث عن المحترف المناسب", en: "Find the right professional" }, desc: { fr: "Découvrez les professionnels correspondant à votre demande.", ar: "اكتشف المحترفين المطابقين لطلبك.", en: "Discover professionals matching your request." } },
-      { label: "03", title: { fr: "Échangez et choisissez", ar: "تواصل واختر", en: "Exchange and choose" }, desc: { fr: "Prenez contact et choisissez la solution qui vous convient.", ar: "تواصل واختر الحل المناسب لك.", en: "Get in touch and choose the solution that suits you." } },
-      { label: "04", title: { fr: "Réalisez votre projet", ar: "نفّذ مشروعك", en: "Complete your project" }, desc: { fr: "Votre professionnel intervient pour réaliser votre projet.", ar: "يتدخل المحترف الخاص بك لتنفيذ مشروعك.", en: "Your professional comes to carry out your project." } },
+      {
+        label: "01",
+        title: {
+          fr: "Décrivez votre besoin",
+          ar: "صِف احتياجك",
+          en: "Describe your need",
+        },
+        desc: {
+          fr: "Expliquez-nous le service dont vous avez besoin.",
+          ar: "اشرح لنا الخدمة التي تحتاجها.",
+          en: "Tell us what service you need.",
+        },
+      },
+      {
+        label: "02",
+        title: {
+          fr: "Trouvez le bon professionnel",
+          ar: "ابحث عن المحترف المناسب",
+          en: "Find the right professional",
+        },
+        desc: {
+          fr: "Découvrez les professionnels correspondant à votre demande.",
+          ar: "اكتشف المحترفين المطابقين لطلبك.",
+          en: "Discover professionals matching your request.",
+        },
+      },
+      {
+        label: "03",
+        title: {
+          fr: "Échangez et choisissez",
+          ar: "تواصل واختر",
+          en: "Exchange and choose",
+        },
+        desc: {
+          fr: "Prenez contact et choisissez la solution qui vous convient.",
+          ar: "تواصل واختر الحل المناسب لك.",
+          en: "Get in touch and choose the solution that suits you.",
+        },
+      },
+      {
+        label: "04",
+        title: {
+          fr: "Réalisez votre projet",
+          ar: "نفّذ مشروعك",
+          en: "Complete your project",
+        },
+        desc: {
+          fr: "Votre professionnel intervient pour réaliser votre projet.",
+          ar: "يتدخل المحترف الخاص بك لتنفيذ مشروعك.",
+          en: "Your professional comes to carry out your project.",
+        },
+      },
     ],
   },
+
   services: {
-    title: { fr: "Nos domaines d'intervention", ar: "مجالات تدخلنا", en: "Our areas of expertise" },
+    title: {
+      fr: "Nos domaines d'intervention",
+      ar: "مجالات تدخلنا",
+      en: "Our areas of expertise",
+    },
     items: [
-      { name: { fr: "Plomberie", ar: "السباكة", en: "Plumbing" }, desc: { fr: "Installation, réparation et entretien.", ar: "تركيب، إصلاح وصيانة.", en: "Installation, repair and maintenance." } },
-      { name: { fr: "Électricité", ar: "الكهرباء", en: "Electricity" }, desc: { fr: "Câblage, dépannage et mise aux normes.", ar: "الأسلاك، الإصلاح والتحديث.", en: "Wiring, troubleshooting and upgrading." } },
-      { name: { fr: "Peinture", ar: "الدهان", en: "Painting" }, desc: { fr: "Peinture intérieure et extérieure, finitions.", ar: "دهان داخلي وخارجي، تشطيبات.", en: "Interior and exterior painting, finishing." } },
-      { name: { fr: "Carrelage", ar: "البلاط", en: "Tiling" }, desc: { fr: "Pose de carrelage, faïence et rénovation.", ar: "تركيب البلاط والسيراميك والتجديد.", en: "Tile laying, ceramic and renovation." } },
-      { name: { fr: "Climatisation", ar: "التكييف", en: "Air conditioning" }, desc: { fr: "Installation, entretien et réparation.", ar: "تركيب، صيانة وإصلاح.", en: "Installation, maintenance and repair." } },
-      { name: { fr: "Menuiserie", ar: "النجارة", en: "Carpentry" }, desc: { fr: "Meubles, agencements et menuiserie sur mesure.", ar: "أثاث، تجهيزات ونجارة حسب الطلب.", en: "Furniture, custom joinery and fittings." } },
+      {
+        name: {
+          fr: "Plomberie",
+          ar: "السباكة",
+          en: "Plumbing",
+        },
+        desc: {
+          fr: "Installation, réparation et entretien.",
+          ar: "تركيب، إصلاح وصيانة.",
+          en: "Installation, repair and maintenance.",
+        },
+      },
+      {
+        name: {
+          fr: "Électricité",
+          ar: "الكهرباء",
+          en: "Electricity",
+        },
+        desc: {
+          fr: "Câblage, dépannage et mise aux normes.",
+          ar: "الأسلاك، الإصلاح والتحديث.",
+          en: "Wiring, troubleshooting and upgrading.",
+        },
+      },
+      {
+        name: {
+          fr: "Peinture",
+          ar: "الدهان",
+          en: "Painting",
+        },
+        desc: {
+          fr: "Peinture intérieure et extérieure, finitions.",
+          ar: "دهان داخلي وخارجي، تشطيبات.",
+          en: "Interior and exterior painting, finishing.",
+        },
+      },
+      {
+        name: {
+          fr: "Carrelage",
+          ar: "البلاط",
+          en: "Tiling",
+        },
+        desc: {
+          fr: "Pose de carrelage, faïence et rénovation.",
+          ar: "تركيب البلاط والسيراميك والتجديد.",
+          en: "Tile laying, ceramic and renovation.",
+        },
+      },
+      {
+        name: {
+          fr: "Climatisation",
+          ar: "التكييف",
+          en: "Air conditioning",
+        },
+        desc: {
+          fr: "Installation, entretien et réparation.",
+          ar: "تركيب، صيانة وإصلاح.",
+          en: "Installation, maintenance and repair.",
+        },
+      },
+      {
+        name: {
+          fr: "Menuiserie",
+          ar: "النجارة",
+          en: "Carpentry",
+        },
+        desc: {
+          fr: "Meubles, agencements et menuiserie sur mesure.",
+          ar: "أثاث، تجهيزات ونجارة حسب الطلب.",
+          en: "Furniture, custom joinery and fittings.",
+        },
+      },
     ],
   },
+
   local: {
-    badge: { fr: "LOCAL & PROCHE DE VOUS", ar: "محلي وقريب منك", en: "LOCAL & CLOSE TO YOU" },
-    title: { fr: "Une plateforme pensée pour Tanger", ar: "منصة مصممة لطنجة", en: "A platform designed for Tangier" },
-    desc: { fr: "AlloMealem commence à Tanger avec une ambition simple : rapprocher les particuliers des professionnels locaux et faciliter l'accès à des services de qualité.", ar: "يبدأ AlloMealem في طنجة بطموح بسيط: تقريب الأفراد من المحترفين المحليين وتسهيل الوصول إلى خدمات عالية الجودة.", en: "AlloMealem starts in Tangier with a simple ambition: to bring individuals closer to local professionals and make it easier to access quality services." },
+    badge: {
+      fr: "LOCAL & PROCHE DE VOUS",
+      ar: "محلي وقريب منك",
+      en: "LOCAL & CLOSE TO YOU",
+    },
+    title: {
+      fr: "Une plateforme pensée pour Tanger",
+      ar: "منصة مصممة لطنجة",
+      en: "A platform designed for Tangier",
+    },
+    desc: {
+      fr: "AlloMealem commence à Tanger avec une ambition simple : rapprocher les particuliers des professionnels locaux et faciliter l'accès à des services de qualité.",
+      ar: "يبدأ AlloMealem في طنجة بطموح بسيط: تقريب الأفراد من المحترفين المحليين وتسهيل الوصول إلى خدمات عالية الجودة.",
+      en: "AlloMealem starts in Tangier with a simple ambition: to bring individuals closer to local professionals and make it easier to access quality services.",
+    },
     stats: {
-      city: { fr: "Tanger", ar: "طنجة", en: "Tangier" },
-      cityLabel: { fr: "Zone principale", ar: "المنطقة الرئيسية", en: "Main area" },
-      categories: { fr: "6+", ar: "٦+", en: "6+" },
-      categoriesLabel: { fr: "Catégories de services", ar: "فئات الخدمات", en: "Service categories" },
-      response: { fr: "24h", ar: "٢٤ ساعة", en: "24h" },
-      responseLabel: { fr: "Délai de réponse", ar: "وقت الاستجابة", en: "Response time" },
+      city: {
+        fr: "Tanger",
+        ar: "طنجة",
+        en: "Tangier",
+      },
+      cityLabel: {
+        fr: "Zone principale",
+        ar: "المنطقة الرئيسية",
+        en: "Main area",
+      },
+      categories: {
+        fr: "6+",
+        ar: "٦+",
+        en: "6+",
+      },
+      categoriesLabel: {
+        fr: "Catégories de services",
+        ar: "فئات الخدمات",
+        en: "Service categories",
+      },
+      response: {
+        fr: "24h",
+        ar: "٢٤ ساعة",
+        en: "24h",
+      },
+      responseLabel: {
+        fr: "Délai de réponse",
+        ar: "وقت الاستجابة",
+        en: "Response time",
+      },
     },
   },
+
   values: {
-    title: { fr: "Nos valeurs", ar: "قيمنا", en: "Our values" },
+    title: {
+      fr: "Nos valeurs",
+      ar: "قيمنا",
+      en: "Our values",
+    },
     items: [
-      { name: { fr: "Confiance", ar: "الثقة", en: "Trust" }, desc: { fr: "Construire des relations fiables entre clients et professionnels.", ar: "بناء علاقات موثوقة بين العملاء والمحترفين.", en: "Building reliable relationships between clients and professionals." }, icon: "shield" },
-      { name: { fr: "Simplicité", ar: "البساطة", en: "Simplicity" }, desc: { fr: "Rendre la recherche et la prise de contact aussi simples que possible.", ar: "جعل البحث والتواصل بأبسط شكل ممكن.", en: "Making search and contact as simple as possible." }, icon: "zap" },
-      { name: { fr: "Proximité", ar: "القرب", en: "Proximity" }, desc: { fr: "Valoriser les professionnels locaux et rester proche des besoins de notre communauté.", ar: "تقدير المحترفين المحليين والبقاء قريبين من احتياجات مجتمعنا.", en: "Valuing local professionals and staying close to the needs of our community." }, icon: "map-pin" },
+      {
+        name: {
+          fr: "Confiance",
+          ar: "الثقة",
+          en: "Trust",
+        },
+        desc: {
+          fr: "Construire des relations fiables entre clients et professionnels.",
+          ar: "بناء علاقات موثوقة بين العملاء والمحترفين.",
+          en: "Building reliable relationships between clients and professionals.",
+        },
+        icon: "shield",
+      },
+      {
+        name: {
+          fr: "Simplicité",
+          ar: "البساطة",
+          en: "Simplicity",
+        },
+        desc: {
+          fr: "Rendre la recherche et la prise de contact aussi simples que possible.",
+          ar: "جعل البحث والتواصل بأبسط شكل ممكن.",
+          en: "Making search and contact as simple as possible.",
+        },
+        icon: "zap",
+      },
+      {
+        name: {
+          fr: "Proximité",
+          ar: "القرب",
+          en: "Proximity",
+        },
+        desc: {
+          fr: "Valoriser les professionnels locaux et rester proche des besoins de notre communauté.",
+          ar: "تقدير المحترفين المحليين والبقاء قريبين من احتياجات مجتمعنا.",
+          en: "Valuing local professionals and staying close to the needs of our community.",
+        },
+        icon: "map-pin",
+      },
     ],
   },
+
   cta: {
-    title: { fr: "Vous avez un projet ?", ar: "هل لديك مشروع؟", en: "Have a project?" },
-    desc: { fr: "Trouvez le professionnel dont vous avez besoin à Tanger et commencez votre projet en toute simplicité.", ar: "ابحث عن المحترف الذي تحتاجه في طنجة وابدأ مشروعك بكل بساطة.", en: "Find the professional you need in Tangier and start your project with ease." },
-    primary: { fr: "Trouver un professionnel →", ar: "ابحث عن محترف ←", en: "Find a professional →" },
-    secondary: { fr: "Nous contacter", ar: "اتصل بنا", en: "Contact us" },
+    title: {
+      fr: "Vous avez un projet ?",
+      ar: "هل لديك مشروع؟",
+      en: "Have a project?",
+    },
+    desc: {
+      fr: "Trouvez le professionnel dont vous avez besoin à Tanger et commencez votre projet en toute simplicité.",
+      ar: "ابحث عن المحترف الذي تحتاجه في طنجة وابدأ مشروعك بكل بساطة.",
+      en: "Find the professional you need in Tangier and start your project with ease.",
+    },
+    primary: {
+      fr: "Trouver un professionnel →",
+      ar: "ابحث عن محترف ←",
+      en: "Find a professional →",
+    },
+    secondary: {
+      fr: "Nous contacter",
+      ar: "اتصل بنا",
+      en: "Contact us",
+    },
   },
 };
 
-const isRTL = lang === "ar";
-const dir = isRTL ? "rtl" : "ltr";
+// ============================================================
+// HELPERS
+// ============================================================
+
+const contactUrl = `/${lang}/contact`;
+const homeUrl = `/${lang}/`;
+const servicesUrl = `/${lang}/services`;
+
 ---
 
-<Layout lang={lang} title="À propos - AlloMealem" dir={dir}>
-  <main class={`about-page ${isRTL ? 'rtl' : ''}`}>
+<Layout
+  lang={lang}
+  title={
+    lang === "ar"
+      ? "حول AlloMealem"
+      : lang === "en"
+        ? "About AlloMealem"
+        : "À propos - AlloMealem"
+  }
+  dir={dir}
+>
+  <main class:list={["about-page", { rtl: isRTL }]}>
     <Header lang={lang} />
 
-    <!-- ============================================================ -->
-    <!-- 1. HERO (Image agrandie et mise en valeur) -->
-    <!-- ============================================================ -->
+    <!-- ============================================================
+         HERO
+    ============================================================= -->
     <section class="about-hero">
-      <div class="about-hero-bg" aria-hidden="true">
-        <div class="bg-gradient"></div>
-        <div class="bg-shape shape-1"></div>
-        <div class="bg-shape shape-2"></div>
+      <div class="hero-background" aria-hidden="true">
+        <div class="hero-gradient"></div>
+        <div class="hero-orb hero-orb-1"></div>
+        <div class="hero-orb hero-orb-2"></div>
       </div>
 
-      <div class="about-hero-inner container">
-        <div class="about-hero-copy">
+      <div class="container hero-container">
+        <div class="hero-content">
           <div class="badge">
             <span class="badge-dot"></span>
             {t.hero.badge[lang]}
           </div>
-          <h1 class="about-hero-title">{t.hero.title[lang]}</h1>
-          <p class="about-hero-desc">{t.hero.desc[lang]}</p>
-          <div class="about-hero-cta">
-            <a href='/contact' class="btn btn-primary">
-              {t.hero.ctaPrimary[lang]}
-              <span class="btn-arrow" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-              </span>
+
+          <h1 class="hero-title">
+            {t.hero.title[lang]}
+          </h1>
+
+          <p class="hero-description">
+            {t.hero.desc[lang]}
+          </p>
+
+          <div class="hero-buttons">
+            <a href={contactUrl} class="btn btn-primary">
+              <span>{t.hero.ctaPrimary[lang]}</span>
+
+              <svg
+                class="btn-arrow"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
             </a>
-            <a href='/contact' class="btn btn-secondary">{t.hero.ctaSecondary[lang]}</a>
+
+            <a href={servicesUrl} class="btn btn-secondary">
+              {t.hero.ctaSecondary[lang]}
+            </a>
           </div>
         </div>
 
-        <div class="about-hero-visual">
-          <div class="visual-frame">
-            <div class="visual-blob" aria-hidden="true"></div>
-            <div class="illustration-placeholder">
-              <img src="/props1.png" alt="Artisan professionnel AlloMealem" width="620" height="465" loading="eager" />
+        <div class="hero-visual">
+          <div class="hero-image-wrapper">
+            <div class="hero-image-glow"></div>
+
+            <img
+              src="/props1.png"
+              alt="Artisan professionnel AlloMealem"
+              width="620"
+              height="465"
+              loading="eager"
+            />
+
+            <div class="floating-icon floating-1" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M4 12h16M12 4v16M4 4l16 16"></path>
+              </svg>
             </div>
-            
-            <!-- Icônes flottantes agrandies et élégantes -->
-            <div class="floating-icon icon-plumbing" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 12h16M12 4v16M4 4l16 16"/></svg></div>
-            <div class="floating-icon icon-electric" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
-            <div class="floating-icon icon-paint" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H5.78a1.65 1.65 0 0 0-1.51 1 1.65 1.65 0 0 0 .33 1.82L12 22z"/><path d="M4 10h16"/></svg></div>
-            <div class="floating-icon icon-tile" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></div>
+
+            <div class="floating-icon floating-2" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
+              </svg>
+            </div>
+
+            <div class="floating-icon floating-3" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <circle cx="12" cy="12" r="3"></circle>
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H5.78a1.65 1.65 0 0 0-1.51 1 1.65 1.65 0 0 0 .33 1.82L12 22z"></path>
+                <path d="M4 10h16"></path>
+              </svg>
+            </div>
+
+            <div class="floating-icon floating-4" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <rect x="3" y="3" width="7" height="7"></rect>
+                <rect x="14" y="3" width="7" height="7"></rect>
+                <rect x="3" y="14" width="7" height="7"></rect>
+                <rect x="14" y="14" width="7" height="7"></rect>
+              </svg>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ============================================================ -->
-    <!-- 2. NOTRE MISSION (Grande image avec cartes en superposition) -->
-    <!-- ============================================================ -->
+    <!-- ============================================================
+         MISSION
+    ============================================================= -->
     <section class="mission-section">
       <div class="container mission-grid">
-        <div class="mission-text">
-          <div class="badge">{t.mission.badge[lang]}</div>
-          <h2 class="section-title">{t.mission.title[lang]}</h2>
-          <p class="mission-p">{t.mission.p1[lang]}</p>
-          <p class="mission-p">{t.mission.p2[lang]}</p>
+        <div class="mission-content">
+          <div class="badge">
+            {t.mission.badge[lang]}
+          </div>
+
+          <h2 class="section-title">
+            {t.mission.title[lang]}
+          </h2>
+
+          <p class="mission-text">
+            {t.mission.p1[lang]}
+          </p>
+
+          <p class="mission-text">
+            {t.mission.p2[lang]}
+          </p>
         </div>
-        
+
         <div class="mission-visual">
-          <div class="mission-img-large">
-            <img src="/image1.png" alt="Équipe AlloMealem" width="600" height="450" loading="lazy" />
-            
-            <!-- Cartes flottantes style "Glassmorphism" -->
-            <div class="float-card card-1">
-              <span class="float-check">✓</span>
-              <span class="float-label">{t.mission.cards.verified[lang]}</span>
+          <div class="mission-image">
+            <img
+              src="/image1.png"
+              alt="Équipe AlloMealem"
+              width="600"
+              height="450"
+              loading="lazy"
+            />
+
+            <div class="mission-card mission-card-1">
+              <span class="check">✓</span>
+              <span>{t.mission.cards.verified[lang]}</span>
             </div>
-            <div class="float-card card-2">
-              <span class="float-check">✓</span>
-              <span class="float-label">{t.mission.cards.local[lang]}</span>
+
+            <div class="mission-card mission-card-2">
+              <span class="check">✓</span>
+              <span>{t.mission.cards.local[lang]}</span>
             </div>
-            <div class="float-card card-3">
-              <span class="float-check">✓</span>
-              <span class="float-label">{t.mission.cards.rapid[lang]}</span>
+
+            <div class="mission-card mission-card-3">
+              <span class="check">✓</span>
+              <span>{t.mission.cards.rapid[lang]}</span>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ============================================================ -->
-    <!-- 3. POURQUOI AlloMealem -->
-    <!-- ============================================================ -->
+    <!-- ============================================================
+         WHY
+    ============================================================= -->
     <section class="why-section">
       <div class="container">
-        <h2 class="section-title text-center">{t.why.title[lang]}</h2>
+        <div class="section-heading centered">
+          <h2 class="section-title">
+            {t.why.title[lang]}
+          </h2>
+        </div>
+
         <div class="why-grid">
-          {t.why.items.map((item, i) => (
-            <div class="why-card" key={i}>
-              <div class="why-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  {i === 0 && <><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></>}
-                  {i === 1 && <><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></>}
-                  {i === 2 && <><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></>}
-                  {i === 3 && <><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></>}
-                </svg>
-              </div>
-              <h3 class="why-title">{item.title[lang]}</h3>
-              <p class="why-desc">{item.desc[lang]}</p>
-            </div>
-          ))}
+          {
+            t.why.items.map((item, i) => (
+              <article class="why-card">
+                <div class="why-icon">
+                  {i === 0 && (
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"></path>
+                      <circle cx="12" cy="10" r="3"></circle>
+                    </svg>
+                  )}
+
+                  {i === 1 && (
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <circle cx="11" cy="11" r="8"></circle>
+                      <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                  )}
+
+                  {i === 2 && (
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                      <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                  )}
+
+                  {i === 3 && (
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                      <polyline points="9 12 11 14 15 10"></polyline>
+                    </svg>
+                  )}
+                </div>
+
+                <h3>{item.title[lang]}</h3>
+                <p>{item.desc[lang]}</p>
+              </article>
+            ))
+          }
         </div>
       </div>
     </section>
 
-    <!-- ============================================================ -->
-    <!-- 4. COMMENT ÇA FONCTIONNE -->
-    <!-- ============================================================ -->
+    <!-- ============================================================
+         STEPS
+    ============================================================= -->
     <section class="steps-section">
       <div class="container">
-        <h2 class="section-title text-center">{t.steps.title[lang]}</h2>
-        <div class="steps-timeline">
-          {t.steps.items.map((step, i) => (
-            <div class="step-item" key={i}>
-              <div class="step-number">{step.label}</div>
-              <div class="step-content">
-                <h4 class="step-title">{step.title[lang]}</h4>
-                <p class="step-desc">{step.desc[lang]}</p>
-              </div>
-              {i < t.steps.items.length - 1 && (
-                <div class="step-connector" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        <div class="section-heading centered">
+          <h2 class="section-title">
+            {t.steps.title[lang]}
+          </h2>
+        </div>
+
+        <div class="steps-grid">
+          {
+            t.steps.items.map((step, i) => (
+              <article class="step-item">
+                <div class="step-number">
+                  {step.label}
                 </div>
-              )}
-            </div>
-          ))}
+
+                <div class="step-content">
+                  <h3>{step.title[lang]}</h3>
+                  <p>{step.desc[lang]}</p>
+                </div>
+
+                {i < t.steps.items.length - 1 && (
+                  <div class="step-arrow" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <line x1="5" y1="12" x2="19" y2="12"></line>
+                      <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                  </div>
+                )}
+              </article>
+            ))
+          }
         </div>
       </div>
     </section>
 
-    <!-- ============================================================ -->
-    <!-- 5. NOS DOMAINES D'INTERVENTION -->
-    <!-- ============================================================ -->
-    <section class="services-section">
+    <!-- ============================================================
+         SERVICES
+    ============================================================= -->
+    <section class="services-section" id="services">
       <div class="container">
-        <h2 class="section-title text-center">{t.services.title[lang]}</h2>
+        <div class="section-heading centered">
+          <h2 class="section-title">
+            {t.services.title[lang]}
+          </h2>
+        </div>
+
         <div class="services-grid">
-          {t.services.items.map((service, i) => (
-            <div class="service-card" key={i}>
-              <div class="service-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                  {i === 0 && <><path d="M4 12h16M12 4v16M4 4l16 16"/></>}
-                  {i === 1 && <><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></>}
-                  {i === 2 && <><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H5.78a1.65 1.65 0 0 0-1.51 1 1.65 1.65 0 0 0 .33 1.82L12 22z"/><path d="M4 10h16"/></>}
-                  {i === 3 && <><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></>}
-                  {i === 4 && <><path d="M12 2v4M12 22v-4M4 12H2M22 12h-2"/><circle cx="12" cy="12" r="3"/></>}
-                  {i === 5 && <><path d="M4 4h16v4H4zM4 12h10v4H4zM4 20h16v-4H4z"/></>}
-                </svg>
-              </div>
-              <h4 class="service-name">{service.name[lang]}</h4>
-              <p class="service-desc">{service.desc[lang]}</p>
-              <a href="#service" class="service-link">
-                {lang === "fr" ? "Découvrir" : lang === "ar" ? "اكتشف" : "Discover"}
-                <span aria-hidden="true">→</span>
-              </a>
-            </div>
-          ))}
+          {
+            t.services.items.map((service, i) => (
+              <article class="service-card">
+                <div class="service-icon">
+                  {i === 0 && (
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                      <path d="M4 12h16M12 4v16M4 4l16 16"></path>
+                    </svg>
+                  )}
+
+                  {i === 1 && (
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                      <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
+                    </svg>
+                  )}
+
+                  {i === 2 && (
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                      <circle cx="12" cy="12" r="3"></circle>
+                      <path d="M19.4 15a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H5.78a1.65 1.65 0 0 0-1.51 1 1.65 1.65 0 0 0 .33 1.82L12 22z"></path>
+                      <path d="M4 10h16"></path>
+                    </svg>
+                  )}
+
+                  {i === 3 && (
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                      <rect x="3" y="3" width="7" height="7"></rect>
+                      <rect x="14" y="3" width="7" height="7"></rect>
+                      <rect x="3" y="14" width="7" height="7"></rect>
+                      <rect x="14" y="14" width="7" height="7"></rect>
+                    </svg>
+                  )}
+
+                  {i === 4 && (
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                      <path d="M12 2v4"></path>
+                      <path d="M12 22v-4"></path>
+                      <path d="M4 12H2"></path>
+                      <path d="M22 12h-2"></path>
+                      <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                  )}
+
+                  {i === 5 && (
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                      <path d="M4 4h16v4H4z"></path>
+                      <path d="M4 12h10v4H4z"></path>
+                      <path d="M4 20h16v-4H4z"></path>
+                    </svg>
+                  )}
+                </div>
+
+                <h3>{service.name[lang]}</h3>
+                <p>{service.desc[lang]}</p>
+
+                <a href={servicesUrl} class="service-link">
+                  {lang === "fr"
+                    ? "Découvrir"
+                    : lang === "ar"
+                      ? "اكتشف"
+                      : "Discover"}
+
+                  <span>→</span>
+                </a>
+              </article>
+            ))
+          }
         </div>
       </div>
     </section>
 
-    <!-- ============================================================ -->
-    <!-- 6. PLATEFORME PENSÉE POUR TANGER (Visuel agrandi) -->
-    <!-- ============================================================ -->
+    <!-- ============================================================
+         LOCAL
+    ============================================================= -->
     <section class="local-section">
       <div class="container local-grid">
-        <div class="local-text">
-          <div class="badge light">{t.local.badge[lang]}</div>
-          <h2 class="section-title light">{t.local.title[lang]}</h2>
-          <p class="local-desc">{t.local.desc[lang]}</p>
+        <div class="local-content">
+          <div class="badge badge-dark">
+            <span class="badge-dot"></span>
+            {t.local.badge[lang]}
+          </div>
+
+          <h2 class="section-title section-title-light">
+            {t.local.title[lang]}
+          </h2>
+
+          <p class="local-description">
+            {t.local.desc[lang]}
+          </p>
+
           <div class="local-stats">
-            <div class="stat-item">
-              <span class="stat-value">{t.local.stats.city[lang]}</span>
-              <span class="stat-label">{t.local.stats.cityLabel[lang]}</span>
+            <div class="stat">
+              <strong>{t.local.stats.city[lang]}</strong>
+              <span>{t.local.stats.cityLabel[lang]}</span>
             </div>
-            <div class="stat-item">
-              <span class="stat-value">{t.local.stats.categories[lang]}</span>
-              <span class="stat-label">{t.local.stats.categoriesLabel[lang]}</span>
+
+            <div class="stat">
+              <strong>{t.local.stats.categories[lang]}</strong>
+              <span>{t.local.stats.categoriesLabel[lang]}</span>
             </div>
-            <div class="stat-item">
-              <span class="stat-value">{t.local.stats.response[lang]}</span>
-              <span class="stat-label">{t.local.stats.responseLabel[lang]}</span>
+
+            <div class="stat">
+              <strong>{t.local.stats.response[lang]}</strong>
+              <span>{t.local.stats.responseLabel[lang]}</span>
             </div>
           </div>
         </div>
+
         <div class="local-visual">
-          <div class="map-placeholder-large">
-            <svg viewBox="0 0 400 400" fill="none" class="map-svg">
-              <path d="M80 200 Q150 80 220 140 T350 200 Q280 350 200 280 T80 200Z" stroke="rgba(255,255,255,0.15)" stroke-width="2" fill="rgba(255,255,255,0.03)" />
-              <circle cx="200" cy="180" r="6" fill="#2563EB" />
-              <circle cx="160" cy="150" r="3" fill="rgba(255,255,255,0.5)" />
-              <circle cx="260" cy="130" r="3" fill="rgba(255,255,255,0.5)" />
-              <circle cx="280" cy="220" r="3" fill="rgba(255,255,255,0.5)" />
-              <circle cx="140" cy="240" r="3" fill="rgba(255,255,255,0.5)" />
+          <div class="map-card">
+            <div class="map-grid"></div>
+
+            <svg
+              class="map-svg"
+              viewBox="0 0 400 400"
+              fill="none"
+              aria-hidden="true"
+            >
+              <path
+                d="M80 200 Q150 80 220 140 T350 200 Q280 350 200 280 T80 200Z"
+                stroke="rgba(255,255,255,0.18)"
+                stroke-width="2"
+                fill="rgba(255,255,255,0.03)"
+              />
+
+              <circle cx="200" cy="180" r="7" fill="#2563EB"></circle>
+              <circle cx="160" cy="150" r="4" fill="rgba(255,255,255,0.5)"></circle>
+              <circle cx="260" cy="130" r="4" fill="rgba(255,255,255,0.5)"></circle>
+              <circle cx="280" cy="220" r="4" fill="rgba(255,255,255,0.5)"></circle>
+              <circle cx="140" cy="240" r="4" fill="rgba(255,255,255,0.5)"></circle>
             </svg>
-            <div class="map-dot dot-1"></div>
-            <div class="map-dot dot-2"></div>
-            <div class="map-dot dot-3"></div>
-            <div class="map-dot dot-4"></div>
-            <div class="map-dot dot-5"></div>
+
+            <span class="map-pin pin-1"></span>
+            <span class="map-pin pin-2"></span>
+            <span class="map-pin pin-3"></span>
+            <span class="map-pin pin-4"></span>
+            <span class="map-pin pin-5"></span>
+
+            <div class="map-label">
+              <span class="map-label-dot"></span>
+              {t.local.stats.city[lang]}
+            </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ============================================================ -->
-    <!-- 7. NOS VALEURS -->
-    <!-- ============================================================ -->
+    <!-- ============================================================
+         VALUES
+    ============================================================= -->
     <section class="values-section">
       <div class="container">
-        <h2 class="section-title text-center">{t.values.title[lang]}</h2>
+        <div class="section-heading centered">
+          <h2 class="section-title">
+            {t.values.title[lang]}
+          </h2>
+        </div>
+
         <div class="values-grid">
-          {t.values.items.map((value, i) => (
-            <div class="value-card" key={i}>
-              <div class="value-icon">
-                {value.icon === "shield" && <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>}
-                {value.icon === "zap" && <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>}
-                {value.icon === "map-pin" && <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>}
-              </div>
-              <h3 class="value-name">{value.name[lang]}</h3>
-              <p class="value-desc">{value.desc[lang]}</p>
-            </div>
-          ))}
+          {
+            t.values.items.map((value) => (
+              <article class="value-card">
+                <div class="value-icon">
+                  {value.icon === "shield" && (
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                      <polyline points="9 12 11 14 15 10"></polyline>
+                    </svg>
+                  )}
+
+                  {value.icon === "zap" && (
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                      <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                    </svg>
+                  )}
+
+                  {value.icon === "map-pin" && (
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                      <path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"></path>
+                      <circle cx="12" cy="10" r="3"></circle>
+                    </svg>
+                  )}
+                </div>
+
+                <h3>{value.name[lang]}</h3>
+                <p>{value.desc[lang]}</p>
+              </article>
+            ))
+          }
         </div>
       </div>
     </section>
 
-    <!-- ============================================================ -->
-    <!-- 8. CTA FINAL -->
-    <!-- ============================================================ -->
+    <!-- ============================================================
+         CTA
+    ============================================================= -->
     <section class="cta-section">
-      <div class="container cta-box">
-        <h2 class="cta-title">{t.cta.title[lang]}</h2>
-        <p class="cta-desc">{t.cta.desc[lang]}</p>
-        <div class="cta-actions">
-          <a href='#services' class="btn btn-primary">{t.cta.primary[lang]}</a>
-          <a href='/contact' class="btn btn-secondary">{t.cta.secondary[lang]}</a>
+      <div class="container">
+        <div class="cta-box">
+          <div class="cta-decoration"></div>
+
+          <div class="cta-content">
+            <h2>{t.cta.title[lang]}</h2>
+
+            <p>
+              {t.cta.desc[lang]}
+            </p>
+
+            <div class="cta-buttons">
+              <a href={servicesUrl} class="btn btn-primary">
+                {t.cta.primary[lang]}
+              </a>
+
+              <a href={contactUrl} class="btn btn-secondary">
+                {t.cta.secondary[lang]}
+              </a>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -346,427 +916,2016 @@ const dir = isRTL ? "rtl" : "ltr";
 
 <style>
   /* ================================================================
-     VARIABLES & BASE
-     ================================================================ */
+     VARIABLES
+  ================================================================ */
+
   :root {
-    --c-primary: #2563EB;
-    --c-primary-dark: #1D4ED8;
-    --c-primary-light: #EFF6FF;
-    --c-accent: #F59E0B;
-    --c-dark: #0F172A;
-    --c-white: #FFFFFF;
-    --c-line: rgba(15, 23, 42, 0.08);
-    --header-h: 80px;
-    --radius-card: 24px; /* Rayon plus grand pour les grandes images */
+    --primary: #2563eb;
+    --primary-dark: #1d4ed8;
+    --primary-light: #eff6ff;
+
+    --dark: #0f172a;
+    --dark-2: #0b1220;
+
+    --text: #0f172a;
+    --text-muted: #475569;
+
+    --white: #ffffff;
+    --gray-50: #f8fafc;
+    --gray-100: #f1f5f9;
+    --gray-200: #e2e8f0;
+    --gray-300: #cbd5e1;
+
+    --radius: 24px;
+    --header-height: 80px;
   }
 
+  /* ================================================================
+     RESET / BASE
+  ================================================================ */
+
   .about-page {
-    background: #F8FAFC;
-    color: var(--c-dark);
-    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+    background: var(--gray-50);
+    color: var(--text);
+    font-family:
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      Roboto,
+      Arial,
+      sans-serif;
+  }
+
+  .about-page *,
+  .about-page *::before,
+  .about-page *::after {
+    box-sizing: border-box;
   }
 
   .container {
+    width: 100%;
     max-width: 1280px;
     margin: 0 auto;
-    padding: 0 28px;
+    padding-left: 28px;
+    padding-right: 28px;
   }
+
+  img {
+    max-width: 100%;
+  }
+
+  /* ================================================================
+     BADGE
+  ================================================================ */
 
   .badge {
     display: inline-flex;
     align-items: center;
-    gap: 10px;
-    padding: 8px 18px 8px 14px;
-    background: var(--c-primary-light);
-    border: 1px solid rgba(37, 99, 235, 0.15);
+    gap: 9px;
+
+    padding: 8px 16px;
+
+    background: var(--primary-light);
+    border: 1px solid rgba(37, 99, 235, 0.14);
+
     border-radius: 999px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    text-transform: uppercase;
+
+    color: var(--primary);
+
+    font-size: 0.78rem;
+    line-height: 1;
+    font-weight: 700;
     letter-spacing: 0.04em;
-    color: var(--c-primary);
-    margin-bottom: 24px;
+    text-transform: uppercase;
+
+    margin-bottom: 22px;
   }
-  .badge-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--c-primary); }
-  .badge.light { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.15); color: #93C5FD; }
-  .badge.light .badge-dot { background: #93C5FD; }
+
+  .badge-dot {
+    width: 7px;
+    height: 7px;
+    min-width: 7px;
+    border-radius: 50%;
+    background: var(--primary);
+  }
+
+  .badge-dark {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.12);
+    color: #93c5fd;
+  }
+
+  .badge-dark .badge-dot {
+    background: #60a5fa;
+  }
+
+  /* ================================================================
+     TITLES
+  ================================================================ */
+
+  .section-heading {
+    width: 100%;
+  }
+
+  .section-heading.centered {
+    text-align: center;
+  }
 
   .section-title {
+    margin: 0 0 18px;
+
+    color: var(--text);
+
     font-size: clamp(2rem, 3.5vw, 2.8rem);
-    font-weight: 700;
-    letter-spacing: -0.02em;
-    line-height: 1.1;
-    margin: 0 0 16px;
-    color: var(--c-dark);
+    line-height: 1.12;
+    font-weight: 800;
+
+    letter-spacing: -0.03em;
   }
-  .section-title.light { color: #F1F5F9; }
-  .section-title.text-center { text-align: center; }
+
+  .section-title-light {
+    color: #f8fafc;
+  }
 
   /* ================================================================
-     1. HERO (Images agrandies)
-     ================================================================ */
-  .about-hero {
-    padding: calc(var(--header-h) + 48px) 0 100px;
-    position: relative;
-    overflow: hidden;
-    isolation: isolate;
-    background: var(--c-white);
-    min-height: 85vh;
-    display: flex;
-    align-items: center;
-  }
-  .about-hero-bg { position: absolute; inset: 0; z-index: -1; pointer-events: none; }
-  .about-hero-bg .bg-gradient {
-    position: absolute; inset: 0;
-    background: radial-gradient(ellipse at 20% 10%, rgba(37,99,235,0.06), transparent 55%),
-                radial-gradient(ellipse at 90% 80%, rgba(245,158,11,0.04), transparent 50%),
-                linear-gradient(180deg, #FFFFFF 0%, #F8FAFC 100%);
-  }
-  .about-hero-bg .bg-shape {
-    position: absolute; border-radius: 50%; opacity: 0.3;
-    animation: drift 22s ease-in-out infinite;
-  }
-  .shape-1 { width: 400px; height: 400px; background: radial-gradient(circle, rgba(37,99,235,0.1), transparent 70%); top: -100px; left: -100px; }
-  .shape-2 { width: 300px; height: 300px; background: radial-gradient(circle, rgba(245,158,11,0.08), transparent 70%); bottom: -50px; right: 10%; animation-delay: -8s; }
-
-  .about-hero-inner {
-    display: grid;
-    grid-template-columns: 1fr 1.3fr; /* Plus d'espace pour l'image */
-    gap: 64px;
-    align-items: center;
-  }
-  .about-hero-copy { max-width: 580px; }
-  .about-hero-title {
-    font-size: clamp(2.4rem, 4.5vw, 3.8rem);
-    font-weight: 800;
-    line-height: 1.05;
-    letter-spacing: -0.03em;
-    margin: 0 0 20px;
-    color: var(--c-dark);
-  }
-  .about-hero-desc {
-    font-size: 1.15rem;
-    color: #475569;
-    line-height: 1.7;
-    margin: 0 0 36px;
-  }
-  .about-hero-cta { display: flex; gap: 16px; flex-wrap: wrap; }
+     BUTTONS
+  ================================================================ */
 
   .btn {
-    display: inline-flex; align-items: center; justify-content: center; gap: 10px;
-    padding: 16px 32px; font-size: 1rem; font-weight: 600; border-radius: 40px;
-    text-decoration: none; transition: all 0.25s ease; cursor: pointer; white-space: nowrap;
-  }
-  .btn-primary {
-    background: var(--c-primary); color: var(--c-white);
-    box-shadow: 0 12px 28px -8px rgba(37,99,235,0.4);
-  }
-  .btn-primary:hover {
-    background: var(--c-primary-dark); transform: translateY(-3px);
-    box-shadow: 0 18px 36px -8px rgba(37,99,235,0.55);
-  }
-  .btn-arrow svg { width: 18px; height: 18px; transition: transform 0.25s ease; }
-  .btn-primary:hover .btn-arrow svg { transform: translateX(4px); }
-  .btn-secondary {
-    background: transparent; color: var(--c-dark); border: 2px solid var(--c-line);
-  }
-  .btn-secondary:hover {
-    color: var(--c-primary); border-color: var(--c-primary);
-    background: var(--c-primary-light); transform: translateY(-2px);
+    min-height: 52px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+
+    padding: 14px 26px;
+
+    border-radius: 999px;
+
+    font-size: 0.98rem;
+    font-weight: 700;
+
+    text-decoration: none;
+
+    cursor: pointer;
+
+    transition:
+      transform 0.25s ease,
+      background 0.25s ease,
+      color 0.25s ease,
+      border-color 0.25s ease,
+      box-shadow 0.25s ease;
   }
 
-  /* Visuel Hero agrandi */
-  .about-hero-visual {
-    position: relative; display: flex; align-items: center; justify-content: flex-end;
+  .btn-primary {
+    color: #fff;
+    background: var(--primary);
+
+    border: 1px solid var(--primary);
+
+    box-shadow:
+      0 12px 28px rgba(37, 99, 235, 0.24);
   }
-  .visual-frame { position: relative; width: 100%; display: flex; justify-content: flex-end; }
-  .visual-blob {
-    position: absolute; inset: 0;
-    background: radial-gradient(circle at 60% 50%, rgba(37,99,235,0.12), transparent 65%);
-    border-radius: 50%; filter: blur(50px); animation: blob 14s ease-in-out infinite;
+
+  .btn-primary:hover {
+    background: var(--primary-dark);
+    border-color: var(--primary-dark);
+
+    transform: translateY(-3px);
+
+    box-shadow:
+      0 18px 35px rgba(37, 99, 235, 0.3);
   }
-  @keyframes blob { 0%,100%{ transform:scale(1); } 50%{ transform:scale(1.08); } }
-  
-  .illustration-placeholder img {
-    width: 100%; max-width: 620px; height: auto; aspect-ratio: 4/3;
-    object-fit: cover; border-radius: 32px;
-    box-shadow: 0 40px 80px -20px rgba(37,99,235,0.2);
-    border: 1px solid rgba(255,255,255,0.6);
+
+  .btn-secondary {
+    color: var(--text);
+    background: #fff;
+
+    border: 1px solid var(--gray-200);
+  }
+
+  .btn-secondary:hover {
+    color: var(--primary);
+    border-color: var(--primary);
+    background: var(--primary-light);
+
+    transform: translateY(-2px);
+  }
+
+  .btn-arrow {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+
+    transition: transform 0.25s ease;
+  }
+
+  .btn-primary:hover .btn-arrow {
+    transform: translateX(4px);
+  }
+
+  /* ================================================================
+     HERO
+  ================================================================ */
+
+  .about-hero {
+    position: relative;
+    isolation: isolate;
+
+    min-height: calc(100vh - var(--header-height));
+
+    display: flex;
+    align-items: center;
+
+    padding: 80px 0 100px;
+
+    overflow: hidden;
+
+    background:
+      radial-gradient(
+        circle at 10% 20%,
+        rgba(37, 99, 235, 0.08),
+        transparent 35%
+      ),
+      linear-gradient(
+        180deg,
+        #ffffff 0%,
+        #f8fafc 100%
+      );
+  }
+
+  .hero-background {
+    position: absolute;
+    inset: 0;
+
+    overflow: hidden;
+
+    pointer-events: none;
+
+    z-index: -1;
+  }
+
+  .hero-gradient {
+    position: absolute;
+    inset: 0;
+
+    background:
+      radial-gradient(
+        circle at 80% 15%,
+        rgba(245, 158, 11, 0.06),
+        transparent 25%
+      );
+  }
+
+  .hero-orb {
+    position: absolute;
+
+    border-radius: 50%;
+
+    filter: blur(2px);
+
+    animation: heroFloat 12s ease-in-out infinite;
+  }
+
+  .hero-orb-1 {
+    width: 420px;
+    height: 420px;
+
+    top: -220px;
+    left: -180px;
+
+    background:
+      radial-gradient(
+        circle,
+        rgba(37, 99, 235, 0.1),
+        transparent 70%
+      );
+  }
+
+  .hero-orb-2 {
+    width: 360px;
+    height: 360px;
+
+    right: -180px;
+    bottom: -200px;
+
+    background:
+      radial-gradient(
+        circle,
+        rgba(245, 158, 11, 0.07),
+        transparent 70%
+      );
+
+    animation-delay: -5s;
+  }
+
+  @keyframes heroFloat {
+    0%,
+    100% {
+      transform: translate3d(0, 0, 0);
+    }
+
+    50% {
+      transform: translate3d(0, -18px, 0);
+    }
+  }
+
+  .hero-container {
+    display: grid;
+
+    grid-template-columns:
+      minmax(0, 0.9fr)
+      minmax(0, 1.1fr);
+
+    gap: clamp(40px, 6vw, 90px);
+
+    align-items: center;
+  }
+
+  .hero-content {
+    min-width: 0;
+    max-width: 600px;
+  }
+
+  .hero-title {
+    margin: 0 0 22px;
+
+    color: var(--dark);
+
+    font-size: clamp(2.5rem, 5vw, 4.2rem);
+    line-height: 1.04;
+
+    font-weight: 850;
+
+    letter-spacing: -0.045em;
+  }
+
+  .hero-description {
+    max-width: 590px;
+
+    margin: 0 0 34px;
+
+    color: var(--text-muted);
+
+    font-size: clamp(1rem, 1.4vw, 1.15rem);
+    line-height: 1.75;
+  }
+
+  .hero-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+
+  .hero-visual {
+    min-width: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .hero-image-wrapper {
+    position: relative;
+
+    width: 100%;
+    max-width: 650px;
+
+    padding: 20px;
+  }
+
+  .hero-image-wrapper img {
+    position: relative;
+    z-index: 2;
+
+    display: block;
+
+    width: 100%;
+    height: auto;
+
+    aspect-ratio: 4 / 3;
+
+    object-fit: cover;
+
+    border-radius: 32px;
+
+    border: 1px solid rgba(255, 255, 255, 0.8);
+
+    box-shadow:
+      0 40px 90px rgba(15, 23, 42, 0.14);
+
     transition: transform 0.5s ease;
   }
-  .illustration-placeholder img:hover { transform: scale(1.015); }
 
-  /* Icônes flottantes agrandies et élégantes */
+  .hero-image-wrapper:hover img {
+    transform: scale(1.015);
+  }
+
+  .hero-image-glow {
+    position: absolute;
+    inset: 5%;
+
+    background:
+      radial-gradient(
+        circle,
+        rgba(37, 99, 235, 0.2),
+        transparent 65%
+      );
+
+    filter: blur(40px);
+
+    z-index: 0;
+  }
+
+  /* Floating icons */
+
   .floating-icon {
-    position: absolute; width: 56px; height: 56px; border-radius: 16px;
-    background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(8px);
-    box-shadow: 0 12px 32px rgba(0,0,0,0.08);
-    display: flex; align-items: center; justify-content: center;
-    border: 1px solid rgba(255,255,255,0.6); color: var(--c-primary);
-    animation: floatY 6s ease-in-out infinite; z-index: 5;
+    position: absolute;
+
+    z-index: 5;
+
+    width: 58px;
+    height: 58px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: var(--primary);
+
+    background: rgba(255, 255, 255, 0.92);
+
+    border: 1px solid rgba(255, 255, 255, 0.8);
+
+    border-radius: 17px;
+
+    box-shadow:
+      0 14px 35px rgba(15, 23, 42, 0.12);
+
+    backdrop-filter: blur(12px);
+
+    animation: floatingIcon 6s ease-in-out infinite;
   }
-  .floating-icon svg { width: 26px; height: 26px; }
-  .icon-plumbing { top: 5%; left: -2%; animation-delay: 0s; }
-  .icon-electric { top: 0%; right: 10%; animation-delay: -1.5s; }
-  .icon-paint { bottom: 15%; left: -5%; animation-delay: -3s; }
-  .icon-tile { bottom: 5%; right: -2%; animation-delay: -4.5s; }
-  @keyframes floatY { 0%,100%{ transform: translateY(0); } 50%{ transform: translateY(-14px); } }
+
+  .floating-icon svg {
+    width: 27px;
+    height: 27px;
+  }
+
+  .floating-1 {
+    top: 4%;
+    left: 0;
+
+    animation-delay: 0s;
+  }
+
+  .floating-2 {
+    top: 2%;
+    right: 8%;
+
+    animation-delay: -1.5s;
+  }
+
+  .floating-3 {
+    bottom: 12%;
+    left: 0;
+
+    animation-delay: -3s;
+  }
+
+  .floating-4 {
+    right: 0;
+    bottom: 5%;
+
+    animation-delay: -4.5s;
+  }
+
+  @keyframes floatingIcon {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+
+    50% {
+      transform: translateY(-13px);
+    }
+  }
 
   /* ================================================================
-     2. MISSION (Grande image avec superposition)
-     ================================================================ */
-  .mission-section { padding: 100px 0; background: var(--c-white); }
+     MISSION
+  ================================================================ */
+
+  .mission-section {
+    padding: 110px 0;
+
+    background: #fff;
+  }
+
   .mission-grid {
-    display: grid; grid-template-columns: 1fr 1.2fr; gap: 80px; align-items: center;
-  }
-  .mission-p { font-size: 1.1rem; line-height: 1.8; color: #475569; margin: 0 0 16px; }
-  
-  .mission-img-large {
-    position: relative; width: 100%; aspect-ratio: 4/3;
-    border-radius: 32px; overflow: hidden;
-    box-shadow: 0 40px 80px -20px rgba(15, 23, 42, 0.15);
-  }
-  .mission-img-large img {
-    width: 100%; height: 100%; object-fit: cover;
-    transition: transform 0.6s ease;
-  }
-  .mission-img-large:hover img { transform: scale(1.03); }
+    display: grid;
 
-  .float-card {
-    position: absolute; background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px); padding: 14px 22px; border-radius: 16px;
-    box-shadow: 0 12px 32px rgba(0,0,0,0.1);
-    display: flex; align-items: center; gap: 12px;
-    font-size: 0.95rem; font-weight: 600; color: var(--c-dark);
-    border: 1px solid rgba(255,255,255,0.6); white-space: nowrap; z-index: 10;
+    grid-template-columns:
+      minmax(0, 0.9fr)
+      minmax(0, 1.1fr);
+
+    gap: clamp(45px, 7vw, 100px);
+
+    align-items: center;
   }
-  .float-check {
-    display: flex; align-items: center; justify-content: center;
-    width: 24px; height: 24px; border-radius: 50%;
-    background: var(--c-primary-light); color: var(--c-primary);
-    font-size: 0.8rem; font-weight: 800;
+
+  .mission-content {
+    min-width: 0;
   }
-  .card-1 { top: 24px; left: 24px; animation: floatY 7s ease-in-out infinite; }
-  .card-2 { bottom: 24px; right: 24px; animation: floatY 7s ease-in-out infinite -2s; }
-  .card-3 { top: 45%; right: 24px; transform: translateY(-50%); animation: floatY 7s ease-in-out infinite -4s; }
+
+  .mission-text {
+    margin: 0 0 18px;
+
+    color: var(--text-muted);
+
+    font-size: 1.05rem;
+    line-height: 1.8;
+  }
+
+  .mission-visual {
+    min-width: 0;
+  }
+
+  .mission-image {
+    position: relative;
+
+    width: 100%;
+
+    border-radius: 30px;
+  }
+
+  .mission-image img {
+    display: block;
+
+    width: 100%;
+    height: auto;
+
+    aspect-ratio: 4 / 3;
+
+    object-fit: cover;
+
+    border-radius: 30px;
+
+    box-shadow:
+      0 35px 70px rgba(15, 23, 42, 0.14);
+  }
+
+  .mission-card {
+    position: absolute;
+
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    max-width: calc(100% - 30px);
+
+    padding: 12px 17px;
+
+    color: var(--dark);
+
+    background: rgba(255, 255, 255, 0.94);
+
+    border: 1px solid rgba(255, 255, 255, 0.8);
+
+    border-radius: 15px;
+
+    font-size: 0.88rem;
+    font-weight: 700;
+
+    box-shadow:
+      0 15px 35px rgba(15, 23, 42, 0.12);
+
+    backdrop-filter: blur(12px);
+
+    z-index: 3;
+
+    white-space: nowrap;
+
+    animation: floatingIcon 7s ease-in-out infinite;
+  }
+
+  .mission-card .check {
+    width: 24px;
+    height: 24px;
+    min-width: 24px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    color: var(--primary);
+
+    background: var(--primary-light);
+
+    font-size: 0.75rem;
+  }
+
+  .mission-card-1 {
+    top: 22px;
+    left: 22px;
+  }
+
+  .mission-card-2 {
+    right: 22px;
+    bottom: 22px;
+
+    animation-delay: -2s;
+  }
+
+  .mission-card-3 {
+    right: 22px;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    animation-delay: -4s;
+  }
 
   /* ================================================================
-     3. POURQUOI & 4. STEPS
-     ================================================================ */
-  .why-section { padding: 100px 0; background: #F1F5F9; }
-  .why-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px; margin-top: 48px; }
+     WHY
+  ================================================================ */
+
+  .why-section {
+    padding: 110px 0;
+
+    background: var(--gray-100);
+  }
+
+  .why-grid {
+    display: grid;
+
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+
+    gap: 24px;
+
+    margin-top: 48px;
+  }
+
   .why-card {
-    background: var(--c-white); padding: 36px 24px; border-radius: var(--radius-card);
-    border: 1px solid var(--c-line); text-align: center;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    min-width: 0;
+
+    padding: 34px 24px;
+
+    text-align: center;
+
+    background: #fff;
+
+    border: 1px solid var(--gray-200);
+
+    border-radius: var(--radius);
+
+    transition:
+      transform 0.3s ease,
+      box-shadow 0.3s ease;
   }
-  .why-card:hover { transform: translateY(-8px); box-shadow: 0 20px 40px -12px rgba(0,0,0,0.08); }
+
+  .why-card:hover {
+    transform: translateY(-7px);
+
+    box-shadow:
+      0 20px 45px rgba(15, 23, 42, 0.08);
+  }
+
   .why-icon {
-    width: 64px; height: 64px; border-radius: 50%; background: var(--c-primary-light);
-    color: var(--c-primary); display: flex; align-items: center; justify-content: center;
-    margin: 0 auto 20px;
-  }
-  .why-icon svg { width: 28px; height: 28px; }
-  .why-title { font-size: 1.15rem; font-weight: 700; margin: 0 0 8px; }
-  .why-desc { font-size: 0.95rem; color: #475569; line-height: 1.6; margin: 0; }
+    width: 64px;
+    height: 64px;
 
-  .steps-section { padding: 100px 0; background: var(--c-white); }
-  .steps-timeline {
-    display: flex; flex-wrap: wrap; justify-content: center; gap: 24px 0;
-    margin-top: 48px; position: relative;
+    margin: 0 auto 20px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: var(--primary);
+
+    background: var(--primary-light);
+
+    border-radius: 50%;
   }
-  .steps-timeline::before {
-    content: ''; position: absolute; top: 52px; left: 10%; right: 10%;
-    height: 2px; background: var(--c-line); z-index: 0;
+
+  .why-icon svg {
+    width: 29px;
+    height: 29px;
   }
+
+  .why-card h3 {
+    margin: 0 0 10px;
+
+    color: var(--dark);
+
+    font-size: 1.12rem;
+    line-height: 1.35;
+    font-weight: 750;
+  }
+
+  .why-card p {
+    margin: 0;
+
+    color: var(--text-muted);
+
+    font-size: 0.94rem;
+    line-height: 1.65;
+  }
+
+  /* ================================================================
+     STEPS
+  ================================================================ */
+
+  .steps-section {
+    padding: 110px 0;
+
+    background: #fff;
+  }
+
+  .steps-grid {
+    position: relative;
+
+    display: grid;
+
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+
+    gap: 25px;
+
+    margin-top: 55px;
+  }
+
+  .steps-grid::before {
+    content: "";
+
+    position: absolute;
+
+    top: 26px;
+    left: 10%;
+    right: 10%;
+
+    height: 2px;
+
+    background: var(--gray-200);
+
+    z-index: 0;
+  }
+
   .step-item {
-    flex: 1 1 180px; max-width: 220px; text-align: center;
-    position: relative; z-index: 1; padding: 0 12px;
+    position: relative;
+    z-index: 1;
+
+    min-width: 0;
+
+    text-align: center;
   }
+
   .step-number {
-    width: 48px; height: 48px; border-radius: 50%; background: var(--c-primary);
-    color: var(--c-white); font-weight: 700; font-size: 1.1rem;
-    display: flex; align-items: center; justify-content: center;
-    margin: 0 auto 16px; box-shadow: 0 8px 20px rgba(37,99,235,0.3);
-  }
-  .step-title { font-size: 1.05rem; font-weight: 700; margin: 0 0 6px; }
-  .step-desc { font-size: 0.9rem; color: #475569; line-height: 1.5; margin: 0; }
-  .step-connector { display: none; }
+    width: 52px;
+    height: 52px;
 
-  /* ================================================================
-     5. SERVICES
-     ================================================================ */
-  .services-section { padding: 100px 0; background: #F1F5F9; }
-  .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; margin-top: 48px; }
-  .service-card {
-    background: var(--c-white); padding: 32px 24px; border-radius: var(--radius-card);
-    border: 1px solid var(--c-line); text-align: center;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-  }
-  .service-card:hover { transform: translateY(-6px); box-shadow: 0 16px 40px -8px rgba(0,0,0,0.06); }
-  .service-icon {
-    width: 64px; height: 64px; border-radius: 50%; background: var(--c-primary-light);
-    color: var(--c-primary); display: flex; align-items: center; justify-content: center;
     margin: 0 auto 20px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #fff;
+
+    background: var(--primary);
+
+    border-radius: 50%;
+
+    font-size: 0.95rem;
+    font-weight: 800;
+
+    box-shadow:
+      0 8px 25px rgba(37, 99, 235, 0.28);
+
+    border: 5px solid #fff;
   }
-  .service-icon svg { width: 30px; height: 30px; }
-  .service-name { font-size: 1.2rem; font-weight: 700; margin: 0 0 8px; }
-  .service-desc { font-size: 0.95rem; color: #475569; line-height: 1.5; margin: 0 0 16px; }
+
+  .step-content h3 {
+    margin: 0 0 8px;
+
+    color: var(--dark);
+
+    font-size: 1.05rem;
+    font-weight: 750;
+  }
+
+  .step-content p {
+    max-width: 220px;
+
+    margin: 0 auto;
+
+    color: var(--text-muted);
+
+    font-size: 0.9rem;
+    line-height: 1.55;
+  }
+
+  .step-arrow {
+    position: absolute;
+
+    top: 16px;
+    right: -14px;
+
+    width: 28px;
+    height: 28px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: var(--gray-300);
+
+    background: #fff;
+  }
+
+  .step-arrow svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  /* ================================================================
+     SERVICES
+  ================================================================ */
+
+  .services-section {
+    padding: 110px 0;
+
+    background: var(--gray-100);
+  }
+
+  .services-grid {
+    display: grid;
+
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+
+    gap: 24px;
+
+    margin-top: 48px;
+  }
+
+  .service-card {
+    min-width: 0;
+
+    padding: 34px 25px;
+
+    text-align: center;
+
+    background: #fff;
+
+    border: 1px solid var(--gray-200);
+
+    border-radius: var(--radius);
+
+    transition:
+      transform 0.3s ease,
+      box-shadow 0.3s ease;
+  }
+
+  .service-card:hover {
+    transform: translateY(-6px);
+
+    box-shadow:
+      0 20px 45px rgba(15, 23, 42, 0.08);
+  }
+
+  .service-icon {
+    width: 64px;
+    height: 64px;
+
+    margin: 0 auto 20px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: var(--primary);
+
+    background: var(--primary-light);
+
+    border-radius: 50%;
+  }
+
+  .service-icon svg {
+    width: 30px;
+    height: 30px;
+  }
+
+  .service-card h3 {
+    margin: 0 0 9px;
+
+    color: var(--dark);
+
+    font-size: 1.15rem;
+    font-weight: 750;
+  }
+
+  .service-card p {
+    min-height: 48px;
+
+    margin: 0 0 17px;
+
+    color: var(--text-muted);
+
+    font-size: 0.94rem;
+    line-height: 1.55;
+  }
+
   .service-link {
-    font-weight: 600; color: var(--c-primary); text-decoration: none;
-    display: inline-flex; align-items: center; gap: 6px; font-size: 0.95rem;
-    transition: gap 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+
+    color: var(--primary);
+
+    font-size: 0.93rem;
+    font-weight: 700;
+
+    text-decoration: none;
+
+    transition: gap 0.2s ease;
   }
-  .service-link:hover { gap: 12px; }
+
+  .service-link:hover {
+    gap: 12px;
+  }
+
+  .service-link span {
+    transition: transform 0.2s ease;
+  }
 
   /* ================================================================
-     6. LOCAL (Visuel agrandi)
-     ================================================================ */
-  .local-section { padding: 100px 0; background: #0B1220; color: #F1F5F9; }
-  .local-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
-  .local-desc { font-size: 1.1rem; line-height: 1.7; color: #CBD5E1; max-width: 520px; margin: 0 0 40px; }
-  .local-stats { display: flex; gap: 48px; }
-  .stat-item { display: flex; flex-direction: column; }
-  .stat-value { font-size: 2rem; font-weight: 700; color: var(--c-primary); letter-spacing: -0.02em; }
-  .stat-label { font-size: 0.9rem; color: #94A3B8; font-weight: 500; margin-top: 4px; }
+     LOCAL
+  ================================================================ */
 
-  .local-visual { display: flex; justify-content: center; align-items: center; }
-  .map-placeholder-large {
-    width: 100%; min-height: 420px; border-radius: 32px; position: relative;
+  .local-section {
+    padding: 110px 0;
+
+    color: #f8fafc;
+
+    background:
+      radial-gradient(
+        circle at 20% 20%,
+        rgba(37, 99, 235, 0.15),
+        transparent 35%
+      ),
+      #0b1220;
+  }
+
+  .local-grid {
+    display: grid;
+
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    gap: clamp(45px, 7vw, 100px);
+
+    align-items: center;
+  }
+
+  .local-content {
+    min-width: 0;
+  }
+
+  .local-description {
+    max-width: 600px;
+
+    margin: 0 0 40px;
+
+    color: #cbd5e1;
+
+    font-size: 1.05rem;
+    line-height: 1.75;
+  }
+
+  .local-stats {
+    display: grid;
+
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+
+    gap: 24px;
+  }
+
+  .stat {
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+  }
+
+  .stat strong {
+    color: #60a5fa;
+
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    line-height: 1.1;
+    font-weight: 800;
+
+    word-break: break-word;
+  }
+
+  .stat span {
+    margin-top: 7px;
+
+    color: #94a3b8;
+
+    font-size: 0.82rem;
+    line-height: 1.45;
+  }
+
+  .local-visual {
+    min-width: 0;
+  }
+
+  .map-card {
+    position: relative;
+
+    min-height: 430px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
     overflow: hidden;
-    background: radial-gradient(circle at 30% 40%, rgba(37, 99, 235, 0.2), rgba(15, 23, 42, 0.6));
+
+    border-radius: 30px;
+
+    background:
+      radial-gradient(
+        circle at 30% 40%,
+        rgba(37, 99, 235, 0.2),
+        rgba(15, 23, 42, 0.7)
+      );
+
+    border: 1px solid rgba(255, 255, 255, 0.08);
+
+    box-shadow:
+      0 30px 70px rgba(0, 0, 0, 0.2);
+  }
+
+  .map-grid {
+    position: absolute;
+    inset: 0;
+
+    opacity: 0.15;
+
+    background-image:
+      linear-gradient(
+        rgba(255, 255, 255, 0.1) 1px,
+        transparent 1px
+      ),
+      linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0.1) 1px,
+        transparent 1px
+      );
+
+    background-size: 45px 45px;
+  }
+
+  .map-svg {
+    position: relative;
+    z-index: 2;
+
+    width: min(72%, 360px);
+    height: auto;
+
+    opacity: 0.8;
+  }
+
+  .map-pin {
+    position: absolute;
+    z-index: 4;
+
+    width: 10px;
+    height: 10px;
+
+    border-radius: 50%;
+
+    background: var(--primary);
+
+    box-shadow:
+      0 0 0 5px rgba(37, 99, 235, 0.12),
+      0 0 25px rgba(37, 99, 235, 0.7);
+
+    animation: pinPulse 3s infinite;
+  }
+
+  .pin-1 {
+    top: 25%;
+    left: 35%;
+  }
+
+  .pin-2 {
+    top: 64%;
+    left: 65%;
+
+    animation-delay: -0.6s;
+  }
+
+  .pin-3 {
+    top: 45%;
+    left: 25%;
+
+    animation-delay: -1.2s;
+  }
+
+  .pin-4 {
+    top: 74%;
+    left: 45%;
+
+    animation-delay: -1.8s;
+  }
+
+  .pin-5 {
+    top: 35%;
+    left: 75%;
+
+    animation-delay: -2.4s;
+  }
+
+  @keyframes pinPulse {
+    0%,
+    100% {
+      transform: scale(1);
+      opacity: 0.65;
+    }
+
+    50% {
+      transform: scale(1.5);
+      opacity: 1;
+    }
+  }
+
+  .map-label {
+    position: absolute;
+
+    right: 24px;
+    bottom: 24px;
+
+    z-index: 5;
+
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    padding: 10px 15px;
+
+    color: #e2e8f0;
+
+    background: rgba(15, 23, 42, 0.75);
+
     border: 1px solid rgba(255, 255, 255, 0.1);
-    display: flex; align-items: center; justify-content: center;
+
+    border-radius: 999px;
+
+    font-size: 0.85rem;
+    font-weight: 700;
+
+    backdrop-filter: blur(10px);
   }
-  .map-svg { width: 70%; height: 70%; opacity: 0.7; }
-  .map-dot {
-    position: absolute; width: 10px; height: 10px; border-radius: 50%;
-    background: var(--c-primary); box-shadow: 0 0 20px rgba(37,99,235,0.6);
+
+  .map-label-dot {
+    width: 8px;
+    height: 8px;
+
+    border-radius: 50%;
+
+    background: #60a5fa;
   }
-  .dot-1 { top: 25%; left: 35%; animation: pulse-dot 3s infinite; }
-  .dot-2 { top: 65%; left: 65%; animation: pulse-dot 3s infinite -0.8s; }
-  .dot-3 { top: 45%; left: 25%; animation: pulse-dot 3s infinite -1.6s; }
-  .dot-4 { top: 75%; left: 45%; animation: pulse-dot 3s infinite -2.4s; }
-  .dot-5 { top: 35%; left: 75%; animation: pulse-dot 3s infinite -3.2s; }
-  @keyframes pulse-dot { 0%,100%{ opacity:0.4; transform:scale(1); } 50%{ opacity:1; transform:scale(2); } }
 
   /* ================================================================
-     7. VALEURS & 8. CTA
-     ================================================================ */
-  .values-section { padding: 100px 0; background: var(--c-white); }
-  .values-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; margin-top: 48px; }
-  .value-card { text-align: center; padding: 24px; }
+     VALUES
+  ================================================================ */
+
+  .values-section {
+    padding: 110px 0;
+
+    background: #fff;
+  }
+
+  .values-grid {
+    display: grid;
+
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+
+    gap: 35px;
+
+    margin-top: 48px;
+  }
+
+  .value-card {
+    min-width: 0;
+
+    padding: 28px 24px;
+
+    text-align: center;
+  }
+
   .value-icon {
-    width: 72px; height: 72px; border-radius: 50%; background: var(--c-primary-light);
-    color: var(--c-primary); display: flex; align-items: center; justify-content: center;
-    margin: 0 auto 24px;
-  }
-  .value-icon svg { width: 32px; height: 32px; }
-  .value-name { font-size: 1.4rem; font-weight: 700; margin: 0 0 8px; }
-  .value-desc { font-size: 1rem; color: #475569; line-height: 1.6; margin: 0; }
+    width: 72px;
+    height: 72px;
 
-  .cta-section { padding: 100px 0; background: #F1F5F9; }
+    margin: 0 auto 22px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: var(--primary);
+
+    background: var(--primary-light);
+
+    border-radius: 50%;
+  }
+
+  .value-icon svg {
+    width: 32px;
+    height: 32px;
+  }
+
+  .value-card h3 {
+    margin: 0 0 9px;
+
+    color: var(--dark);
+
+    font-size: 1.35rem;
+    font-weight: 750;
+  }
+
+  .value-card p {
+    max-width: 330px;
+
+    margin: 0 auto;
+
+    color: var(--text-muted);
+
+    font-size: 0.96rem;
+    line-height: 1.65;
+  }
+
+  /* ================================================================
+     CTA
+  ================================================================ */
+
+  .cta-section {
+    padding: 100px 0;
+
+    background: var(--gray-100);
+  }
+
   .cta-box {
-    background: var(--c-white); padding: 72px 48px; border-radius: 32px;
-    text-align: center; border: 1px solid var(--c-line);
-    box-shadow: 0 20px 60px -20px rgba(0,0,0,0.06);
+    position: relative;
+
+    overflow: hidden;
+
+    padding: clamp(45px, 7vw, 75px) 30px;
+
+    text-align: center;
+
+    background: #fff;
+
+    border: 1px solid var(--gray-200);
+
+    border-radius: 32px;
+
+    box-shadow:
+      0 25px 60px rgba(15, 23, 42, 0.07);
   }
-  .cta-title { font-size: clamp(2rem, 3.5vw, 2.8rem); font-weight: 700; letter-spacing: -0.02em; margin: 0 0 12px; }
-  .cta-desc { font-size: 1.15rem; color: #475569; max-width: 560px; margin: 0 auto 36px; line-height: 1.6; }
-  .cta-actions { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+
+  .cta-decoration {
+    position: absolute;
+
+    width: 280px;
+    height: 280px;
+
+    top: -170px;
+    right: -120px;
+
+    border-radius: 50%;
+
+    background:
+      radial-gradient(
+        circle,
+        rgba(37, 99, 235, 0.12),
+        transparent 70%
+      );
+  }
+
+  .cta-content {
+    position: relative;
+    z-index: 2;
+
+    max-width: 700px;
+
+    margin: 0 auto;
+  }
+
+  .cta-content h2 {
+    margin: 0 0 14px;
+
+    color: var(--dark);
+
+    font-size: clamp(2rem, 4vw, 2.8rem);
+    line-height: 1.1;
+    font-weight: 800;
+
+    letter-spacing: -0.03em;
+  }
+
+  .cta-content p {
+    max-width: 600px;
+
+    margin: 0 auto 34px;
+
+    color: var(--text-muted);
+
+    font-size: 1.05rem;
+    line-height: 1.7;
+  }
+
+  .cta-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-wrap: wrap;
+
+    gap: 14px;
+  }
 
   /* ================================================================
-     RESPONSIVE
-     ================================================================ */
-  @media (max-width: 1024px) {
-    .about-hero-inner { grid-template-columns: 1fr; gap: 48px; text-align: center; }
-    .about-hero-copy { max-width: 100%; margin: 0 auto; }
-    .about-hero-cta { justify-content: center; }
-    .about-hero-visual { order: -1; max-width: 500px; margin: 0 auto; }
-    .icon-hvac, .icon-wood { display: none; }
-    
-    .mission-grid { grid-template-columns: 1fr; gap: 48px; }
-    .mission-visual { order: -1; }
-    
-    .why-grid { grid-template-columns: repeat(2, 1fr); }
-    .services-grid { grid-template-columns: repeat(2, 1fr); }
-    .local-grid { grid-template-columns: 1fr; text-align: center; }
-    .local-desc { margin: 0 auto 40px; }
-    .local-stats { justify-content: center; }
-    .values-grid { grid-template-columns: 1fr; max-width: 500px; margin: 48px auto 0; }
+     RTL
+  ================================================================ */
+
+  .rtl {
+    direction: rtl;
   }
 
-  @media (max-width: 768px) {
-    .container { padding: 0 20px; }
-    .about-hero { padding-top: calc(var(--header-h) + 32px); min-height: auto; padding-bottom: 60px; }
-    .about-hero-title { font-size: 2.2rem; }
-    .btn { width: 100%; justify-content: center; }
-    
-    .mission-img-large { aspect-ratio: 16/10; }
-    .card-3 { display: none; } /* Simplifier sur mobile */
-    
-    .why-grid, .services-grid { grid-template-columns: 1fr; }
-    .steps-timeline { flex-direction: column; align-items: center; gap: 32px; }
-    .steps-timeline::before { display: none; }
-    .step-item { max-width: 100%; }
-    .step-connector { display: block; margin: 8px 0; }
-    .step-connector svg { transform: rotate(90deg); width: 24px; height: 24px; color: var(--c-line); }
-    
-    .local-stats { flex-direction: column; gap: 24px; align-items: center; }
-    .map-placeholder-large { min-height: 300px; }
-    .cta-box { padding: 48px 24px; }
-    .cta-actions { flex-direction: column; }
+  .rtl .btn-arrow {
+    transform: rotate(180deg);
+  }
+
+  .rtl .btn-primary:hover .btn-arrow {
+    transform: rotate(180deg) translateX(4px);
+  }
+
+  .rtl .mission-card-1 {
+    left: auto;
+    right: 22px;
+  }
+
+  .rtl .mission-card-2,
+  .rtl .mission-card-3 {
+    right: auto;
+    left: 22px;
+  }
+
+  .rtl .service-link span {
+    display: inline-block;
+    transform: scaleX(-1);
+  }
+
+  .rtl .floating-1 {
+    left: auto;
+    right: 0;
+  }
+
+  .rtl .floating-3 {
+    left: auto;
+    right: 0;
+  }
+
+  .rtl .floating-2 {
+    right: auto;
+    left: 8%;
+  }
+
+  .rtl .floating-4 {
+    right: auto;
+    left: 0;
   }
 
   /* ================================================================
-     RTL SUPPORT
-     ================================================================ */
-  .rtl .btn-arrow svg { transform: rotate(180deg); }
-  .rtl .btn-primary:hover .btn-arrow svg { transform: rotate(180deg) translateX(4px); }
-  .rtl .service-link span { display: inline-block; transform: scaleX(-1); }
-  .rtl .floating-icon { direction: ltr; }
-  
-  .rtl .card-1 { left: auto; right: 24px; }
-  .rtl .card-2 { right: auto; left: 24px; }
-  .rtl .card-3 { right: auto; left: 24px; }
+     LARGE TABLET
+  ================================================================ */
+
+  @media (max-width: 1100px) {
+    .container {
+      padding-left: 24px;
+      padding-right: 24px;
+    }
+
+    .hero-container {
+      gap: 45px;
+    }
+
+    .hero-title {
+      font-size: clamp(2.3rem, 5vw, 3.4rem);
+    }
+
+    .mission-grid {
+      gap: 45px;
+    }
+
+    .why-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .services-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  /* ================================================================
+     TABLET
+  ================================================================ */
+
+  @media (max-width: 900px) {
+    :root {
+      --header-height: 72px;
+    }
+
+    .about-hero {
+      min-height: auto;
+
+      padding-top: 65px;
+      padding-bottom: 80px;
+    }
+
+    .hero-container {
+      grid-template-columns: 1fr;
+
+      text-align: center;
+
+      gap: 45px;
+    }
+
+    .hero-content {
+      max-width: 720px;
+
+      margin: 0 auto;
+    }
+
+    .hero-description {
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .hero-buttons {
+      justify-content: center;
+    }
+
+    .hero-visual {
+      order: 2;
+    }
+
+    .hero-image-wrapper {
+      max-width: 650px;
+      margin: 0 auto;
+    }
+
+    .mission-grid {
+      grid-template-columns: 1fr;
+
+      gap: 55px;
+    }
+
+    .mission-content {
+      max-width: 750px;
+
+      margin: 0 auto;
+
+      text-align: center;
+    }
+
+    .mission-visual {
+      max-width: 700px;
+
+      width: 100%;
+
+      margin: 0 auto;
+    }
+
+    .mission-card-3 {
+      display: none;
+    }
+
+    .steps-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+
+      gap: 45px 25px;
+    }
+
+    .steps-grid::before {
+      display: none;
+    }
+
+    .step-arrow {
+      display: none;
+    }
+
+    .local-grid {
+      grid-template-columns: 1fr;
+
+      gap: 55px;
+    }
+
+    .local-content {
+      text-align: center;
+    }
+
+    .local-description {
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .local-stats {
+      max-width: 650px;
+
+      margin: 0 auto;
+    }
+
+    .local-visual {
+      max-width: 650px;
+
+      width: 100%;
+
+      margin: 0 auto;
+    }
+  }
+
+  /* ================================================================
+     MOBILE
+  ================================================================ */
+
+  @media (max-width: 640px) {
+    .container {
+      padding-left: 16px;
+      padding-right: 16px;
+    }
+
+    .about-hero {
+      padding-top: 45px;
+      padding-bottom: 65px;
+    }
+
+    .badge {
+      max-width: 100%;
+
+      padding: 8px 13px;
+
+      font-size: 0.7rem;
+    }
+
+    .hero-title {
+      font-size: clamp(2rem, 10vw, 2.65rem);
+
+      letter-spacing: -0.035em;
+    }
+
+    .hero-description {
+      font-size: 0.98rem;
+
+      line-height: 1.65;
+    }
+
+    .hero-buttons {
+      width: 100%;
+
+      flex-direction: column;
+
+      gap: 10px;
+    }
+
+    .hero-buttons .btn,
+    .cta-buttons .btn {
+      width: 100%;
+    }
+
+    .hero-image-wrapper {
+      padding: 8px;
+    }
+
+    .hero-image-wrapper img {
+      border-radius: 22px;
+    }
+
+    .floating-icon {
+      width: 45px;
+      height: 45px;
+
+      border-radius: 13px;
+    }
+
+    .floating-icon svg {
+      width: 21px;
+      height: 21px;
+    }
+
+    .floating-1 {
+      top: 1%;
+      left: -2px;
+    }
+
+    .floating-2 {
+      top: -2%;
+      right: 4%;
+    }
+
+    .floating-3 {
+      bottom: 7%;
+      left: -2px;
+    }
+
+    .floating-4 {
+      right: -2px;
+      bottom: 1%;
+    }
+
+    .mission-section,
+    .why-section,
+    .steps-section,
+    .services-section,
+    .values-section {
+      padding: 75px 0;
+    }
+
+    .local-section {
+      padding: 75px 0;
+    }
+
+    .section-title {
+      font-size: clamp(1.8rem, 8vw, 2.3rem);
+    }
+
+    .mission-text {
+      font-size: 0.98rem;
+      line-height: 1.7;
+    }
+
+    .mission-image img {
+      border-radius: 22px;
+    }
+
+    .mission-card {
+      padding: 9px 11px;
+
+      gap: 7px;
+
+      font-size: 0.68rem;
+
+      border-radius: 11px;
+    }
+
+    .mission-card .check {
+      width: 20px;
+      height: 20px;
+      min-width: 20px;
+
+      font-size: 0.65rem;
+    }
+
+    .mission-card-1 {
+      top: 12px;
+      left: 12px;
+    }
+
+    .mission-card-2 {
+      right: 12px;
+      bottom: 12px;
+    }
+
+    .rtl .mission-card-1 {
+      left: auto;
+      right: 12px;
+    }
+
+    .rtl .mission-card-2 {
+      right: auto;
+      left: 12px;
+    }
+
+    .why-grid,
+    .services-grid,
+    .values-grid {
+      grid-template-columns: 1fr;
+
+      gap: 16px;
+
+      margin-top: 35px;
+    }
+
+    .why-card {
+      padding: 28px 20px;
+    }
+
+    .service-card {
+      padding: 28px 20px;
+    }
+
+    .service-card p {
+      min-height: auto;
+    }
+
+    .steps-grid {
+      grid-template-columns: 1fr;
+
+      gap: 35px;
+
+      margin-top: 40px;
+    }
+
+    .step-item {
+      display: grid;
+
+      grid-template-columns: 52px minmax(0, 1fr);
+
+      gap: 18px;
+
+      text-align: start;
+
+      align-items: start;
+    }
+
+    .step-number {
+      grid-column: 1;
+
+      margin: 0;
+    }
+
+    .step-content {
+      grid-column: 2;
+
+      padding-top: 3px;
+    }
+
+    .step-content p {
+      max-width: none;
+
+      margin: 0;
+    }
+
+    .local-stats {
+      grid-template-columns: 1fr;
+
+      gap: 24px;
+    }
+
+    .stat {
+      align-items: center;
+    }
+
+    .map-card {
+      min-height: 300px;
+
+      border-radius: 22px;
+    }
+
+    .map-svg {
+      width: 80%;
+    }
+
+    .map-label {
+      right: 14px;
+      bottom: 14px;
+
+      padding: 8px 12px;
+
+      font-size: 0.75rem;
+    }
+
+    .cta-section {
+      padding: 65px 0;
+    }
+
+    .cta-box {
+      padding: 45px 20px;
+
+      border-radius: 24px;
+    }
+
+    .cta-content h2 {
+      font-size: 2rem;
+    }
+
+    .cta-content p {
+      font-size: 0.95rem;
+    }
+
+    .cta-buttons {
+      flex-direction: column;
+
+      width: 100%;
+    }
+
+    .value-card {
+      padding: 20px 10px;
+    }
+  }
+
+  /* ================================================================
+     SMALL MOBILE
+  ================================================================ */
+
+  @media (max-width: 380px) {
+    .container {
+      padding-left: 13px;
+      padding-right: 13px;
+    }
+
+    .hero-title {
+      font-size: 1.9rem;
+    }
+
+    .hero-description {
+      font-size: 0.92rem;
+    }
+
+    .floating-icon {
+      width: 39px;
+      height: 39px;
+
+      border-radius: 11px;
+    }
+
+    .floating-icon svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .mission-card {
+      padding: 7px 9px;
+
+      font-size: 0.6rem;
+    }
+
+    .mission-card .check {
+      width: 18px;
+      height: 18px;
+      min-width: 18px;
+    }
+
+    .map-card {
+      min-height: 260px;
+    }
+  }
+
+  /* ================================================================
+     ACCESSIBILITY
+  ================================================================ */
+
+  @media (prefers-reduced-motion: reduce) {
+    .about-page *,
+    .about-page *::before,
+    .about-page *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
 
   /* ================================================================
      DARK MODE
-     ================================================================ */
+  ================================================================ */
+
   @media (prefers-color-scheme: dark) {
-    .about-page { background: #0B1220; color: #F1F5F9; }
-    .about-hero { background: #0B1220; }
-    .about-hero-bg .bg-gradient {
-      background: radial-gradient(ellipse at 20% 10%, rgba(37,99,235,0.15), transparent 55%),
-                  radial-gradient(ellipse at 90% 80%, rgba(245,158,11,0.06), transparent 50%),
-                  linear-gradient(180deg, #0B1220 0%, #0F172A 100%);
+    .about-page {
+      background: #0b1220;
+      color: #f1f5f9;
     }
-    .about-hero-title { color: #F1F5F9; }
-    .about-hero-desc { color: #CBD5E1; }
-    .badge { background: rgba(37,99,235,0.15); border-color: rgba(37,99,235,0.3); }
-    .section-title { color: #F1F5F9; }
-    .btn-secondary { color: #F1F5F9; border-color: rgba(255,255,255,0.15); }
-    .btn-secondary:hover { background: rgba(37,99,235,0.15); color: #93C5FD; border-color: var(--c-primary); }
-    
-    .why-section, .services-section { background: #0F172A; }
-    .why-card, .service-card { background: #1E293B; border-color: rgba(255,255,255,0.05); }
-    .why-title, .service-name, .value-name { color: #F1F5F9; }
-    .why-desc, .service-desc, .value-desc { color: #CBD5E1; }
-    
-    .steps-section, .values-section, .cta-section { background: #0B1220; }
-    .step-desc { color: #CBD5E1; }
-    
-    .cta-box { background: #1E293B; border-color: rgba(255,255,255,0.05); }
-    .cta-title { color: #F1F5F9; }
-    .cta-desc { color: #CBD5E1; }
-    
-    .float-card { background: rgba(30, 41, 59, 0.95); border-color: rgba(255,255,255,0.1); color: #F1F5F9; }
-    .float-check { background: rgba(37,99,235,0.2); color: #60A5FA; }
-    
-    .mission-section { background: #0B1220; }
-    .mission-p { color: #CBD5E1; }
-    
-    .service-icon, .why-icon, .value-icon { background: rgba(37,99,235,0.2); color: #60A5FA; }
-    .floating-icon { background: rgba(30, 41, 59, 0.9); border-color: rgba(255,255,255,0.1); }
+
+    .about-hero {
+      background:
+        radial-gradient(
+          circle at 10% 20%,
+          rgba(37, 99, 235, 0.13),
+          transparent 35%
+        ),
+        linear-gradient(
+          180deg,
+          #0b1220 0%,
+          #0f172a 100%
+        );
+    }
+
+    .hero-title {
+      color: #f8fafc;
+    }
+
+    .hero-description {
+      color: #cbd5e1;
+    }
+
+    .btn-secondary {
+      color: #f8fafc;
+
+      background: #1e293b;
+
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .btn-secondary:hover {
+      color: #93c5fd;
+
+      background: rgba(37, 99, 235, 0.12);
+
+      border-color: var(--primary);
+    }
+
+    .floating-icon {
+      color: #60a5fa;
+
+      background: rgba(30, 41, 59, 0.92);
+
+      border-color: rgba(255, 255, 255, 0.08);
+    }
+
+    .mission-section,
+    .steps-section,
+    .values-section {
+      background: #0b1220;
+    }
+
+    .section-title,
+    .mission-text,
+    .why-card h3,
+    .service-card h3,
+    .value-card h3,
+    .step-content h3 {
+      color: #f1f5f9;
+    }
+
+    .mission-text,
+    .why-card p,
+    .service-card p,
+    .value-card p,
+    .step-content p {
+      color: #cbd5e1;
+    }
+
+    .why-section,
+    .services-section,
+    .cta-section {
+      background: #0f172a;
+    }
+
+    .why-card,
+    .service-card,
+    .cta-box {
+      background: #1e293b;
+
+      border-color: rgba(255, 255, 255, 0.06);
+    }
+
+    .why-icon,
+    .service-icon,
+    .value-icon {
+      background: rgba(37, 99, 235, 0.18);
+
+      color: #60a5fa;
+    }
+
+    .step-number {
+      border-color: #0b1220;
+    }
+
+    .steps-grid::before {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .step-arrow {
+      background: #0b1220;
+    }
+
+    .cta-content h2 {
+      color: #f1f5f9;
+    }
+
+    .cta-content p {
+      color: #cbd5e1;
+    }
+
+    .mission-card {
+      color: #f1f5f9;
+
+      background: rgba(30, 41, 59, 0.95);
+
+      border-color: rgba(255, 255, 255, 0.08);
+    }
+
+    .mission-card .check {
+      color: #60a5fa;
+
+      background: rgba(37, 99, 235, 0.2);
+    }
   }
 </style>
