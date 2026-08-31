@@ -1,91 +1,212 @@
 ---
 // src/pages/[lang]/services/electricien.astro
 import Layout from "../layouts/Layout.astro";
-import { t } from "../../../lib/i18n";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 
 export interface Props {
-  lang?: "fr" | "ar";
+  lang?: "fr" | "ar" | "en";
   currentPath?: string;
 }
 
-const { lang = "fr", currentPath = "/services/electricien" } = Astro.props;
+const {
+  lang = "fr",
+  currentPath = "/services/electricien",
+} = Astro.props;
 
 const baseUrl = `/${lang}`;
 
 // ============================================================
-// ICON SYSTEM — clean inline SVG (Lucide style) with electrical icons
+// ICON SYSTEM
 // ============================================================
-function icon(name: string, size: number = 24, className: string = ""): string {
-  const icons: Record<string, string> = {
-    // Existing icons from plombier
-    wrench: `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>`,
-    droplets: `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><path d="M12 22a7 7 0 0 0 7-7c0-3.5-3-8-7-12-4 4-7 8.5-7 12a7 7 0 0 0 7 7z"/><path d="M12 16a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/></svg>`,
-    "map-pin": `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>`,
-    "check-circle": `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>`,
-    "arrow-right": `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>`,
-    "arrow-down": `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>`,
-    settings: `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>`,
-    shower: `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><path d="m4 4 2.5 2.5"/><path d="M13.5 6.5a4.95 4.95 0 0 0-7 7"/><path d="M15 5 5 15"/><path d="M14 17v.01"/><path d="M10 16v.01"/><path d="M13 13v.01"/><path d="M16 10v.01"/><path d="M11 20v.01"/><path d="M17 14v.01"/><path d="M20 11v.01"/></svg>`,
-    clock: `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`,
-    "file-text": `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>`,
 
-    // New electrical icons
-    zap: `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>`,
-    lightbulb: `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>`,
-    plug: `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><path d="M12 22v-5"/><path d="M9 8V2"/><path d="M15 8V2"/><path d="M18 8v5a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4V8z"/></svg>`,
+function icon(
+  name: string,
+  size: number = 24,
+  className: string = ""
+): string {
+  const icons: Record<string, string> = {
+    "map-pin": `
+      <svg xmlns="http://www.w3.org/2000/svg"
+        width="${size}" height="${size}" viewBox="0 0 24 24"
+        fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round"
+        class="${className}">
+        <path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0Z"/>
+        <circle cx="12" cy="10" r="3"/>
+      </svg>
+    `,
+
+    "check-circle": `
+      <svg xmlns="http://www.w3.org/2000/svg"
+        width="${size}" height="${size}" viewBox="0 0 24 24"
+        fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round"
+        class="${className}">
+        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+        <polyline points="22 4 12 14.01 9 11.01"/>
+      </svg>
+    `,
+
+    "arrow-right": `
+      <svg xmlns="http://www.w3.org/2000/svg"
+        width="${size}" height="${size}" viewBox="0 0 24 24"
+        fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round"
+        class="${className}">
+        <line x1="5" y1="12" x2="19" y2="12"/>
+        <polyline points="12 5 19 12 12 19"/>
+      </svg>
+    `,
+
+    "arrow-down": `
+      <svg xmlns="http://www.w3.org/2000/svg"
+        width="${size}" height="${size}" viewBox="0 0 24 24"
+        fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round"
+        class="${className}">
+        <line x1="12" y1="5" x2="12" y2="19"/>
+        <polyline points="19 12 12 19 5 12"/>
+      </svg>
+    `,
+
+    wrench: `
+      <svg xmlns="http://www.w3.org/2000/svg"
+        width="${size}" height="${size}" viewBox="0 0 24 24"
+        fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round"
+        class="${className}">
+        <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+      </svg>
+    `,
+
+    settings: `
+      <svg xmlns="http://www.w3.org/2000/svg"
+        width="${size}" height="${size}" viewBox="0 0 24 24"
+        fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round"
+        class="${className}">
+        <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
+        <circle cx="12" cy="12" r="3"/>
+      </svg>
+    `,
+
+    zap: `
+      <svg xmlns="http://www.w3.org/2000/svg"
+        width="${size}" height="${size}" viewBox="0 0 24 24"
+        fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round"
+        class="${className}">
+        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+      </svg>
+    `,
+
+    lightbulb: `
+      <svg xmlns="http://www.w3.org/2000/svg"
+        width="${size}" height="${size}" viewBox="0 0 24 24"
+        fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round"
+        class="${className}">
+        <path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/>
+        <path d="M9 18h6"/>
+        <path d="M10 22h4"/>
+      </svg>
+    `,
+
+    plug: `
+      <svg xmlns="http://www.w3.org/2000/svg"
+        width="${size}" height="${size}" viewBox="0 0 24 24"
+        fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round"
+        class="${className}">
+        <path d="M12 22v-5"/>
+        <path d="M9 8V2"/>
+        <path d="M15 8V2"/>
+        <path d="M18 8v5a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4V8z"/>
+      </svg>
+    `,
+
+    clock: `
+      <svg xmlns="http://www.w3.org/2000/svg"
+        width="${size}" height="${size}" viewBox="0 0 24 24"
+        fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round"
+        class="${className}">
+        <circle cx="12" cy="12" r="10"/>
+        <polyline points="12 6 12 12 16 14"/>
+      </svg>
+    `,
+
+    "file-text": `
+      <svg xmlns="http://www.w3.org/2000/svg"
+        width="${size}" height="${size}" viewBox="0 0 24 24"
+        fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round"
+        class="${className}">
+        <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
+        <polyline points="14 2 14 8 20 8"/>
+        <line x1="16" y1="13" x2="8" y2="13"/>
+        <line x1="16" y1="17" x2="8" y2="17"/>
+        <polyline points="10 9 9 9 8 9"/>
+      </svg>
+    `,
   };
 
   return icons[name] || "";
 }
 
 // ============================================================
-// HERO MULTILINGUAL CONTENT — adapted for electrician
+// MULTILINGUAL HERO CONTENT
 // ============================================================
-const heroContent: Record<string, any> = {
+
+const heroContent = {
   fr: {
     badge: "Électricité à Tanger",
-    title: "Votre maison à Tanger,<br/>entre de <span class=\"highlight\">bonnes mains</span>.",
-    subtitle: "Besoin d'un électricien pour une installation, une panne ou une réparation ? AlloMealem vous met en relation avec des électriciens de confiance à Tanger.",
+    title: `Votre maison à Tanger,<br/>entre de <span class="highlight">bonnes mains</span>.`,
+    subtitle:
+      "Besoin d'un électricien pour une installation, une panne ou une réparation ? AlloMealem vous met en relation avec des électriciens de confiance à Tanger.",
     primaryCta: "Trouver un professionnel",
     secondaryCta: "Voir les services",
     trust: [
       "Électriciens locaux",
       "Intervention à Tanger",
       "Intervention rapide",
-      "Professionnels vérifiés"
+      "Professionnels vérifiés",
     ],
-    imgAlt: "Électricien professionnel intervenant à Tanger"
+    imgAlt: "Électricien professionnel intervenant à Tanger",
   },
+
   ar: {
     badge: "الكهرباء في طنجة",
-    title: "منزلك في طنجة،<br/>بين <span class=\"highlight\">أيدٍ أمينة</span>.",
-    subtitle: "هل تحتاج إلى كهربائي للتركيب أو الإصلاح أو حل عطل كهربائي؟ يوصلك AlloMealem بكهربائيين موثوقين في طنجة.",
+    title: `منزلك في طنجة،<br/>بين <span class="highlight">أيدٍ أمينة</span>.`,
+    subtitle:
+      "هل تحتاج إلى كهربائي للتركيب أو الإصلاح أو حل عطل كهربائي؟ يوصلك AlloMealem بكهربائيين موثوقين في طنجة.",
     primaryCta: "ابحث عن حرفي",
     secondaryCta: "عرض الخدمات",
     trust: [
       "كهربائيون محليون",
       "تدخل في طنجة",
       "تدخل سريع",
-      "محترفون موثوقون"
+      "محترفون موثوقون",
     ],
-    imgAlt: "كهربائي محترف يقدم خدمات الكهرباء في طنجة"
+    imgAlt: "كهربائي محترف يقدم خدمات الكهرباء في طنجة",
   },
+
   en: {
     badge: "Electrical services in Tangier",
-    title: "Your home in Tangier,<br/>in <span class=\"highlight\">good hands</span>.",
-    subtitle: "Need an electrician for an installation, repair or electrical issue? AlloMealem connects you with trusted electricians in Tangier.",
+    title: `Your home in Tangier,<br/>in <span class="highlight">good hands</span>.`,
+    subtitle:
+      "Need an electrician for an installation, repair or electrical issue? AlloMealem connects you with trusted electricians in Tangier.",
     primaryCta: "Find a professional",
     secondaryCta: "View services",
     trust: [
       "Local electricians",
       "Service in Tangier",
       "Fast service",
-      "Verified professionals"
+      "Verified professionals",
     ],
-    imgAlt: "Professional electrician providing electrical services in Tangier"
-  }
+    imgAlt: "Professional electrician providing electrical services in Tangier",
+  },
 };
 
 const content = heroContent[lang] || heroContent.fr;
@@ -95,86 +216,132 @@ const content = heroContent[lang] || heroContent.fr;
   <Header lang={lang} />
 
   <!-- ============================================================
-  HERO SECTION — Electrician version (same blue palette)
+       HERO
   ============================================================ -->
+
   <section class="electrician-hero" id="hero">
     <div class="container">
       <div class="hero-grid">
-        <!-- LEFT COLUMN: Content -->
+
+        <!-- CONTENT -->
         <div class="hero-content">
+
           <span class="hero-badge">
-            <span set:html={icon("map-pin", 16, "badge-icon")}></span>
+            <span set:html={icon("map-pin", 16, "badge-icon")} />
             {content.badge}
           </span>
 
-          <h1 class="hero-title" set:html={content.title}></h1>
+          <h1
+            class="hero-title"
+            set:html={content.title}
+          />
 
-          <p class="hero-desc">{content.subtitle}</p>
+          <p class="hero-desc">
+            {content.subtitle}
+          </p>
 
           <div class="hero-actions">
-            <a href='/contact' class="btn btn-primary">
+
+            <a
+              href={`${baseUrl}/contact`}
+              class="btn btn-primary"
+            >
               {content.primaryCta}
-              <span set:html={icon("arrow-right", 18)}></span>
+              <span
+                set:html={icon("arrow-right", 18)}
+              />
             </a>
-            <a href="#services" class="btn btn-secondary">
+
+            <a
+              href="#services"
+              class="btn btn-secondary"
+            >
               {content.secondaryCta}
             </a>
+
           </div>
 
           <div class="trust-indicators">
-            {content.trust.map((item: string) => (
-              <span class="trust-item">
-                <span set:html={icon("check-circle", 18, "trust-icon")}></span>
-                {item}
-              </span>
-            ))}
+            {
+              content.trust.map((item) => (
+                <span class="trust-item">
+                  <span
+                    set:html={icon(
+                      "check-circle",
+                      18,
+                      "trust-icon"
+                    )}
+                  />
+                  {item}
+                </span>
+              ))
+            }
           </div>
+
         </div>
 
-        <!-- RIGHT COLUMN: Visual Composition -->
+        <!-- VISUAL -->
         <div class="hero-visuals">
-          <!-- Main Image -->
+
+          <!-- Main image -->
           <div class="visual-main">
             <img
-              src="elictricien2.png"
+              src="/elictricien2.png"
               alt={content.imgAlt}
               loading="eager"
               decoding="async"
             />
           </div>
 
-          <!-- Supporting Image 1 -->
+          <!-- Supporting image 1 -->
           <div class="visual-support support-1">
             <img
-              src="elictricien.png"
+              src="/elictricien.png"
               alt="Électricien travaillant sur un tableau électrique"
               loading="lazy"
               decoding="async"
             />
-            <span class="support-label">Installation électrique</span>
+
+            <span class="support-label">
+              Installation électrique
+            </span>
           </div>
 
-          <!-- Supporting Image 2 -->
+          <!-- Supporting image 2 -->
           <div class="visual-support support-2">
             <img
-              src="elictricien1.png"
+              src="/elictricien1.png"
               alt="Électricien installant une prise"
               loading="lazy"
               decoding="async"
             />
-            <span class="support-label">Dépannage</span>
+
+            <span class="support-label">
+              Dépannage
+            </span>
           </div>
 
-          <!-- Floating Card -->
+          <!-- Floating card -->
           <div class="floating-card">
-            <span class="float-icon" set:html={icon("check-circle", 20)}></span>
+
+            <span
+              class="float-icon"
+              set:html={icon("check-circle", 20)}
+            />
+
             <div>
-              <span class="float-title">Intervention rapide</span>
-              <span class="float-sub">À Tanger</span>
+              <span class="float-title">
+                Intervention rapide
+              </span>
+
+              <span class="float-sub">
+                À Tanger
+              </span>
             </div>
+
           </div>
 
-          <!-- Service Tags -->
+          <!-- Tags -->
           <div class="service-tags">
             <span class="tag">Installation</span>
             <span class="tag">Dépannage</span>
@@ -182,192 +349,406 @@ const content = heroContent[lang] || heroContent.fr;
             <span class="tag">Éclairage</span>
             <span class="tag">Prises électriques</span>
           </div>
+
         </div>
       </div>
     </div>
   </section>
 
   <!-- ============================================================
-  SERVICES SECTION — 6 cards for electrical services
+       SERVICES
   ============================================================ -->
+
   <section class="services-section" id="services">
     <div class="container">
+
       <div class="section-header">
-        <span class="eyebrow">Nos services</span>
-        <h2 class="section-title">Des solutions pour tous vos besoins en électricité</h2>
+        <span class="eyebrow">
+          Nos services
+        </span>
+
+        <h2 class="section-title">
+          Des solutions pour tous vos besoins en électricité
+        </h2>
+
         <p class="section-desc">
-          Installation, réparation ou dépannage : trouvez un électricien adapté à votre besoin.
+          Installation, réparation ou dépannage : trouvez un
+          électricien adapté à votre besoin.
         </p>
       </div>
+
       <div class="services-grid">
+
         <div class="service-card">
-          <div class="service-icon" set:html={icon("zap", 28)}></div>
-          <h3 class="service-title">Dépannage électrique</h3>
-          <p class="service-desc">Intervention rapide pour vos pannes et problèmes électriques.</p>
-          <a href="#" class="service-link">En savoir plus <span set:html={icon("arrow-right", 16)}></span></a>
+          <div class="service-icon">
+            <span set:html={icon("zap", 28)} />
+          </div>
+
+          <h3 class="service-title">
+            Dépannage électrique
+          </h3>
+
+          <p class="service-desc">
+            Intervention rapide pour vos pannes et problèmes électriques.
+          </p>
+
+          <a href={`${baseUrl}/contact`} class="service-link">
+            En savoir plus
+            <span set:html={icon("arrow-right", 16)} />
+          </a>
         </div>
+
         <div class="service-card">
-          <div class="service-icon" set:html={icon("zap", 28)}></div>
-          <h3 class="service-title">Installation électrique</h3>
-          <p class="service-desc">Installation et mise en place de vos équipements électriques.</p>
-          <a href="#" class="service-link">En savoir plus <span set:html={icon("arrow-right", 16)}></span></a>
+          <div class="service-icon">
+            <span set:html={icon("zap", 28)} />
+          </div>
+
+          <h3 class="service-title">
+            Installation électrique
+          </h3>
+
+          <p class="service-desc">
+            Installation et mise en place de vos équipements électriques.
+          </p>
+
+          <a href={`${baseUrl}/contact`} class="service-link">
+            En savoir plus
+            <span set:html={icon("arrow-right", 16)} />
+          </a>
         </div>
+
         <div class="service-card">
-          <div class="service-icon" set:html={icon("settings", 28)}></div>
-          <h3 class="service-title">Tableau électrique</h3>
-          <p class="service-desc">Installation, remplacement et mise en conformité de votre tableau électrique.</p>
-          <a href="#" class="service-link">En savoir plus <span set:html={icon("arrow-right", 16)}></span></a>
+          <div class="service-icon">
+            <span set:html={icon("settings", 28)} />
+          </div>
+
+          <h3 class="service-title">
+            Tableau électrique
+          </h3>
+
+          <p class="service-desc">
+            Installation, remplacement et mise en conformité
+            de votre tableau électrique.
+          </p>
+
+          <a href={`${baseUrl}/contact`} class="service-link">
+            En savoir plus
+            <span set:html={icon("arrow-right", 16)} />
+          </a>
         </div>
+
         <div class="service-card">
-          <div class="service-icon" set:html={icon("lightbulb", 28)}></div>
-          <h3 class="service-title">Éclairage</h3>
-          <p class="service-desc">Installation de luminaires, spots et solutions d'éclairage.</p>
-          <a href="#" class="service-link">En savoir plus <span set:html={icon("arrow-right", 16)}></span></a>
+          <div class="service-icon">
+            <span set:html={icon("lightbulb", 28)} />
+          </div>
+
+          <h3 class="service-title">
+            Éclairage
+          </h3>
+
+          <p class="service-desc">
+            Installation de luminaires, spots et solutions d'éclairage.
+          </p>
+
+          <a href={`${baseUrl}/contact`} class="service-link">
+            En savoir plus
+            <span set:html={icon("arrow-right", 16)} />
+          </a>
         </div>
+
         <div class="service-card">
-          <div class="service-icon" set:html={icon("plug", 28)}></div>
-          <h3 class="service-title">Prises et interrupteurs</h3>
-          <p class="service-desc">Installation et remplacement de prises et interrupteurs électriques.</p>
-          <a href="#" class="service-link">En savoir plus <span set:html={icon("arrow-right", 16)}></span></a>
+          <div class="service-icon">
+            <span set:html={icon("plug", 28)} />
+          </div>
+
+          <h3 class="service-title">
+            Prises et interrupteurs
+          </h3>
+
+          <p class="service-desc">
+            Installation et remplacement de prises et interrupteurs électriques.
+          </p>
+
+          <a href={`${baseUrl}/contact`} class="service-link">
+            En savoir plus
+            <span set:html={icon("arrow-right", 16)} />
+          </a>
         </div>
+
         <div class="service-card">
-          <div class="service-icon" set:html={icon("wrench", 28)}></div>
-          <h3 class="service-title">Rénovation électrique</h3>
-          <p class="service-desc">Rénovation et modernisation de vos installations électriques.</p>
-          <a href="#" class="service-link">En savoir plus <span set:html={icon("arrow-right", 16)}></span></a>
+          <div class="service-icon">
+            <span set:html={icon("wrench", 28)} />
+          </div>
+
+          <h3 class="service-title">
+            Rénovation électrique
+          </h3>
+
+          <p class="service-desc">
+            Rénovation et modernisation de vos installations électriques.
+          </p>
+
+          <a href={`${baseUrl}/contact`} class="service-link">
+            En savoir plus
+            <span set:html={icon("arrow-right", 16)} />
+          </a>
         </div>
+
       </div>
     </div>
   </section>
 
   <!-- ============================================================
-  WHY CHOOSE US — Electrician version
+       WHY US
   ============================================================ -->
+
   <section class="why-section" id="why">
     <div class="container">
+
       <div class="why-grid">
+
         <div class="why-image-wrapper">
           <div class="why-image-container">
+
             <img
-              src="elictricien2.png"
+              src="/elictricien2.png"
               alt="Électricien professionnel en intervention"
               loading="lazy"
               decoding="async"
             />
+
             <div class="why-badge">
-              <span set:html={icon("check-circle", 18, "badge-icon")}></span>
+              <span
+                set:html={icon("check-circle", 18, "badge-icon")}
+              />
               Professionnels vérifiés
             </div>
+
           </div>
         </div>
+
         <div class="why-content">
-          <span class="eyebrow">Pourquoi nous choisir ?</span>
-          <h2 class="why-title">Une intervention simple, rapide et fiable</h2>
+
+          <span class="eyebrow">
+            Pourquoi nous choisir ?
+          </span>
+
+          <h2 class="why-title">
+            Une intervention simple, rapide et fiable
+          </h2>
+
           <p class="why-desc">
-            Nous vous aidons à trouver un électricien adapté à votre besoin, avec une expérience claire et sans complication.
+            Nous vous aidons à trouver un électricien adapté à votre
+            besoin, avec une expérience claire et sans complication.
           </p>
+
           <div class="why-benefits">
+
             <div class="why-benefit">
-              <span class="benefit-icon" set:html={icon("check-circle", 20)}></span>
+              <span class="benefit-icon">
+                <span set:html={icon("check-circle", 20)} />
+              </span>
+
               <div>
                 <strong>Électriciens locaux</strong>
-                <span>Des professionnels disponibles à Tanger.</span>
+                <span>
+                  Des professionnels disponibles à Tanger.
+                </span>
               </div>
             </div>
+
             <div class="why-benefit">
-              <span class="benefit-icon" set:html={icon("clock", 20)}></span>
+              <span class="benefit-icon">
+                <span set:html={icon("clock", 20)} />
+              </span>
+
               <div>
                 <strong>Intervention rapide</strong>
-                <span>Une prise en charge adaptée à votre situation.</span>
+                <span>
+                  Une prise en charge adaptée à votre situation.
+                </span>
               </div>
             </div>
+
             <div class="why-benefit">
-              <span class="benefit-icon" set:html={icon("file-text", 20)}></span>
+              <span class="benefit-icon">
+                <span set:html={icon("file-text", 20)} />
+              </span>
+
               <div>
                 <strong>Prix transparents</strong>
-                <span>Des informations claires avant l'intervention.</span>
+                <span>
+                  Des informations claires avant l'intervention.
+                </span>
               </div>
             </div>
+
           </div>
-          <a href='/contact' class="btn btn-primary why-cta">
+
+          <a
+            href={`${baseUrl}/contact`}
+            class="btn btn-primary why-cta"
+          >
             Demander un service
-            <span set:html={icon("arrow-right", 18)}></span>
+            <span set:html={icon("arrow-right", 18)} />
           </a>
+
         </div>
+
       </div>
     </div>
   </section>
 
   <!-- ============================================================
-  HOW IT WORKS — Electrician version
+       HOW IT WORKS
   ============================================================ -->
+
   <section class="how-section" id="how">
     <div class="container">
+
       <div class="section-header">
-        <span class="eyebrow">Comment ça marche</span>
-        <h2 class="section-title">Trouver un électricien en quelques étapes</h2>
+
+        <span class="eyebrow">
+          Comment ça marche
+        </span>
+
+        <h2 class="section-title">
+          Trouver un électricien en quelques étapes
+        </h2>
+
         <p class="section-desc">
-          Un processus simple pour vous permettre de trouver rapidement le professionnel adapté.
+          Un processus simple pour vous permettre de trouver rapidement
+          le professionnel adapté.
         </p>
+
       </div>
+
       <div class="steps">
+
         <div class="step">
           <div class="step-number">01</div>
-          <div class="step-icon" set:html={icon("file-text", 28)}></div>
-          <h3 class="step-title">Décrivez votre besoin</h3>
-          <p class="step-desc">Expliquez simplement le problème ou le travail électrique à réaliser.</p>
+
+          <div class="step-icon">
+            <span set:html={icon("file-text", 28)} />
+          </div>
+
+          <h3 class="step-title">
+            Décrivez votre besoin
+          </h3>
+
+          <p class="step-desc">
+            Expliquez simplement le problème ou le travail électrique
+            à réaliser.
+          </p>
         </div>
+
         <div class="step-connector"></div>
+
         <div class="step">
           <div class="step-number">02</div>
-          <div class="step-icon" set:html={icon("wrench", 28)}></div>
-          <h3 class="step-title">Choisissez un professionnel</h3>
-          <p class="step-desc">Consultez les électriciens disponibles pour votre demande.</p>
+
+          <div class="step-icon">
+            <span set:html={icon("wrench", 28)} />
+          </div>
+
+          <h3 class="step-title">
+            Choisissez un professionnel
+          </h3>
+
+          <p class="step-desc">
+            Consultez les électriciens disponibles pour votre demande.
+          </p>
         </div>
+
         <div class="step-connector"></div>
+
         <div class="step">
           <div class="step-number">03</div>
-          <div class="step-icon" set:html={icon("clock", 28)}></div>
-          <h3 class="step-title">Planifiez l'intervention</h3>
-          <p class="step-desc">Convenez directement des détails de l'intervention.</p>
+
+          <div class="step-icon">
+            <span set:html={icon("clock", 28)} />
+          </div>
+
+          <h3 class="step-title">
+            Planifiez l'intervention
+          </h3>
+
+          <p class="step-desc">
+            Convenez directement des détails de l'intervention.
+          </p>
         </div>
+
       </div>
     </div>
   </section>
 
   <!-- ============================================================
-  FINAL CTA — Electrician version (same blue palette)
+       FINAL CTA
   ============================================================ -->
+
   <section class="cta-section" id="cta">
     <div class="container">
+
       <div class="cta-box">
-        <span class="cta-badge">Électricité à Tanger</span>
-        <h2 class="cta-title">Besoin d'un électricien ?</h2>
-        <p class="cta-desc">Décrivez votre besoin et trouvez un professionnel adapté à Tanger.</p>
+
+        <span class="cta-badge">
+          Électricité à Tanger
+        </span>
+
+        <h2 class="cta-title">
+          Besoin d'un électricien ?
+        </h2>
+
+        <p class="cta-desc">
+          Décrivez votre besoin et trouvez un professionnel adapté
+          à Tanger.
+        </p>
+
         <div class="cta-actions">
-          <a href=`/contact` class="btn btn-primary btn-large">
+
+          <a
+            href={`${baseUrl}/contact`}
+            class="btn btn-primary btn-large"
+          >
             Demander un service
-            <span set:html={icon("arrow-right", 20)}></span>
+            <span set:html={icon("arrow-right", 20)} />
           </a>
-          <a href="#services" class="btn btn-secondary btn-large">
+
+          <a
+            href="#services"
+            class="btn btn-secondary btn-large"
+          >
             Voir nos services
-            <span set:html={icon("arrow-down", 20)}></span>
+            <span set:html={icon("arrow-down", 20)} />
           </a>
+
         </div>
+
         <div class="cta-footer">
+
           <span>
-            <span set:html={icon("check-circle", 16, "footer-icon")}></span>
+            <span
+              set:html={icon("check-circle", 16, "footer-icon")}
+            />
             Électriciens locaux
           </span>
+
           <span>
-            <span set:html={icon("check-circle", 16, "footer-icon")}></span>
+            <span
+              set:html={icon("check-circle", 16, "footer-icon")}
+            />
             Intervention à Tanger
           </span>
+
           <span>
-            <span set:html={icon("check-circle", 16, "footer-icon")}></span>
+            <span
+              set:html={icon("check-circle", 16, "footer-icon")}
+            />
             Professionnels vérifiés
           </span>
+
         </div>
+
       </div>
     </div>
   </section>
@@ -375,138 +756,262 @@ const content = heroContent[lang] || heroContent.fr;
   <Footer lang={lang} />
 
   <!-- ============================================================
-  SCROLL ANIMATION
+       SCROLL ANIMATION
   ============================================================ -->
+
   <script>
     document.addEventListener("DOMContentLoaded", () => {
-      const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-      if (prefersReducedMotion.matches) {
-        document.querySelectorAll(".fade-up").forEach(el => el.classList.add("visible"));
+      const reducedMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)"
+      );
+
+      const elements = document.querySelectorAll(
+        ".section-header, .service-card, .why-image-wrapper, .why-content, .step, .cta-box"
+      );
+
+      if (reducedMotion.matches) {
+        elements.forEach((element) => {
+          element.classList.add("fade-up", "visible");
+        });
+
         return;
       }
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) entry.target.classList.add("visible");
-        });
-      }, { threshold: 0.12, rootMargin: "0px 0px -40px 0px" });
-      document.querySelectorAll(".section-header, .service-card, .why-image-wrapper, .why-content, .step, .cta-box").forEach(el => {
-        el.classList.add("fade-up");
-        observer.observe(el);
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("visible");
+              observer.unobserve(entry.target);
+            }
+          });
+        },
+        {
+          threshold: 0.12,
+          rootMargin: "0px 0px -40px 0px",
+        }
+      );
+
+      elements.forEach((element, index) => {
+        element.classList.add("fade-up");
+
+        if (element.classList.contains("service-card")) {
+          element.style.transitionDelay = `${index * 60}ms`;
+        }
+
+        observer.observe(element);
       });
-      document.querySelectorAll(".service-card").forEach((el, i) => el.style.transitionDelay = (i * 60) + "ms");
     });
   </script>
 </Layout>
 
 <style>
-  /* ==============================================================
-     IMPORT GOOGLE FONT — Inter (premium, similar to image)
-     ============================================================== */
-  @import url('https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..800&display=swap');
+  /* ============================================================
+     FONT
+  ============================================================ */
 
-  /* ==============================================================
-     ROOT — Same blue palette as plombier
-     ============================================================== */
+  @import url("https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..800&display=swap");
+
+  /* ============================================================
+     ROOT
+  ============================================================ */
+
   :root {
     --color-primary: #2563eb;
     --color-primary-dark: #1d4ed8;
     --color-primary-light: #eff6ff;
+
     --color-navy: #0f172a;
     --color-text: #475569;
     --color-slate: #64748b;
+
     --color-bg: #f8fafc;
     --color-white: #ffffff;
+
     --radius-card: 22px;
     --radius-image: 28px;
-    --shadow-card: 0 4px 24px rgba(15, 23, 42, 0.06);
-    --shadow-hover: 0 12px 40px rgba(15, 23, 42, 0.10);
-    --transition: 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+
+    --shadow-card:
+      0 4px 24px rgba(15, 23, 42, 0.06);
+
+    --shadow-hover:
+      0 12px 40px rgba(15, 23, 42, 0.10);
+
+    --transition:
+      0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+    font-family:
+      "Inter",
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      sans-serif;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    overflow-x: hidden;
   }
 
   body {
+    margin: 0;
     font-family: inherit;
+    overflow-x: hidden;
   }
 
+  * {
+    box-sizing: border-box;
+  }
+
+  img {
+    max-width: 100%;
+  }
+
+  /* ============================================================
+     CONTAINER
+  ============================================================ */
+
   .container {
-    max-width: 1280px;
+    width: min(1280px, 100%);
     margin: 0 auto;
     padding: 0 28px;
   }
 
+  /* ============================================================
+     ANIMATION
+  ============================================================ */
+
   .fade-up {
     opacity: 0;
     transform: translateY(28px);
-    transition: opacity 0.7s ease, transform 0.7s ease;
+    transition:
+      opacity 0.7s ease,
+      transform 0.7s ease;
   }
+
   .fade-up.visible {
     opacity: 1;
     transform: translateY(0);
   }
 
+  /* ============================================================
+     EYEBROW
+  ============================================================ */
+
   .eyebrow {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: fit-content;
+
     font-size: 13px;
-    font-weight: 600;
+    font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.06em;
+
     color: var(--color-primary);
     background: var(--color-primary-light);
-    padding: 4px 18px;
+
+    padding: 6px 18px;
     border-radius: 40px;
+
     margin-bottom: 14px;
   }
 
+  /* ============================================================
+     SECTION HEADER
+  ============================================================ */
+
   .section-header {
+    width: 100%;
+    max-width: 720px;
+
     text-align: center;
-    max-width: 700px;
+
     margin: 0 auto 52px;
   }
+
   .section-title {
     font-size: 40px;
-    font-weight: 700;
+    font-weight: 750;
     color: var(--color-navy);
-    margin: 0 0 12px;
+
+    margin: 0 0 14px;
+
     line-height: 1.15;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.025em;
   }
+
   .section-desc {
     font-size: 17px;
     color: var(--color-text);
+
     margin: 0;
-    line-height: 1.6;
+    line-height: 1.7;
   }
 
-  /* ---- Buttons (same as plombier) ---- */
+  /* ============================================================
+     BUTTONS
+  ============================================================ */
+
   .btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-    padding: 14px 32px;
-    border-radius: 60px;
-    font-weight: 600;
-    font-size: 16px;
-    text-decoration: none;
-    transition: all var(--transition);
-    border: none;
-    cursor: pointer;
+
+    gap: 9px;
+
+    min-height: 50px;
+
+    padding: 14px 30px;
+
+    border-radius: 999px;
+
     font-family: inherit;
-    line-height: 1.2;
+    font-size: 16px;
+    font-weight: 650;
+
+    text-decoration: none;
+
+    cursor: pointer;
+
+    border: 2px solid transparent;
+
+    transition:
+      background var(--transition),
+      color var(--transition),
+      border-color var(--transition),
+      transform var(--transition),
+      box-shadow var(--transition);
   }
+
+  .btn svg {
+    flex-shrink: 0;
+  }
+
   .btn-primary {
     background: var(--color-primary);
     color: var(--color-white);
-    box-shadow: 0 4px 20px rgba(37, 99, 235, 0.3);
+
+    box-shadow:
+      0 5px 22px rgba(37, 99, 235, 0.28);
   }
+
   .btn-primary:hover {
     background: var(--color-primary-dark);
+
     transform: translateY(-3px);
-    box-shadow: 0 8px 32px rgba(37, 99, 235, 0.4);
+
+    box-shadow:
+      0 10px 32px rgba(37, 99, 235, 0.36);
   }
+
   .btn-primary svg {
     transition: transform 0.25s ease;
   }
+
   .btn-primary:hover svg {
     transform: translateX(4px);
   }
@@ -514,793 +1019,1924 @@ const content = heroContent[lang] || heroContent.fr;
   .btn-secondary {
     background: transparent;
     color: var(--color-navy);
-    border: 2px solid rgba(15, 23, 42, 0.15);
-  }
-  .btn-secondary:hover {
-    background: rgba(15, 23, 42, 0.04);
-    border-color: var(--color-navy);
-    transform: translateY(-3px);
+
+    border-color: rgba(15, 23, 42, 0.15);
   }
 
-  .btn-outline-dark {
-    background: transparent;
-    color: var(--color-white);
-    border: 2px solid rgba(255, 255, 255, 0.3);
-  }
-  .btn-outline-dark:hover {
-    background: rgba(255, 255, 255, 0.08);
-    border-color: var(--color-white);
+  .btn-secondary:hover {
+    background: rgba(15, 23, 42, 0.04);
+
+    border-color: var(--color-navy);
+
     transform: translateY(-3px);
   }
 
   .btn-large {
-    padding: 18px 40px;
-    font-size: 18px;
+    min-height: 58px;
+
+    padding: 17px 38px;
+
+    font-size: 17px;
   }
 
-  /* ==============================================================
-     ELECTRICIAN HERO — Same structure as plombier, blue palette
-     ============================================================== */
+  /* ============================================================
+     HERO
+  ============================================================ */
+
   .electrician-hero {
-    padding: 60px 0 80px;
-    background: var(--color-bg);
     position: relative;
+
+    padding:
+      70px 0
+      90px;
+
+    background: var(--color-bg);
+
     overflow: hidden;
+
     margin-top: var(--header-h, 76px);
   }
+
   .electrician-hero::before {
     content: "";
+
     position: absolute;
-    top: -40%;
-    right: -10%;
-    width: 600px;
-    height: 600px;
-    background: radial-gradient(circle, rgba(37, 99, 235, 0.06), transparent 70%);
+
+    top: -300px;
+    right: -150px;
+
+    width: 700px;
+    height: 700px;
+
     border-radius: 50%;
+
+    background:
+      radial-gradient(
+        circle,
+        rgba(37, 99, 235, 0.08),
+        transparent 68%
+      );
+
     pointer-events: none;
   }
+
   .electrician-hero::after {
     content: "";
+
     position: absolute;
-    bottom: -20%;
-    left: -10%;
-    width: 400px;
-    height: 400px;
-    background: radial-gradient(circle, rgba(37, 99, 235, 0.04), transparent 70%);
+
+    bottom: -200px;
+    left: -150px;
+
+    width: 500px;
+    height: 500px;
+
     border-radius: 50%;
+
+    background:
+      radial-gradient(
+        circle,
+        rgba(37, 99, 235, 0.05),
+        transparent 70%
+      );
+
     pointer-events: none;
   }
 
   .hero-grid {
     display: grid;
-    grid-template-columns: 1fr 1.2fr;
-    gap: 60px;
+
+    grid-template-columns:
+      minmax(0, 0.9fr)
+      minmax(0, 1.1fr);
+
+    gap: clamp(40px, 5vw, 70px);
+
     align-items: center;
+
     position: relative;
-    z-index: 1;
+    z-index: 2;
   }
 
-  /* --- Left Column: Content --- */
   .hero-content {
+    min-width: 0;
+
     display: flex;
     flex-direction: column;
+
     gap: 20px;
   }
 
   .hero-badge {
     display: inline-flex;
     align-items: center;
+
     gap: 8px;
+
+    width: fit-content;
+
+    padding: 7px 17px 7px 13px;
+
+    border-radius: 999px;
+
     background: var(--color-primary-light);
     color: var(--color-primary);
-    padding: 6px 18px 6px 14px;
-    border-radius: 40px;
+
     font-size: 13px;
-    font-weight: 600;
+    font-weight: 700;
+
     text-transform: uppercase;
     letter-spacing: 0.04em;
-    width: fit-content;
   }
+
   .badge-icon {
+    flex-shrink: 0;
     stroke-width: 2.5;
   }
 
   .hero-title {
-    font-size: 52px;
+    max-width: 650px;
+
+    font-size: clamp(38px, 4.2vw, 56px);
+
     font-weight: 800;
-    line-height: 1.08;
+
+    line-height: 1.06;
+
     color: var(--color-navy);
+
     margin: 0;
-    letter-spacing: -0.03em;
+
+    letter-spacing: -0.035em;
   }
+
   .highlight {
-    color: var(--color-primary);
     position: relative;
+
+    color: var(--color-primary);
+
+    display: inline-block;
   }
+
   .highlight::after {
     content: "";
+
     position: absolute;
-    bottom: 4px;
+
     left: 0;
-    width: 100%;
-    height: 6px;
+    right: 0;
+
+    bottom: 4px;
+
+    height: 7px;
+
+    border-radius: 999px;
+
     background: var(--color-primary-light);
-    border-radius: 4px;
+
     z-index: -1;
   }
 
   .hero-desc {
+    max-width: 560px;
+
     font-size: 17px;
-    line-height: 1.7;
+
+    line-height: 1.75;
+
     color: var(--color-text);
-    max-width: 480px;
+
     margin: 0;
   }
 
   .hero-actions {
     display: flex;
-    gap: 16px;
+
+    align-items: center;
+
     flex-wrap: wrap;
+
+    gap: 14px;
+
     margin-top: 4px;
   }
 
   .trust-indicators {
     display: flex;
+
     flex-wrap: wrap;
-    gap: 24px;
+
+    gap: 12px 22px;
+
     margin-top: 8px;
   }
+
   .trust-item {
-    display: flex;
+    display: inline-flex;
+
     align-items: center;
-    gap: 8px;
-    font-size: 14px;
-    font-weight: 500;
+
+    gap: 7px;
+
+    font-size: 13px;
+    font-weight: 600;
+
     color: var(--color-navy);
   }
+
   .trust-icon {
+    flex-shrink: 0;
+
     color: var(--color-primary);
+
     stroke-width: 2.5;
   }
 
-  /* --- Right Column: Visual Composition --- */
+  /* ============================================================
+     HERO VISUALS
+  ============================================================ */
+
   .hero-visuals {
     position: relative;
-    height: 560px;
+
     width: 100%;
+    height: 570px;
+
+    min-width: 0;
   }
 
-  /* Main Image */
   .visual-main {
     position: absolute;
-    width: 72%;
+
+    top: 8%;
+    left: 13%;
+
+    width: 74%;
     height: 82%;
-    top: 9%;
-    left: 14%;
-    border-radius: var(--radius-image);
+
     overflow: hidden;
-    box-shadow: 0 24px 64px rgba(15, 23, 42, 0.12);
+
+    border-radius: var(--radius-image);
+
+    background: #e2e8f0;
+
+    box-shadow:
+      0 24px 65px rgba(15, 23, 42, 0.14);
+
     z-index: 2;
-    transition: transform 0.5s ease;
+
+    transition:
+      transform 0.5s ease;
   }
+
   .visual-main:hover {
     transform: scale(1.01);
   }
+
   .visual-main img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+
     display: block;
+
+    object-fit: cover;
   }
 
-  /* Supporting Images */
   .visual-support {
     position: absolute;
-    border-radius: 18px;
+
     overflow: hidden;
-    box-shadow: 0 8px 32px rgba(15, 23, 42, 0.10);
-    border: 3px solid var(--color-white);
+
     background: var(--color-white);
-    z-index: 3;
-    transition: all var(--transition);
-    cursor: pointer;
+
+    border: 3px solid var(--color-white);
+
+    border-radius: 18px;
+
+    box-shadow:
+      0 10px 34px rgba(15, 23, 42, 0.12);
+
+    z-index: 4;
+
+    transition:
+      transform var(--transition),
+      box-shadow var(--transition);
   }
+
   .visual-support:hover {
-    transform: scale(1.05) translateY(-4px);
-    box-shadow: 0 16px 48px rgba(15, 23, 42, 0.15);
-    z-index: 5;
+    transform:
+      translateY(-5px)
+      scale(1.04);
+
+    box-shadow:
+      0 18px 50px rgba(15, 23, 42, 0.16);
+
+    z-index: 8;
   }
+
   .visual-support img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+
     display: block;
+
+    object-fit: cover;
   }
 
   .support-1 {
-    width: 32%;
-    height: 28%;
     top: 0;
     right: 0;
-    z-index: 4;
+
+    width: 31%;
+    height: 27%;
   }
+
   .support-2 {
-    width: 32%;
-    height: 28%;
     bottom: 0;
     left: 0;
-    z-index: 4;
+
+    width: 31%;
+    height: 27%;
   }
 
   .support-label {
     position: absolute;
-    bottom: 8px;
+
     left: 50%;
+    bottom: 8px;
+
     transform: translateX(-50%);
-    background: rgba(15, 23, 42, 0.7);
-    backdrop-filter: blur(4px);
-    color: var(--color-white);
-    font-size: 11px;
-    font-weight: 600;
-    padding: 4px 14px;
-    border-radius: 40px;
+
     white-space: nowrap;
-    letter-spacing: 0.02em;
+
+    max-width: calc(100% - 12px);
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    padding: 5px 11px;
+
+    border-radius: 999px;
+
+    background: rgba(15, 23, 42, 0.72);
+
+    backdrop-filter: blur(7px);
+
+    color: var(--color-white);
+
+    font-size: 10px;
+    font-weight: 700;
   }
 
-  /* Floating Card */
+  /* ============================================================
+     FLOATING CARD
+  ============================================================ */
+
   .floating-card {
     position: absolute;
-    bottom: 10%;
-    right: 2%;
-    background: var(--color-white);
-    padding: 16px 24px 16px 18px;
-    border-radius: 16px;
-    box-shadow: 0 12px 40px rgba(15, 23, 42, 0.12);
+
+    right: 1%;
+    bottom: 11%;
+
     display: flex;
     align-items: center;
+
     gap: 12px;
-    z-index: 6;
-    border: 1px solid rgba(15, 23, 42, 0.04);
-    animation: float 4s ease-in-out infinite;
-    backdrop-filter: blur(8px);
-    background: rgba(255, 255, 255, 0.92);
+
+    min-width: 185px;
+
+    padding: 15px 21px 15px 16px;
+
+    background: rgba(255, 255, 255, 0.94);
+
+    border: 1px solid rgba(15, 23, 42, 0.05);
+
+    border-radius: 17px;
+
+    box-shadow:
+      0 13px 40px rgba(15, 23, 42, 0.13);
+
+    backdrop-filter: blur(10px);
+
+    z-index: 7;
+
+    animation:
+      floatingCard 4s ease-in-out infinite;
   }
-  @keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-8px); }
+
+  @keyframes floatingCard {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+
+    50% {
+      transform: translateY(-8px);
+    }
   }
+
   .float-icon {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 36px;
-    height: 36px;
-    background: var(--color-primary-light);
+
+    width: 38px;
+    height: 38px;
+
+    flex: 0 0 38px;
+
     border-radius: 50%;
+
+    background: var(--color-primary-light);
+
     color: var(--color-primary);
-    flex-shrink: 0;
-  }
-  .float-title {
-    font-size: 15px;
-    font-weight: 700;
-    color: var(--color-navy);
-    display: block;
-    line-height: 1.2;
-  }
-  .float-sub {
-    font-size: 13px;
-    color: var(--color-text);
-    display: block;
-    line-height: 1.2;
   }
 
-  /* Service Tags */
+  .float-title {
+    display: block;
+
+    color: var(--color-navy);
+
+    font-size: 14px;
+    font-weight: 750;
+
+    line-height: 1.25;
+  }
+
+  .float-sub {
+    display: block;
+
+    margin-top: 3px;
+
+    color: var(--color-text);
+
+    font-size: 12px;
+
+    line-height: 1.25;
+  }
+
+  /* ============================================================
+     SERVICE TAGS
+  ============================================================ */
+
   .service-tags {
     position: absolute;
-    bottom: 0;
+
     left: 50%;
+    bottom: 0;
+
     transform: translateX(-50%);
+
+    width: max-content;
+    max-width: 94%;
+
     display: flex;
-    gap: 10px;
-    z-index: 7;
-    flex-wrap: wrap;
+
     justify-content: center;
+    align-items: center;
+
+    flex-wrap: wrap;
+
+    gap: 7px;
+
+    z-index: 9;
   }
+
   .tag {
+    padding: 6px 14px;
+
+    border-radius: 999px;
+
     background: var(--color-white);
+
     border: 1px solid rgba(15, 23, 42, 0.08);
-    padding: 6px 18px;
-    border-radius: 40px;
-    font-size: 13px;
-    font-weight: 600;
+
     color: var(--color-navy);
-    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
-    transition: all var(--transition);
-    cursor: default;
+
+    font-size: 11px;
+    font-weight: 650;
+
+    white-space: nowrap;
+
+    box-shadow:
+      0 4px 13px rgba(15, 23, 42, 0.05);
+
+    transition:
+      all var(--transition);
   }
+
   .tag:hover {
-    background: var(--color-primary);
     color: var(--color-white);
+
+    background: var(--color-primary);
+
     border-color: var(--color-primary);
+
     transform: translateY(-2px);
   }
 
-  /* ==============================================================
-     RESPONSIVE — identical breakpoints to plombier
-     ============================================================== */
-  @media (max-width: 1200px) {
-    .hero-title { font-size: 42px; }
-    .hero-visuals { height: 480px; }
+  /* ============================================================
+     SERVICES
+  ============================================================ */
+
+  .services-section {
+    padding: 105px 0;
+
+    background: var(--color-white);
   }
 
-  @media (max-width: 1024px) {
+  .services-grid {
+    display: grid;
+
+    grid-template-columns:
+      repeat(3, minmax(0, 1fr));
+
+    gap: 24px;
+  }
+
+  .service-card {
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+
+    padding: 32px 28px 28px;
+
+    background: var(--color-white);
+
+    border:
+      1px solid rgba(15, 23, 42, 0.055);
+
+    border-radius: var(--radius-card);
+
+    box-shadow: var(--shadow-card);
+
+    transition:
+      transform var(--transition),
+      border-color var(--transition),
+      box-shadow var(--transition);
+  }
+
+  .service-card:hover {
+    transform: translateY(-6px);
+
+    border-color: rgba(37, 99, 235, 0.5);
+
+    box-shadow: var(--shadow-hover);
+  }
+
+  .service-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 56px;
+    height: 56px;
+
+    margin-bottom: 17px;
+
+    border-radius: 15px;
+
+    background: var(--color-primary-light);
+
+    color: var(--color-primary);
+
+    transition:
+      background var(--transition),
+      color var(--transition),
+      transform var(--transition);
+  }
+
+  .service-card:hover .service-icon {
+    background: var(--color-primary);
+    color: var(--color-white);
+
+    transform: scale(1.04);
+  }
+
+  .service-title {
+    font-size: 19px;
+    font-weight: 750;
+
+    line-height: 1.3;
+
+    color: var(--color-navy);
+
+    margin: 0 0 9px;
+  }
+
+  .service-desc {
+    flex: 1;
+
+    font-size: 14px;
+
+    line-height: 1.65;
+
+    color: var(--color-text);
+
+    margin: 0 0 22px;
+  }
+
+  .service-link {
+    display: inline-flex;
+    align-items: center;
+
+    gap: 7px;
+
+    width: fit-content;
+
+    color: var(--color-primary);
+
+    font-size: 14px;
+    font-weight: 700;
+
+    text-decoration: none;
+
+    transition: gap 0.25s ease;
+  }
+
+  .service-link:hover {
+    gap: 12px;
+  }
+
+  /* ============================================================
+     WHY
+  ============================================================ */
+
+  .why-section {
+    padding: 105px 0;
+
+    background: var(--color-primary-light);
+  }
+
+  .why-grid {
+    display: grid;
+
+    grid-template-columns:
+      minmax(0, 1fr)
+      minmax(0, 1fr);
+
+    gap: clamp(45px, 6vw, 80px);
+
+    align-items: center;
+  }
+
+  .why-image-wrapper {
+    min-width: 0;
+  }
+
+  .why-image-container {
+    position: relative;
+
+    overflow: hidden;
+
+    border-radius: var(--radius-image);
+
+    box-shadow:
+      0 16px 52px rgba(15, 23, 42, 0.10);
+  }
+
+  .why-image-container img {
+    width: 100%;
+    height: 460px;
+
+    display: block;
+
+    object-fit: cover;
+
+    transition:
+      transform 0.6s ease;
+  }
+
+  .why-image-container:hover img {
+    transform: scale(1.025);
+  }
+
+  .why-badge {
+    position: absolute;
+
+    left: 22px;
+    bottom: 22px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 8px;
+
+    padding: 10px 18px;
+
+    border-radius: 999px;
+
+    background: var(--color-white);
+
+    color: var(--color-navy);
+
+    font-size: 13px;
+    font-weight: 700;
+
+    box-shadow:
+      0 5px 22px rgba(0, 0, 0, 0.10);
+  }
+
+  .why-content {
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: flex-start;
+  }
+
+  .why-title {
+    max-width: 580px;
+
+    font-size: 40px;
+    font-weight: 750;
+
+    line-height: 1.15;
+
+    letter-spacing: -0.025em;
+
+    color: var(--color-navy);
+
+    margin: 0 0 17px;
+  }
+
+  .why-desc {
+    max-width: 580px;
+
+    font-size: 17px;
+
+    line-height: 1.7;
+
+    color: var(--color-text);
+
+    margin: 0 0 30px;
+  }
+
+  .why-benefits {
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 18px;
+
+    margin-bottom: 32px;
+  }
+
+  .why-benefit {
+    display: flex;
+    align-items: flex-start;
+
+    gap: 14px;
+  }
+
+  .benefit-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 34px;
+    height: 34px;
+
+    flex: 0 0 34px;
+
+    margin-top: 1px;
+
+    border-radius: 50%;
+
+    background: var(--color-white);
+
+    color: var(--color-primary);
+
+    box-shadow:
+      0 2px 8px rgba(15, 23, 42, 0.04);
+  }
+
+  .why-benefit div {
+    display: flex;
+    flex-direction: column;
+
+    gap: 3px;
+  }
+
+  .why-benefit strong {
+    color: var(--color-navy);
+
+    font-size: 15px;
+    font-weight: 750;
+  }
+
+  .why-benefit span:last-child {
+    color: var(--color-text);
+
+    font-size: 14px;
+
+    line-height: 1.5;
+  }
+
+  .why-cta {
+    align-self: flex-start;
+  }
+
+  /* ============================================================
+     HOW IT WORKS
+  ============================================================ */
+
+  .how-section {
+    padding: 105px 0;
+
+    background: var(--color-white);
+  }
+
+  .steps {
+    width: 100%;
+    max-width: 1000px;
+
+    margin: 0 auto;
+
+    display: grid;
+
+    grid-template-columns:
+      minmax(0, 1fr)
+      auto
+      minmax(0, 1fr)
+      auto
+      minmax(0, 1fr);
+
+    align-items: start;
+
+    gap: 10px;
+  }
+
+  .step {
+    text-align: center;
+
+    padding: 0 12px;
+  }
+
+  .step-number {
+    margin-bottom: 8px;
+
+    color: rgba(37, 99, 235, 0.13);
+
+    font-size: 54px;
+    font-weight: 800;
+
+    line-height: 1;
+
+    letter-spacing: -0.05em;
+  }
+
+  .step-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 58px;
+    height: 58px;
+
+    margin: 0 auto 15px;
+
+    border-radius: 15px;
+
+    background: var(--color-primary-light);
+
+    color: var(--color-primary);
+  }
+
+  .step-title {
+    color: var(--color-navy);
+
+    font-size: 20px;
+    font-weight: 750;
+
+    line-height: 1.3;
+
+    margin: 0 0 9px;
+  }
+
+  .step-desc {
+    color: var(--color-text);
+
+    font-size: 14px;
+
+    line-height: 1.65;
+
+    margin: 0;
+  }
+
+  .step-connector {
+    width: 45px;
+    height: 2px;
+
+    margin-top: 88px;
+
+    background: var(--color-primary);
+
+    opacity: 0.20;
+  }
+
+  /* ============================================================
+     CTA
+  ============================================================ */
+
+  .cta-section {
+    position: relative;
+
+    padding: 90px 0;
+
+    background: var(--color-white);
+
+    overflow: hidden;
+  }
+
+  .cta-section::before {
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    background:
+      radial-gradient(
+        ellipse at 50% 0%,
+        rgba(37, 99, 235, 0.14),
+        transparent 68%
+      );
+
+    pointer-events: none;
+  }
+
+  .cta-box {
+    position: relative;
+    z-index: 1;
+
+    width: 100%;
+    max-width: 800px;
+
+    margin: 0 auto;
+
+    text-align: center;
+  }
+
+  .cta-badge {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    margin-bottom: 16px;
+
+    padding: 6px 18px;
+
+    border-radius: 999px;
+
+    background: rgba(37, 99, 235, 0.10);
+
+    color: var(--color-primary);
+
+    font-size: 13px;
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.06em;
+  }
+
+  .cta-title {
+    color: var(--color-navy);
+
+    font-size: 44px;
+    font-weight: 750;
+
+    line-height: 1.15;
+
+    letter-spacing: -0.025em;
+
+    margin: 0 0 13px;
+  }
+
+  .cta-desc {
+    max-width: 650px;
+
+    margin: 0 auto 32px;
+
+    color: var(--color-text);
+
+    font-size: 18px;
+
+    line-height: 1.7;
+  }
+
+  .cta-actions {
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    flex-wrap: wrap;
+
+    gap: 14px;
+
+    margin-bottom: 34px;
+  }
+
+  .cta-footer {
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    flex-wrap: wrap;
+
+    gap: 20px 30px;
+
+    color: var(--color-slate);
+
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .cta-footer span {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 6px;
+  }
+
+  .footer-icon {
+    color: var(--color-primary);
+
+    stroke-width: 2.5;
+  }
+
+  /* ============================================================
+     TABLET
+  ============================================================ */
+
+  @media (max-width: 1100px) {
+
+    .hero-grid {
+      grid-template-columns:
+        minmax(0, 1fr)
+        minmax(0, 1fr);
+
+      gap: 35px;
+    }
+
+    .hero-title {
+      font-size: clamp(38px, 4.5vw, 48px);
+    }
+
+    .hero-visuals {
+      height: 500px;
+    }
+
+    .services-grid {
+      grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+    }
+
+    .why-title {
+      font-size: 34px;
+    }
+
+    .why-image-container img {
+      height: 400px;
+    }
+  }
+
+  /* ============================================================
+     TABLET PORTRAIT
+  ============================================================ */
+
+  @media (max-width: 900px) {
+
+    .electrician-hero {
+      padding:
+        60px 0
+        75px;
+    }
+
     .hero-grid {
       grid-template-columns: 1fr;
-      gap: 48px;
+
+      gap: 55px;
     }
+
     .hero-content {
-      text-align: center;
       align-items: center;
+
+      text-align: center;
     }
-    .hero-desc { max-width: 100%; }
-    .hero-actions { justify-content: center; }
-    .trust-indicators { justify-content: center; }
+
+    .hero-badge {
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .hero-title {
+      max-width: 800px;
+
+      font-size: clamp(38px, 6vw, 50px);
+    }
+
+    .hero-desc {
+      max-width: 700px;
+    }
+
+    .hero-actions {
+      justify-content: center;
+    }
+
+    .trust-indicators {
+      justify-content: center;
+    }
+
     .hero-visuals {
-      height: 480px;
-      max-width: 600px;
+      width: min(680px, 100%);
+      height: 500px;
+
       margin: 0 auto;
     }
-    .visual-main {
-      width: 74%;
-      height: 80%;
-      top: 10%;
-      left: 13%;
+
+    .why-grid {
+      grid-template-columns: 1fr;
+
+      gap: 45px;
     }
-    .support-1, .support-2 {
-      width: 30%;
-      height: 26%;
+
+    .why-image-container {
+      width: min(700px, 100%);
+
+      margin: 0 auto;
     }
-    .floating-card {
-      bottom: 8%;
-      right: 0;
+
+    .why-content {
+      align-items: center;
+
+      text-align: center;
+    }
+
+    .why-title,
+    .why-desc {
+      max-width: 700px;
+    }
+
+    .why-benefits {
+      max-width: 650px;
+
+      text-align: left;
+    }
+
+    .why-cta {
+      align-self: center;
+    }
+
+    .steps {
+      grid-template-columns: 1fr;
+
+      max-width: 650px;
+
+      gap: 38px;
+    }
+
+    .step {
+      padding: 0;
+    }
+
+    .step-connector {
+      display: none;
+    }
+
+    .step-desc {
+      max-width: 500px;
+
+      margin-left: auto;
+      margin-right: auto;
     }
   }
 
+  /* ============================================================
+     MOBILE LARGE
+  ============================================================ */
+
   @media (max-width: 768px) {
-    .electrician-hero { padding: 100px 0 60px; }
-    .hero-title { font-size: 34px; }
-    .hero-visuals { height: 400px; }
+
+    .container {
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+
+    .electrician-hero {
+      margin-top: var(--header-h, 70px);
+
+      padding:
+        48px 0
+        60px;
+    }
+
+    .hero-grid {
+      gap: 42px;
+    }
+
+    .hero-content {
+      gap: 17px;
+    }
+
+    .hero-badge {
+      font-size: 11px;
+
+      padding:
+        6px 13px 6px 10px;
+    }
+
+    .hero-title {
+      font-size: clamp(31px, 8vw, 40px);
+
+      line-height: 1.1;
+    }
+
+    .hero-desc {
+      font-size: 15px;
+
+      line-height: 1.65;
+    }
+
+    .hero-actions {
+      width: 100%;
+
+      flex-direction: column;
+
+      gap: 10px;
+    }
+
+    .hero-actions .btn {
+      width: min(100%, 340px);
+    }
+
+    .trust-indicators {
+      width: 100%;
+
+      flex-direction: column;
+
+      align-items: center;
+
+      gap: 9px;
+
+      margin-top: 5px;
+    }
+
+    .trust-item {
+      font-size: 13px;
+    }
+
+    /* Hero image */
+
+    .hero-visuals {
+      height: 390px;
+
+      width: 100%;
+
+      max-width: 560px;
+    }
+
     .visual-main {
-      width: 80%;
-      height: 76%;
-      top: 12%;
-      left: 10%;
+      width: 78%;
+      height: 77%;
+
+      top: 11%;
+      left: 11%;
+
+      border-radius: 23px;
     }
-    .support-1, .support-2 {
-      width: 34%;
-      height: 24%;
+
+    .visual-support {
+      border-width: 2px;
+
+      border-radius: 14px;
     }
-    .support-1 { top: 0; right: 0; }
-    .support-2 { bottom: 0; left: 0; }
-    .support-label {
-      font-size: 10px;
-      padding: 2px 12px;
-      bottom: 6px;
+
+    .support-1,
+    .support-2 {
+      width: 32%;
+      height: 25%;
     }
-    .floating-card {
-      padding: 12px 16px 12px 14px;
-      bottom: 6%;
+
+    .support-1 {
+      top: 0;
       right: 0;
     }
-    .float-title { font-size: 13px; }
-    .float-sub { font-size: 11px; }
-    .service-tags {
-      gap: 6px;
-      bottom: -4px;
+
+    .support-2 {
+      bottom: 0;
+      left: 0;
     }
-    .tag {
+
+    .support-label {
+      bottom: 5px;
+
+      padding: 4px 8px;
+
+      font-size: 8px;
+    }
+
+    .floating-card {
+      right: 0;
+      bottom: 9%;
+
+      min-width: auto;
+
+      padding:
+        11px 14px 11px 11px;
+
+      gap: 8px;
+
+      border-radius: 13px;
+    }
+
+    .float-icon {
+      width: 32px;
+      height: 32px;
+
+      flex-basis: 32px;
+    }
+
+    .float-title {
       font-size: 11px;
-      padding: 4px 14px;
     }
-    .hero-actions {
-      flex-direction: column;
-      align-items: center;
+
+    .float-sub {
+      font-size: 10px;
+    }
+
+    .service-tags {
       width: 100%;
+
+      max-width: 100%;
+
+      gap: 5px;
+
+      bottom: -2px;
     }
-    .hero-actions .btn {
-      width: 100%;
-      max-width: 320px;
-      justify-content: center;
+
+    .tag {
+      padding: 4px 9px;
+
+      font-size: 9px;
     }
-    .trust-indicators {
+
+    /* Sections */
+
+    .services-section,
+    .why-section,
+    .how-section {
+      padding: 75px 0;
+    }
+
+    .section-header {
+      margin-bottom: 38px;
+    }
+
+    .eyebrow {
+      font-size: 11px;
+
+      padding:
+        5px 14px;
+    }
+
+    .section-title {
+      font-size: 29px;
+
+      line-height: 1.2;
+    }
+
+    .section-desc {
+      font-size: 15px;
+
+      line-height: 1.65;
+    }
+
+    /* Services */
+
+    .services-grid {
+      grid-template-columns: 1fr;
+
+      width: min(100%, 480px);
+
+      margin: 0 auto;
+
+      gap: 17px;
+    }
+
+    .service-card {
+      padding: 25px 22px 23px;
+
+      border-radius: 18px;
+    }
+
+    .service-icon {
+      width: 52px;
+      height: 52px;
+
+      margin-bottom: 14px;
+    }
+
+    .service-title {
+      font-size: 18px;
+    }
+
+    .service-desc {
+      font-size: 14px;
+    }
+
+    /* Why */
+
+    .why-grid {
+      gap: 35px;
+    }
+
+    .why-image-container {
+      border-radius: 21px;
+    }
+
+    .why-image-container img {
+      height: 300px;
+    }
+
+    .why-badge {
+      left: 14px;
+      bottom: 14px;
+
+      padding:
+        8px 13px;
+
+      font-size: 11px;
+    }
+
+    .why-title {
+      font-size: 29px;
+
+      line-height: 1.2;
+    }
+
+    .why-desc {
+      font-size: 15px;
+    }
+
+    .why-benefits {
+      gap: 15px;
+
+      margin-bottom: 26px;
+    }
+
+    .why-benefit {
+      gap: 11px;
+    }
+
+    .why-benefit strong {
+      font-size: 14px;
+    }
+
+    .why-benefit span:last-child {
+      font-size: 13px;
+    }
+
+    .why-cta {
+      width: min(100%, 320px);
+    }
+
+    /* Steps */
+
+    .steps {
+      gap: 34px;
+    }
+
+    .step-number {
+      font-size: 43px;
+    }
+
+    .step-icon {
+      width: 53px;
+      height: 53px;
+
+      margin-bottom: 12px;
+    }
+
+    .step-title {
+      font-size: 18px;
+    }
+
+    .step-desc {
+      font-size: 14px;
+    }
+
+    /* CTA */
+
+    .cta-section {
+      padding: 65px 0;
+    }
+
+    .cta-title {
+      font-size: 30px;
+    }
+
+    .cta-desc {
+      font-size: 15px;
+
+      margin-bottom: 25px;
+    }
+
+    .cta-actions {
       flex-direction: column;
-      align-items: center;
+
+      width: 100%;
+
       gap: 10px;
+
+      margin-bottom: 27px;
+    }
+
+    .cta-actions .btn {
+      width: min(100%, 340px);
+    }
+
+    .btn-large {
+      min-height: 52px;
+
+      padding:
+        14px 27px;
+
+      font-size: 15px;
+    }
+
+    .cta-footer {
+      flex-direction: column;
+
+      gap: 10px;
+
+      font-size: 12px;
+    }
+  }
+
+  /* ============================================================
+     MOBILE SMALL
+  ============================================================ */
+
+  @media (max-width: 480px) {
+
+    .container {
+      padding-left: 16px;
+      padding-right: 16px;
+    }
+
+    .electrician-hero {
+      padding:
+        38px 0
+        45px;
+    }
+
+    .hero-grid {
+      gap: 32px;
+    }
+
+    .hero-title {
+      font-size: 29px;
+
+      letter-spacing: -0.025em;
+    }
+
+    .hero-desc {
+      font-size: 14px;
+    }
+
+    .hero-actions .btn {
+      max-width: 100%;
+
+      min-height: 48px;
+
+      font-size: 14px;
+
+      padding:
+        13px 22px;
+    }
+
+    .trust-item {
+      font-size: 12px;
+    }
+
+    /* Smaller visual */
+
+    .hero-visuals {
+      height: 315px;
+    }
+
+    .visual-main {
+      width: 84%;
+      height: 73%;
+
+      top: 13%;
+      left: 8%;
+
+      border-radius: 18px;
+    }
+
+    .support-1,
+    .support-2 {
+      width: 35%;
+      height: 23%;
+
+      border-radius: 11px;
+    }
+
+    .support-label {
+      display: none;
+    }
+
+    .floating-card {
+      display: none;
+    }
+
+    .service-tags {
+      bottom: -1px;
+
+      gap: 4px;
+    }
+
+    .tag {
+      font-size: 8px;
+
+      padding:
+        3px 7px;
+    }
+
+    /* Sections */
+
+    .services-section,
+    .why-section,
+    .how-section {
+      padding: 62px 0;
+    }
+
+    .section-header {
+      margin-bottom: 31px;
+    }
+
+    .section-title {
+      font-size: 25px;
+    }
+
+    .section-desc {
+      font-size: 14px;
+    }
+
+    .service-card {
+      padding:
+        22px 18px;
+
+      border-radius: 17px;
+    }
+
+    .service-title {
+      font-size: 17px;
+    }
+
+    .service-desc {
+      font-size: 13px;
+
+      line-height: 1.6;
+    }
+
+    .service-link {
+      font-size: 13px;
+    }
+
+    /* Why */
+
+    .why-image-container img {
+      height: 235px;
+    }
+
+    .why-badge {
+      font-size: 10px;
+
+      padding:
+        6px 10px;
+    }
+
+    .why-title {
+      font-size: 25px;
+    }
+
+    .why-desc {
+      font-size: 14px;
+    }
+
+    .why-benefit {
+      align-items: flex-start;
+    }
+
+    .benefit-icon {
+      width: 31px;
+      height: 31px;
+
+      flex-basis: 31px;
+    }
+
+    .why-benefit strong {
+      font-size: 13px;
+    }
+
+    .why-benefit span:last-child {
+      font-size: 12px;
+    }
+
+    /* Steps */
+
+    .step-number {
+      font-size: 38px;
+    }
+
+    .step-icon {
+      width: 50px;
+      height: 50px;
+    }
+
+    .step-title {
+      font-size: 17px;
+    }
+
+    .step-desc {
+      font-size: 13px;
+    }
+
+    /* CTA */
+
+    .cta-section {
+      padding: 55px 0;
+    }
+
+    .cta-badge {
+      font-size: 10px;
+
+      padding:
+        5px 13px;
+    }
+
+    .cta-title {
+      font-size: 25px;
+    }
+
+    .cta-desc {
+      font-size: 14px;
+    }
+
+    .cta-actions .btn {
+      width: 100%;
+    }
+  }
+
+  /* ============================================================
+     VERY SMALL DEVICES
+  ============================================================ */
+
+  @media (max-width: 360px) {
+
+    .hero-title {
+      font-size: 26px;
+    }
+
+    .hero-visuals {
+      height: 285px;
+    }
+
+    .tag {
+      font-size: 7px;
+
+      padding:
+        3px 6px;
+    }
+
+    .section-title {
+      font-size: 23px;
+    }
+
+    .cta-title {
+      font-size: 23px;
+    }
+  }
+
+  /* ============================================================
+     RTL ARABIC
+  ============================================================ */
+
+  :global([dir="rtl"]) .hero-content,
+  :global([dir="rtl"]) .why-content {
+    text-align: right;
+  }
+
+  :global([dir="rtl"]) .hero-actions {
+    flex-direction: row-reverse;
+  }
+
+  :global([dir="rtl"]) .trust-indicators {
+    justify-content: flex-start;
+  }
+
+  :global([dir="rtl"]) .why-cta {
+    align-self: flex-start;
+  }
+
+  :global([dir="rtl"]) .why-benefit {
+    flex-direction: row-reverse;
+  }
+
+  :global([dir="rtl"]) .service-link,
+  :global([dir="rtl"]) .btn {
+    flex-direction: row-reverse;
+  }
+
+  :global([dir="rtl"]) .btn-primary:hover svg {
+    transform: translateX(-4px);
+  }
+
+  :global([dir="rtl"]) .why-badge {
+    left: auto;
+    right: 22px;
+  }
+
+  @media (max-width: 900px) {
+
+    :global([dir="rtl"]) .hero-content,
+    :global([dir="rtl"]) .why-content {
+      text-align: center;
+    }
+
+    :global([dir="rtl"]) .why-benefits {
+      text-align: right;
+    }
+
+    :global([dir="rtl"]) .why-cta {
+      align-self: center;
+    }
+
+    :global([dir="rtl"]) .trust-indicators {
+      justify-content: center;
     }
   }
 
   @media (max-width: 480px) {
-    .hero-title { font-size: 28px; }
-    .hero-visuals { height: 320px; }
-    .visual-main {
-      width: 85%;
-      height: 74%;
-      top: 13%;
-      left: 7%;
-    }
-    .support-1, .support-2 {
-      width: 36%;
-      height: 22%;
-    }
-    .floating-card { display: none; }
-    .service-tags { gap: 4px; }
-    .tag {
-      font-size: 10px;
-      padding: 3px 10px;
+
+    :global([dir="rtl"]) .why-badge {
+      right: 12px;
     }
   }
 
-  /* ==============================================================
-     PREFERS-REDUCED-MOTION
-     ============================================================== */
+  /* ============================================================
+     ACCESSIBILITY / REDUCED MOTION
+  ============================================================ */
+
   @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after {
-      animation-duration: 0.01ms !important;
-      transition-duration: 0.01ms !important;
+
+    html {
+      scroll-behavior: auto;
     }
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+
     .fade-up {
       opacity: 1 !important;
       transform: none !important;
     }
-    .floating-card { animation: none !important; }
-    .visual-main:hover, .visual-support:hover { transform: none !important; }
-  }
 
-  /* ==============================================================
-     REST OF THE PAGE STYLES — Same as plombier (blue palette)
-     ============================================================== */
-  .services-section {
-    padding: 100px 0;
-    background: var(--color-white);
-  }
-  .services-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 24px;
-  }
-  .service-card {
-    background: var(--color-white);
-    border-radius: var(--radius-card);
-    padding: 32px 28px 28px;
-    border: 1px solid rgba(15, 23, 42, 0.04);
-    box-shadow: var(--shadow-card);
-    transition: all var(--transition);
-    display: flex;
-    flex-direction: column;
-  }
-  .service-card:hover {
-    transform: translateY(-4px);
-    border-color: var(--color-primary);
-    box-shadow: var(--shadow-hover);
-  }
-  .service-icon {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 56px;
-    height: 56px;
-    background: var(--color-primary-light);
-    border-radius: 14px;
-    color: var(--color-primary);
-    margin-bottom: 16px;
-    transition: all var(--transition);
-    flex-shrink: 0;
-  }
-  .service-card:hover .service-icon {
-    background: var(--color-primary);
-    color: var(--color-white);
-  }
-  .service-title {
-    font-size: 19px;
-    font-weight: 700;
-    color: var(--color-navy);
-    margin: 0 0 8px;
-  }
-  .service-desc {
-    font-size: 14px;
-    color: var(--color-text);
-    line-height: 1.6;
-    margin: 0 0 20px;
-    flex: 1;
-  }
-  .service-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--color-primary);
-    text-decoration: none;
-    transition: gap 0.25s ease;
-    margin-top: auto;
-  }
-  .service-link:hover { gap: 12px; }
-  .service-link svg { transition: transform 0.25s ease; }
-  .service-link:hover svg { transform: translateX(4px); }
+    .floating-card {
+      animation: none !important;
+    }
 
-  .why-section {
-    padding: 100px 0;
-    background: var(--color-primary-light);
-  }
-  .why-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 60px;
-    align-items: center;
-  }
-  .why-image-wrapper { position: relative; }
-  .why-image-container {
-    position: relative;
-    border-radius: var(--radius-image);
-    overflow: hidden;
-    box-shadow: 0 12px 48px rgba(15, 23, 42, 0.08);
-  }
-  .why-image-container img {
-    width: 100%;
-    height: 420px;
-    object-fit: cover;
-    display: block;
-    transition: transform 0.6s ease;
-  }
-  .why-image-container:hover img { transform: scale(1.02); }
-  .why-badge {
-    position: absolute;
-    bottom: 24px;
-    left: 24px;
-    background: var(--color-white);
-    padding: 10px 20px;
-    border-radius: 40px;
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--color-navy);
-    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .badge-icon {
-    color: var(--color-primary);
-    stroke-width: 2.5;
-  }
-  .why-content { display: flex; flex-direction: column; }
-  .why-title {
-    font-size: 38px;
-    font-weight: 700;
-    color: var(--color-navy);
-    margin: 0 0 16px;
-    line-height: 1.15;
-    letter-spacing: -0.02em;
-  }
-  .why-desc {
-    font-size: 17px;
-    line-height: 1.7;
-    color: var(--color-text);
-    margin: 0 0 28px;
-  }
-  .why-benefits {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    margin-bottom: 32px;
-  }
-  .why-benefit {
-    display: flex;
-    align-items: flex-start;
-    gap: 14px;
-  }
-  .benefit-icon {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 32px;
-    height: 32px;
-    background: var(--color-white);
-    border-radius: 50%;
-    color: var(--color-primary);
-    flex-shrink: 0;
-    margin-top: 2px;
-  }
-  .why-benefit div { display: flex; flex-direction: column; }
-  .why-benefit strong {
-    font-size: 15px;
-    font-weight: 600;
-    color: var(--color-navy);
-  }
-  .why-benefit span:last-child {
-    font-size: 14px;
-    color: var(--color-text);
-    line-height: 1.5;
-  }
-  .why-cta { align-self: flex-start; }
+    .visual-main:hover,
+    .visual-support:hover,
+    .service-card:hover {
+      transform: none !important;
+    }
 
-  .how-section {
-    padding: 100px 0;
-    background: var(--color-white);
-  }
-  .steps {
-    display: grid;
-    grid-template-columns: 1fr auto 1fr auto 1fr;
-    align-items: start;
-    gap: 8px;
-    max-width: 960px;
-    margin: 0 auto;
-  }
-  .step {
-    text-align: center;
-    padding: 0 12px;
-  }
-  .step-number {
-    font-size: 52px;
-    font-weight: 800;
-    color: rgba(37, 99, 235, 0.12);
-    line-height: 1;
-    margin-bottom: 8px;
-    letter-spacing: -0.04em;
-  }
-  .step-icon {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 56px;
-    height: 56px;
-    background: var(--color-primary-light);
-    border-radius: 14px;
-    color: var(--color-primary);
-    margin-bottom: 14px;
-  }
-  .step-title {
-    font-size: 20px;
-    font-weight: 700;
-    color: var(--color-navy);
-    margin: 0 0 8px;
-  }
-  .step-desc {
-    font-size: 15px;
-    color: var(--color-text);
-    line-height: 1.6;
-    margin: 0;
-  }
-  .step-connector {
-    width: 40px;
-    height: 2px;
-    background: var(--color-primary);
-    opacity: 0.25;
-    margin-top: 44px;
-    flex-shrink: 0;
-  }
+    .why-image-container:hover img {
+      transform: none !important;
+    }
 
-  .cta-section {
-    padding: 80px 0;
-    background: var(--color-white);
-    position: relative;
-    overflow: hidden;
-  }
-  .cta-section::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(ellipse at 50% 0%, rgba(37, 99, 235, 0.15), transparent 70%);
-    pointer-events: none;
-  }
-  .cta-box {
-    position: relative;
-    z-index: 1;
-    text-align: center;
-    max-width: 760px;
-    margin: 0 auto;
-    color: var(--color-navy);
-  }
-  .cta-badge {
-    display: inline-block;
-    font-size: 13px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: var(--color-primary);
-    background: rgba(37, 99, 235, 0.2);
-    padding: 4px 18px;
-    border-radius: 40px;
-    margin-bottom: 16px;
-  }
-  .cta-title {
-    font-size: 42px;
-    font-weight: 700;
-    margin: 0 0 12px;
-    line-height: 1.15;
-    letter-spacing: -0.02em;
-  }
-  .cta-desc {
-    font-size: 18px;
-    opacity: 0.75;
-    line-height: 1.7;
-    margin: 0 0 32px;
-  }
-  .cta-actions {
-    display: flex;
-    gap: 16px;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin-bottom: 36px;
-  }
-  .cta-footer {
-    display: flex;
-    justify-content: center;
-    gap: 32px;
-    flex-wrap: wrap;
-    font-size: 14px;
-    opacity: 0.6;
-  }
-  .cta-footer span {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-  .footer-icon {
-    color: var(--color-primary);
-    stroke-width: 2.5;
-  }
-
-  @media (max-width: 1024px) {
-    .services-grid { grid-template-columns: repeat(2, 1fr); }
-    .why-grid { grid-template-columns: 1fr; gap: 40px; }
-    .why-image-container img { height: 320px; }
-    .why-content { text-align: center; }
-    .why-cta { align-self: center; }
-    .why-benefits { align-items: flex-start; text-align: left; }
-    .why-benefit { justify-content: center; }
-    .steps { grid-template-columns: 1fr; gap: 32px; }
-    .step-connector { display: none; }
-    .step { padding: 0; }
-    .cta-title { font-size: 34px; }
-  }
-
-  @media (max-width: 768px) {
-    .container { padding: 0 20px; }
-    .section-title { font-size: 30px; }
-    .services-section { padding: 72px 0; }
-    .services-grid { grid-template-columns: 1fr; max-width: 440px; margin: 0 auto; }
-    .why-section { padding: 72px 0; }
-    .why-title { font-size: 28px; }
-    .why-image-container img { height: 240px; }
-    .why-badge { bottom: 16px; left: 16px; padding: 8px 16px; font-size: 13px; }
-    .how-section { padding: 72px 0; }
-    .cta-section { padding: 56px 0; }
-    .cta-title { font-size: 28px; }
-    .cta-actions { flex-direction: column; align-items: center; }
-    .cta-actions .btn { width: 100%; max-width: 320px; justify-content: center; }
-    .cta-footer { gap: 16px; flex-direction: column; align-items: center; }
-    .btn-large { padding: 16px 32px; font-size: 16px; }
-  }
-
-  @media (max-width: 480px) {
-    .section-title { font-size: 26px; }
-    .service-card { padding: 24px 20px; }
-    .why-title { font-size: 24px; }
-    .step-number { font-size: 40px; }
-    .cta-title { font-size: 24px; }
-    .cta-desc { font-size: 16px; }
-    .why-benefit { flex-direction: column; align-items: center; text-align: center; }
-    .why-benefits { align-items: center; }
-    .why-badge { bottom: 12px; left: 12px; font-size: 12px; padding: 6px 14px; }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
-    .fade-up { opacity: 1 !important; transform: none !important; }
-    .service-card:hover { transform: none !important; }
-    .why-image-container:hover img { transform: none !important; }
-    .btn-primary:hover svg { transform: none !important; }
-    .service-link:hover svg { transform: none !important; }
+    .btn-primary:hover svg,
+    .service-link:hover svg {
+      transform: none !important;
+    }
   }
 </style>
+```
