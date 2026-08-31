@@ -1,90 +1,97 @@
 ---
-// src/pages/[lang]/services/electricien.astro
+// src/pages/[lang]/services/carrelage.astro
 import Layout from "../layouts/Layout.astro";
-import { t } from "../../../lib/i18n";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 
 export interface Props {
-  lang?: "fr" | "ar";
+  lang?: "fr" | "ar" | "en";
   currentPath?: string;
 }
 
-const { lang = "fr", currentPath = "/services/electricien" } = Astro.props;
+const { lang = "fr", currentPath = "/services/carrelage" } = Astro.props;
 
 const baseUrl = `/${lang}`;
 
 // ============================================================
-// ICON SYSTEM — clean inline SVG (Lucide style) with electrical icons
+// ICON SYSTEM — clean inline SVG
 // ============================================================
 function icon(name: string, size: number = 24, className: string = ""): string {
   const icons: Record<string, string> = {
-    // Existing icons from plombier
     wrench: `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>`,
-    droplets: `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><path d="M12 22a7 7 0 0 0 7-7c0-3.5-3-8-7-12-4 4-7 8.5-7 12a7 7 0 0 0 7 7z"/><path d="M12 16a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/></svg>`,
-    "map-pin": `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>`,
-    "check-circle": `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>`,
-    "arrow-right": `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>`,
-    "arrow-down": `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>`,
-    settings: `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>`,
-    shower: `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><path d="m4 4 2.5 2.5"/><path d="M13.5 6.5a4.95 4.95 0 0 0-7 7"/><path d="M15 5 5 15"/><path d="M14 17v.01"/><path d="M10 16v.01"/><path d="M13 13v.01"/><path d="M16 10v.01"/><path d="M11 20v.01"/><path d="M17 14v.01"/><path d="M20 11v.01"/></svg>`,
-    clock: `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`,
-    "file-text": `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>`,
 
-    // New electrical icons
-    zap: `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>`,
-    lightbulb: `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>`,
-    plug: `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><path d="M12 22v-5"/><path d="M9 8V2"/><path d="M15 8V2"/><path d="M18 8v5a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4V8z"/></svg>`,
+    "map-pin": `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>`,
+
+    "check-circle": `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>`,
+
+    "arrow-right": `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>`,
+
+    "arrow-down": `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>`,
+
+    settings: `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>`,
+
+    grid: `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/></svg>`,
+
+    layers: `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><path d="m12 2 9 5-9 5-9-5 9-5Z"/><path d="m3 12 9 5 9-5"/><path d="m3 17 9 5 9-5"/></svg>`,
+
+    "file-text": `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v6h6"/><path d="M8 13h8"/><path d="M8 17h6"/></svg>`,
+
+    clock: `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`
   };
 
   return icons[name] || "";
 }
 
 // ============================================================
-// HERO MULTILINGUAL CONTENT — adapted for electrician
+// MULTILINGUAL HERO CONTENT
 // ============================================================
 const heroContent: Record<string, any> = {
   fr: {
-    badge: "Électricité à Tanger",
-    title: "Votre maison à Tanger,<br/>entre de <span class=\"highlight\">bonnes mains</span>.",
-    subtitle: "Besoin d'un électricien pour une installation, une panne ou une réparation ? AlloMealem vous met en relation avec des électriciens de confiance à Tanger.",
+    badge: "Carrelage à Tanger",
+    title: "Un intérieur à Tanger,<br/>avec une <span class=\"highlight\">finition parfaite</span>.",
+    subtitle:
+      "Besoin de poser, remplacer ou rénover votre carrelage ? AlloMealem vous met en relation avec des carreleurs de confiance à Tanger.",
     primaryCta: "Trouver un professionnel",
     secondaryCta: "Voir les services",
     trust: [
-      "Électriciens locaux",
+      "Carreleurs locaux",
       "Intervention à Tanger",
-      "Intervention rapide",
+      "Travail soigné",
       "Professionnels vérifiés"
     ],
-    imgAlt: "Électricien professionnel intervenant à Tanger"
+    imgAlt: "Carreleur professionnel réalisant des travaux de carrelage à Tanger"
   },
+
   ar: {
-    badge: "الكهرباء في طنجة",
-    title: "منزلك في طنجة،<br/>بين <span class=\"highlight\">أيدٍ أمينة</span>.",
-    subtitle: "هل تحتاج إلى كهربائي للتركيب أو الإصلاح أو حل عطل كهربائي؟ يوصلك AlloMealem بكهربائيين موثوقين في طنجة.",
+    badge: "تركيب البلاط في طنجة",
+    title: "منزلك في طنجة،<br/>بتشطيب <span class=\"highlight\">مثالي</span>.",
+    subtitle:
+      "هل تحتاج إلى تركيب أو تغيير أو تجديد البلاط؟ يوصلك AlloMealem بحرفيين موثوقين في طنجة.",
     primaryCta: "ابحث عن حرفي",
     secondaryCta: "عرض الخدمات",
     trust: [
-      "كهربائيون محليون",
+      "حرفيون محليون",
       "تدخل في طنجة",
-      "تدخل سريع",
+      "عمل متقن",
       "محترفون موثوقون"
     ],
-    imgAlt: "كهربائي محترف يقدم خدمات الكهرباء في طنجة"
+    imgAlt: "حرفي محترف يقوم بأعمال تركيب البلاط في طنجة"
   },
+
   en: {
-    badge: "Electrical services in Tangier",
-    title: "Your home in Tangier,<br/>in <span class=\"highlight\">good hands</span>.",
-    subtitle: "Need an electrician for an installation, repair or electrical issue? AlloMealem connects you with trusted electricians in Tangier.",
+    badge: "Tiling in Tangier",
+    title: "Your home in Tangier,<br/>with a <span class=\"highlight\">perfect finish</span>.",
+    subtitle:
+      "Need to install, replace or renovate your tiles? AlloMealem connects you with trusted tiling professionals in Tangier.",
     primaryCta: "Find a professional",
     secondaryCta: "View services",
     trust: [
-      "Local electricians",
+      "Local tilers",
       "Service in Tangier",
-      "Fast service",
+      "Quality work",
       "Verified professionals"
     ],
-    imgAlt: "Professional electrician providing electrical services in Tangier"
+    imgAlt: "Professional tiler carrying out tile installation in Tangier"
   }
 };
 
@@ -95,13 +102,15 @@ const content = heroContent[lang] || heroContent.fr;
   <Header lang={lang} />
 
   <!-- ============================================================
-  HERO SECTION — Electrician version (same blue palette)
+       HERO
   ============================================================ -->
-  <section class="electrician-hero" id="hero">
+  <section class="tiling-hero" id="hero">
     <div class="container">
       <div class="hero-grid">
-        <!-- LEFT COLUMN: Content -->
+
+        <!-- LEFT -->
         <div class="hero-content">
+
           <span class="hero-badge">
             <span set:html={icon("map-pin", 16, "badge-icon")}></span>
             {content.badge}
@@ -109,13 +118,16 @@ const content = heroContent[lang] || heroContent.fr;
 
           <h1 class="hero-title" set:html={content.title}></h1>
 
-          <p class="hero-desc">{content.subtitle}</p>
+          <p class="hero-desc">
+            {content.subtitle}
+          </p>
 
           <div class="hero-actions">
             <a href='/contact' class="btn btn-primary">
               {content.primaryCta}
               <span set:html={icon("arrow-right", 18)}></span>
             </a>
+
             <a href="#services" class="btn btn-secondary">
               {content.secondaryCta}
             </a>
@@ -129,245 +141,453 @@ const content = heroContent[lang] || heroContent.fr;
               </span>
             ))}
           </div>
+
         </div>
 
-        <!-- RIGHT COLUMN: Visual Composition -->
+        <!-- RIGHT -->
         <div class="hero-visuals">
-          <!-- Main Image -->
+
           <div class="visual-main">
             <img
-              src="elictricien2.png"
+              src="carellage.png"
               alt={content.imgAlt}
               loading="eager"
               decoding="async"
             />
           </div>
 
-          <!-- Supporting Image 1 -->
           <div class="visual-support support-1">
             <img
-              src="elictricien.png"
-              alt="Électricien travaillant sur un tableau électrique"
+              src="carrelage.png"
+              alt="Pose professionnelle de carrelage"
               loading="lazy"
               decoding="async"
             />
-            <span class="support-label">Installation électrique</span>
+            <span class="support-label">Pose de carrelage</span>
           </div>
 
-          <!-- Supporting Image 2 -->
           <div class="visual-support support-2">
             <img
-              src="elictricien1.png"
-              alt="Électricien installant une prise"
+              src="carrelage2.png"
+              alt="Carrelage intérieur professionnel"
               loading="lazy"
               decoding="async"
             />
-            <span class="support-label">Dépannage</span>
+            <span class="support-label">Rénovation</span>
           </div>
 
-          <!-- Floating Card -->
           <div class="floating-card">
-            <span class="float-icon" set:html={icon("check-circle", 20)}></span>
+            <span
+              class="float-icon"
+              set:html={icon("check-circle", 20)}
+            ></span>
+
             <div>
-              <span class="float-title">Intervention rapide</span>
+              <span class="float-title">Travail soigné</span>
               <span class="float-sub">À Tanger</span>
             </div>
           </div>
 
-          <!-- Service Tags -->
           <div class="service-tags">
-            <span class="tag">Installation</span>
-            <span class="tag">Dépannage</span>
-            <span class="tag">Tableau électrique</span>
-            <span class="tag">Éclairage</span>
-            <span class="tag">Prises électriques</span>
+            <span class="tag">Sol</span>
+            <span class="tag">Mur</span>
+            <span class="tag">Salle de bain</span>
+            <span class="tag">Terrasse</span>
           </div>
+
         </div>
       </div>
     </div>
   </section>
 
   <!-- ============================================================
-  SERVICES SECTION — 6 cards for electrical services
+       SERVICES
   ============================================================ -->
   <section class="services-section" id="services">
     <div class="container">
+
       <div class="section-header">
         <span class="eyebrow">Nos services</span>
-        <h2 class="section-title">Des solutions pour tous vos besoins en électricité</h2>
+
+        <h2 class="section-title">
+          Des solutions pour tous vos projets de carrelage
+        </h2>
+
         <p class="section-desc">
-          Installation, réparation ou dépannage : trouvez un électricien adapté à votre besoin.
+          Pose, rénovation ou remplacement : trouvez le professionnel
+          adapté à votre projet.
         </p>
       </div>
+
       <div class="services-grid">
+
         <div class="service-card">
-          <div class="service-icon" set:html={icon("zap", 28)}></div>
-          <h3 class="service-title">Dépannage électrique</h3>
-          <p class="service-desc">Intervention rapide pour vos pannes et problèmes électriques.</p>
-          <a href="#" class="service-link">En savoir plus <span set:html={icon("arrow-right", 16)}></span></a>
+          <div class="service-icon" set:html={icon("grid", 28)}></div>
+
+          <h3 class="service-title">
+            Pose de carrelage
+          </h3>
+
+          <p class="service-desc">
+            Pose professionnelle de carrelage pour vos sols et vos murs.
+          </p>
+
+          <a href="#" class="service-link">
+            En savoir plus
+            <span set:html={icon("arrow-right", 16)}></span>
+          </a>
         </div>
+
         <div class="service-card">
-          <div class="service-icon" set:html={icon("zap", 28)}></div>
-          <h3 class="service-title">Installation électrique</h3>
-          <p class="service-desc">Installation et mise en place de vos équipements électriques.</p>
-          <a href="#" class="service-link">En savoir plus <span set:html={icon("arrow-right", 16)}></span></a>
+          <div class="service-icon" set:html={icon("layers", 28)}></div>
+
+          <h3 class="service-title">
+            Carrelage au sol
+          </h3>
+
+          <p class="service-desc">
+            Installation de carrelage durable et esthétique pour toutes vos pièces.
+          </p>
+
+          <a href="#" class="service-link">
+            En savoir plus
+            <span set:html={icon("arrow-right", 16)}></span>
+          </a>
         </div>
+
+        <div class="service-card">
+          <div class="service-icon" set:html={icon("grid", 28)}></div>
+
+          <h3 class="service-title">
+            Carrelage mural
+          </h3>
+
+          <p class="service-desc">
+            Pose de faïence et de carrelage mural pour cuisines et salles de bain.
+          </p>
+
+          <a href="#" class="service-link">
+            En savoir plus
+            <span set:html={icon("arrow-right", 16)}></span>
+          </a>
+        </div>
+
         <div class="service-card">
           <div class="service-icon" set:html={icon("settings", 28)}></div>
-          <h3 class="service-title">Tableau électrique</h3>
-          <p class="service-desc">Installation, remplacement et mise en conformité de votre tableau électrique.</p>
-          <a href="#" class="service-link">En savoir plus <span set:html={icon("arrow-right", 16)}></span></a>
+
+          <h3 class="service-title">
+            Rénovation
+          </h3>
+
+          <p class="service-desc">
+            Remplacement de votre ancien carrelage et rénovation de vos surfaces.
+          </p>
+
+          <a href="#" class="service-link">
+            En savoir plus
+            <span set:html={icon("arrow-right", 16)}></span>
+          </a>
         </div>
+
         <div class="service-card">
-          <div class="service-icon" set:html={icon("lightbulb", 28)}></div>
-          <h3 class="service-title">Éclairage</h3>
-          <p class="service-desc">Installation de luminaires, spots et solutions d'éclairage.</p>
-          <a href="#" class="service-link">En savoir plus <span set:html={icon("arrow-right", 16)}></span></a>
+          <div class="service-icon" set:html={icon("layers", 28)}></div>
+
+          <h3 class="service-title">
+            Salle de bain
+          </h3>
+
+          <p class="service-desc">
+            Pose de carrelage et faïence pour créer une salle de bain moderne.
+          </p>
+
+          <a href="#" class="service-link">
+            En savoir plus
+            <span set:html={icon("arrow-right", 16)}></span>
+          </a>
         </div>
-        <div class="service-card">
-          <div class="service-icon" set:html={icon("plug", 28)}></div>
-          <h3 class="service-title">Prises et interrupteurs</h3>
-          <p class="service-desc">Installation et remplacement de prises et interrupteurs électriques.</p>
-          <a href="#" class="service-link">En savoir plus <span set:html={icon("arrow-right", 16)}></span></a>
-        </div>
+
         <div class="service-card">
           <div class="service-icon" set:html={icon("wrench", 28)}></div>
-          <h3 class="service-title">Rénovation électrique</h3>
-          <p class="service-desc">Rénovation et modernisation de vos installations électriques.</p>
-          <a href="#" class="service-link">En savoir plus <span set:html={icon("arrow-right", 16)}></span></a>
+
+          <h3 class="service-title">
+            Terrasse & extérieur
+          </h3>
+
+          <p class="service-desc">
+            Pose de carrelage adapté aux terrasses, balcons et espaces extérieurs.
+          </p>
+
+          <a href="#" class="service-link">
+            En savoir plus
+            <span set:html={icon("arrow-right", 16)}></span>
+          </a>
         </div>
+
       </div>
     </div>
   </section>
 
   <!-- ============================================================
-  WHY CHOOSE US — Electrician version
+       WHY
   ============================================================ -->
   <section class="why-section" id="why">
     <div class="container">
+
       <div class="why-grid">
+
         <div class="why-image-wrapper">
           <div class="why-image-container">
+
             <img
-              src="elictricien2.png"
-              alt="Électricien professionnel en intervention"
+              src="carrelage2.png"
+              alt="Carreleur professionnel en intervention"
               loading="lazy"
               decoding="async"
             />
+
             <div class="why-badge">
-              <span set:html={icon("check-circle", 18, "badge-icon")}></span>
+              <span
+                set:html={icon("check-circle", 18, "badge-icon")}
+              ></span>
               Professionnels vérifiés
             </div>
+
           </div>
         </div>
+
         <div class="why-content">
-          <span class="eyebrow">Pourquoi nous choisir ?</span>
-          <h2 class="why-title">Une intervention simple, rapide et fiable</h2>
+
+          <span class="eyebrow">
+            Pourquoi nous choisir ?
+          </span>
+
+          <h2 class="why-title">
+            Un carrelage posé avec précision et savoir-faire
+          </h2>
+
           <p class="why-desc">
-            Nous vous aidons à trouver un électricien adapté à votre besoin, avec une expérience claire et sans complication.
+            Nous vous aidons à trouver un carreleur adapté à votre projet,
+            que ce soit pour une petite réparation, une rénovation ou une
+            pose complète.
           </p>
+
           <div class="why-benefits">
+
             <div class="why-benefit">
-              <span class="benefit-icon" set:html={icon("check-circle", 20)}></span>
+              <span
+                class="benefit-icon"
+                set:html={icon("check-circle", 20)}
+              ></span>
+
               <div>
-                <strong>Électriciens locaux</strong>
-                <span>Des professionnels disponibles à Tanger.</span>
+                <strong>Carreleurs locaux</strong>
+                <span>
+                  Des professionnels disponibles à Tanger.
+                </span>
               </div>
             </div>
+
             <div class="why-benefit">
-              <span class="benefit-icon" set:html={icon("clock", 20)}></span>
+              <span
+                class="benefit-icon"
+                set:html={icon("clock", 20)}
+              ></span>
+
               <div>
-                <strong>Intervention rapide</strong>
-                <span>Une prise en charge adaptée à votre situation.</span>
+                <strong>Intervention adaptée</strong>
+                <span>
+                  Une prise en charge selon votre projet et vos besoins.
+                </span>
               </div>
             </div>
+
             <div class="why-benefit">
-              <span class="benefit-icon" set:html={icon("file-text", 20)}></span>
+              <span
+                class="benefit-icon"
+                set:html={icon("file-text", 20)}
+              ></span>
+
               <div>
                 <strong>Prix transparents</strong>
-                <span>Des informations claires avant l'intervention.</span>
+                <span>
+                  Des informations claires avant le début des travaux.
+                </span>
               </div>
             </div>
+
           </div>
-          <a href='/contact' class="btn btn-primary why-cta">
+
+          <a
+            href='/contact'
+            class="btn btn-primary why-cta"
+          >
             Demander un service
             <span set:html={icon("arrow-right", 18)}></span>
           </a>
+
         </div>
       </div>
     </div>
   </section>
 
   <!-- ============================================================
-  HOW IT WORKS — Electrician version
+       HOW IT WORKS
   ============================================================ -->
   <section class="how-section" id="how">
     <div class="container">
+
       <div class="section-header">
-        <span class="eyebrow">Comment ça marche</span>
-        <h2 class="section-title">Trouver un électricien en quelques étapes</h2>
+
+        <span class="eyebrow">
+          Comment ça marche
+        </span>
+
+        <h2 class="section-title">
+          Trouver un carreleur en quelques étapes
+        </h2>
+
         <p class="section-desc">
-          Un processus simple pour vous permettre de trouver rapidement le professionnel adapté.
+          Un processus simple pour trouver rapidement le professionnel
+          adapté à votre projet.
         </p>
+
       </div>
+
       <div class="steps">
+
         <div class="step">
+
           <div class="step-number">01</div>
-          <div class="step-icon" set:html={icon("file-text", 28)}></div>
-          <h3 class="step-title">Décrivez votre besoin</h3>
-          <p class="step-desc">Expliquez simplement le problème ou le travail électrique à réaliser.</p>
+
+          <div
+            class="step-icon"
+            set:html={icon("file-text", 28)}
+          ></div>
+
+          <h3 class="step-title">
+            Décrivez votre projet
+          </h3>
+
+          <p class="step-desc">
+            Expliquez le type de carrelage, la surface et les travaux
+            que vous souhaitez réaliser.
+          </p>
+
         </div>
+
         <div class="step-connector"></div>
+
         <div class="step">
+
           <div class="step-number">02</div>
-          <div class="step-icon" set:html={icon("wrench", 28)}></div>
-          <h3 class="step-title">Choisissez un professionnel</h3>
-          <p class="step-desc">Consultez les électriciens disponibles pour votre demande.</p>
+
+          <div
+            class="step-icon"
+            set:html={icon("grid", 28)}
+          ></div>
+
+          <h3 class="step-title">
+            Choisissez un professionnel
+          </h3>
+
+          <p class="step-desc">
+            Consultez les professionnels disponibles pour votre demande
+            à Tanger.
+          </p>
+
         </div>
+
         <div class="step-connector"></div>
+
         <div class="step">
+
           <div class="step-number">03</div>
-          <div class="step-icon" set:html={icon("clock", 28)}></div>
-          <h3 class="step-title">Planifiez l'intervention</h3>
-          <p class="step-desc">Convenez directement des détails de l'intervention.</p>
+
+          <div
+            class="step-icon"
+            set:html={icon("clock", 28)}
+          ></div>
+
+          <h3 class="step-title">
+            Planifiez l'intervention
+          </h3>
+
+          <p class="step-desc">
+            Convenez directement des détails et de la date des travaux.
+          </p>
+
         </div>
+
       </div>
     </div>
   </section>
 
   <!-- ============================================================
-  FINAL CTA — Electrician version (same blue palette)
+       CTA
   ============================================================ -->
   <section class="cta-section" id="cta">
     <div class="container">
+
       <div class="cta-box">
-        <span class="cta-badge">Électricité à Tanger</span>
-        <h2 class="cta-title">Besoin d'un électricien ?</h2>
-        <p class="cta-desc">Décrivez votre besoin et trouvez un professionnel adapté à Tanger.</p>
+
+        <span class="cta-badge">
+          Carrelage à Tanger
+        </span>
+
+        <h2 class="cta-title">
+          Besoin d'un carreleur ?
+        </h2>
+
+        <p class="cta-desc">
+          Décrivez votre projet et trouvez un professionnel adapté
+          à vos besoins à Tanger.
+        </p>
+
         <div class="cta-actions">
-          <a href=`/contact` class="btn btn-primary btn-large">
+
+          <a
+            href='/contact'
+            class="btn btn-primary btn-large"
+          >
             Demander un service
             <span set:html={icon("arrow-right", 20)}></span>
           </a>
-          <a href="#services" class="btn btn-secondary btn-large">
+
+          <a
+            href="#services"
+            class="btn btn-secondary btn-large"
+          >
             Voir nos services
             <span set:html={icon("arrow-down", 20)}></span>
           </a>
+
         </div>
+
         <div class="cta-footer">
+
           <span>
-            <span set:html={icon("check-circle", 16, "footer-icon")}></span>
-            Électriciens locaux
+            <span
+              set:html={icon("check-circle", 16, "footer-icon")}
+            ></span>
+            Carreleurs locaux
           </span>
+
           <span>
-            <span set:html={icon("check-circle", 16, "footer-icon")}></span>
+            <span
+              set:html={icon("check-circle", 16, "footer-icon")}
+            ></span>
             Intervention à Tanger
           </span>
+
           <span>
-            <span set:html={icon("check-circle", 16, "footer-icon")}></span>
+            <span
+              set:html={icon("check-circle", 16, "footer-icon")}
+            ></span>
             Professionnels vérifiés
           </span>
+
         </div>
+
       </div>
     </div>
   </section>
@@ -375,38 +595,60 @@ const content = heroContent[lang] || heroContent.fr;
   <Footer lang={lang} />
 
   <!-- ============================================================
-  SCROLL ANIMATION
+       SCROLL ANIMATION
   ============================================================ -->
   <script>
     document.addEventListener("DOMContentLoaded", () => {
-      const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+      const prefersReducedMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)"
+      );
+
       if (prefersReducedMotion.matches) {
-        document.querySelectorAll(".fade-up").forEach(el => el.classList.add("visible"));
+        document
+          .querySelectorAll(".fade-up")
+          .forEach(el => el.classList.add("visible"));
         return;
       }
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) entry.target.classList.add("visible");
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("visible");
+            }
+          });
+        },
+        {
+          threshold: 0.12,
+          rootMargin: "0px 0px -40px 0px"
+        }
+      );
+
+      document
+        .querySelectorAll(
+          ".section-header, .service-card, .why-image-wrapper, .why-content, .step, .cta-box"
+        )
+        .forEach(el => {
+          el.classList.add("fade-up");
+          observer.observe(el);
         });
-      }, { threshold: 0.12, rootMargin: "0px 0px -40px 0px" });
-      document.querySelectorAll(".section-header, .service-card, .why-image-wrapper, .why-content, .step, .cta-box").forEach(el => {
-        el.classList.add("fade-up");
-        observer.observe(el);
-      });
-      document.querySelectorAll(".service-card").forEach((el, i) => el.style.transitionDelay = (i * 60) + "ms");
+
+      document
+        .querySelectorAll(".service-card")
+        .forEach((el, i) => {
+          (el as HTMLElement).style.transitionDelay =
+            (i * 60) + "ms";
+        });
     });
   </script>
 </Layout>
 
 <style>
-  /* ==============================================================
-     IMPORT GOOGLE FONT — Inter (premium, similar to image)
-     ============================================================== */
+  /* ============================================================
+     FONT
+  ============================================================ */
   @import url('https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..800&display=swap');
 
-  /* ==============================================================
-     ROOT — Same blue palette as plombier
-     ============================================================== */
   :root {
     --color-primary: #2563eb;
     --color-primary-dark: #1d4ed8;
@@ -416,12 +658,24 @@ const content = heroContent[lang] || heroContent.fr;
     --color-slate: #64748b;
     --color-bg: #f8fafc;
     --color-white: #ffffff;
+
     --radius-card: 22px;
     --radius-image: 28px;
-    --shadow-card: 0 4px 24px rgba(15, 23, 42, 0.06);
-    --shadow-hover: 0 12px 40px rgba(15, 23, 42, 0.10);
-    --transition: 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+
+    --shadow-card:
+      0 4px 24px rgba(15, 23, 42, 0.06);
+
+    --shadow-hover:
+      0 12px 40px rgba(15, 23, 42, 0.10);
+
+    --transition:
+      0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+    font-family:
+      'Inter',
+      system-ui,
+      -apple-system,
+      sans-serif;
   }
 
   body {
@@ -434,15 +688,26 @@ const content = heroContent[lang] || heroContent.fr;
     padding: 0 28px;
   }
 
+  /* ============================================================
+     ANIMATIONS
+  ============================================================ */
+
   .fade-up {
     opacity: 0;
     transform: translateY(28px);
-    transition: opacity 0.7s ease, transform 0.7s ease;
+    transition:
+      opacity 0.7s ease,
+      transform 0.7s ease;
   }
+
   .fade-up.visible {
     opacity: 1;
     transform: translateY(0);
   }
+
+  /* ============================================================
+     EYEBROW
+  ============================================================ */
 
   .eyebrow {
     display: inline-block;
@@ -457,11 +722,16 @@ const content = heroContent[lang] || heroContent.fr;
     margin-bottom: 14px;
   }
 
+  /* ============================================================
+     SECTION HEADER
+  ============================================================ */
+
   .section-header {
     text-align: center;
     max-width: 700px;
     margin: 0 auto 52px;
   }
+
   .section-title {
     font-size: 40px;
     font-weight: 700;
@@ -470,6 +740,7 @@ const content = heroContent[lang] || heroContent.fr;
     line-height: 1.15;
     letter-spacing: -0.02em;
   }
+
   .section-desc {
     font-size: 17px;
     color: var(--color-text);
@@ -477,7 +748,10 @@ const content = heroContent[lang] || heroContent.fr;
     line-height: 1.6;
   }
 
-  /* ---- Buttons (same as plombier) ---- */
+  /* ============================================================
+     BUTTONS
+  ============================================================ */
+
   .btn {
     display: inline-flex;
     align-items: center;
@@ -494,19 +768,25 @@ const content = heroContent[lang] || heroContent.fr;
     font-family: inherit;
     line-height: 1.2;
   }
+
   .btn-primary {
     background: var(--color-primary);
     color: var(--color-white);
-    box-shadow: 0 4px 20px rgba(37, 99, 235, 0.3);
+    box-shadow:
+      0 4px 20px rgba(37, 99, 235, 0.3);
   }
+
   .btn-primary:hover {
     background: var(--color-primary-dark);
     transform: translateY(-3px);
-    box-shadow: 0 8px 32px rgba(37, 99, 235, 0.4);
+    box-shadow:
+      0 8px 32px rgba(37, 99, 235, 0.4);
   }
+
   .btn-primary svg {
     transition: transform 0.25s ease;
   }
+
   .btn-primary:hover svg {
     transform: translateX(4px);
   }
@@ -516,20 +796,10 @@ const content = heroContent[lang] || heroContent.fr;
     color: var(--color-navy);
     border: 2px solid rgba(15, 23, 42, 0.15);
   }
+
   .btn-secondary:hover {
     background: rgba(15, 23, 42, 0.04);
     border-color: var(--color-navy);
-    transform: translateY(-3px);
-  }
-
-  .btn-outline-dark {
-    background: transparent;
-    color: var(--color-white);
-    border: 2px solid rgba(255, 255, 255, 0.3);
-  }
-  .btn-outline-dark:hover {
-    background: rgba(255, 255, 255, 0.08);
-    border-color: var(--color-white);
     transform: translateY(-3px);
   }
 
@@ -538,35 +808,48 @@ const content = heroContent[lang] || heroContent.fr;
     font-size: 18px;
   }
 
-  /* ==============================================================
-     ELECTRICIAN HERO — Same structure as plombier, blue palette
-     ============================================================== */
-  .electrician-hero {
+  /* ============================================================
+     TILING HERO
+  ============================================================ */
+
+  .tiling-hero {
     padding: 60px 0 80px;
     background: var(--color-bg);
     position: relative;
     overflow: hidden;
     margin-top: var(--header-h, 76px);
   }
-  .electrician-hero::before {
+
+  .tiling-hero::before {
     content: "";
     position: absolute;
     top: -40%;
     right: -10%;
     width: 600px;
     height: 600px;
-    background: radial-gradient(circle, rgba(37, 99, 235, 0.06), transparent 70%);
+    background:
+      radial-gradient(
+        circle,
+        rgba(37, 99, 235, 0.06),
+        transparent 70%
+      );
     border-radius: 50%;
     pointer-events: none;
   }
-  .electrician-hero::after {
+
+  .tiling-hero::after {
     content: "";
     position: absolute;
     bottom: -20%;
     left: -10%;
     width: 400px;
     height: 400px;
-    background: radial-gradient(circle, rgba(37, 99, 235, 0.04), transparent 70%);
+    background:
+      radial-gradient(
+        circle,
+        rgba(37, 99, 235, 0.04),
+        transparent 70%
+      );
     border-radius: 50%;
     pointer-events: none;
   }
@@ -580,7 +863,10 @@ const content = heroContent[lang] || heroContent.fr;
     z-index: 1;
   }
 
-  /* --- Left Column: Content --- */
+  /* ============================================================
+     HERO CONTENT
+  ============================================================ */
+
   .hero-content {
     display: flex;
     flex-direction: column;
@@ -601,6 +887,7 @@ const content = heroContent[lang] || heroContent.fr;
     letter-spacing: 0.04em;
     width: fit-content;
   }
+
   .badge-icon {
     stroke-width: 2.5;
   }
@@ -613,10 +900,12 @@ const content = heroContent[lang] || heroContent.fr;
     margin: 0;
     letter-spacing: -0.03em;
   }
+
   .highlight {
     color: var(--color-primary);
     position: relative;
   }
+
   .highlight::after {
     content: "";
     position: absolute;
@@ -650,6 +939,7 @@ const content = heroContent[lang] || heroContent.fr;
     gap: 24px;
     margin-top: 8px;
   }
+
   .trust-item {
     display: flex;
     align-items: center;
@@ -658,19 +948,22 @@ const content = heroContent[lang] || heroContent.fr;
     font-weight: 500;
     color: var(--color-navy);
   }
+
   .trust-icon {
     color: var(--color-primary);
     stroke-width: 2.5;
   }
 
-  /* --- Right Column: Visual Composition --- */
+  /* ============================================================
+     HERO VISUALS
+  ============================================================ */
+
   .hero-visuals {
     position: relative;
     height: 560px;
     width: 100%;
   }
 
-  /* Main Image */
   .visual-main {
     position: absolute;
     width: 72%;
@@ -679,13 +972,16 @@ const content = heroContent[lang] || heroContent.fr;
     left: 14%;
     border-radius: var(--radius-image);
     overflow: hidden;
-    box-shadow: 0 24px 64px rgba(15, 23, 42, 0.12);
+    box-shadow:
+      0 24px 64px rgba(15, 23, 42, 0.12);
     z-index: 2;
     transition: transform 0.5s ease;
   }
+
   .visual-main:hover {
     transform: scale(1.01);
   }
+
   .visual-main img {
     width: 100%;
     height: 100%;
@@ -693,23 +989,30 @@ const content = heroContent[lang] || heroContent.fr;
     display: block;
   }
 
-  /* Supporting Images */
+  /* ============================================================
+     SUPPORTING IMAGES
+  ============================================================ */
+
   .visual-support {
     position: absolute;
     border-radius: 18px;
     overflow: hidden;
-    box-shadow: 0 8px 32px rgba(15, 23, 42, 0.10);
+    box-shadow:
+      0 8px 32px rgba(15, 23, 42, 0.10);
     border: 3px solid var(--color-white);
     background: var(--color-white);
     z-index: 3;
     transition: all var(--transition);
     cursor: pointer;
   }
+
   .visual-support:hover {
     transform: scale(1.05) translateY(-4px);
-    box-shadow: 0 16px 48px rgba(15, 23, 42, 0.15);
+    box-shadow:
+      0 16px 48px rgba(15, 23, 42, 0.15);
     z-index: 5;
   }
+
   .visual-support img {
     width: 100%;
     height: 100%;
@@ -724,6 +1027,7 @@ const content = heroContent[lang] || heroContent.fr;
     right: 0;
     z-index: 4;
   }
+
   .support-2 {
     width: 32%;
     height: 28%;
@@ -748,15 +1052,19 @@ const content = heroContent[lang] || heroContent.fr;
     letter-spacing: 0.02em;
   }
 
-  /* Floating Card */
+  /* ============================================================
+     FLOATING CARD
+  ============================================================ */
+
   .floating-card {
     position: absolute;
     bottom: 10%;
     right: 2%;
-    background: var(--color-white);
+    background: rgba(255, 255, 255, 0.92);
     padding: 16px 24px 16px 18px;
     border-radius: 16px;
-    box-shadow: 0 12px 40px rgba(15, 23, 42, 0.12);
+    box-shadow:
+      0 12px 40px rgba(15, 23, 42, 0.12);
     display: flex;
     align-items: center;
     gap: 12px;
@@ -764,12 +1072,18 @@ const content = heroContent[lang] || heroContent.fr;
     border: 1px solid rgba(15, 23, 42, 0.04);
     animation: float 4s ease-in-out infinite;
     backdrop-filter: blur(8px);
-    background: rgba(255, 255, 255, 0.92);
   }
+
   @keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-8px); }
+    0%, 100% {
+      transform: translateY(0);
+    }
+
+    50% {
+      transform: translateY(-8px);
+    }
   }
+
   .float-icon {
     display: flex;
     align-items: center;
@@ -781,6 +1095,7 @@ const content = heroContent[lang] || heroContent.fr;
     color: var(--color-primary);
     flex-shrink: 0;
   }
+
   .float-title {
     font-size: 15px;
     font-weight: 700;
@@ -788,6 +1103,7 @@ const content = heroContent[lang] || heroContent.fr;
     display: block;
     line-height: 1.2;
   }
+
   .float-sub {
     font-size: 13px;
     color: var(--color-text);
@@ -795,7 +1111,10 @@ const content = heroContent[lang] || heroContent.fr;
     line-height: 1.2;
   }
 
-  /* Service Tags */
+  /* ============================================================
+     SERVICE TAGS
+  ============================================================ */
+
   .service-tags {
     position: absolute;
     bottom: 0;
@@ -807,6 +1126,7 @@ const content = heroContent[lang] || heroContent.fr;
     flex-wrap: wrap;
     justify-content: center;
   }
+
   .tag {
     background: var(--color-white);
     border: 1px solid rgba(15, 23, 42, 0.08);
@@ -815,10 +1135,12 @@ const content = heroContent[lang] || heroContent.fr;
     font-size: 13px;
     font-weight: 600;
     color: var(--color-navy);
-    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
+    box-shadow:
+      0 4px 12px rgba(15, 23, 42, 0.04);
     transition: all var(--transition);
     cursor: default;
   }
+
   .tag:hover {
     background: var(--color-primary);
     color: var(--color-white);
@@ -826,149 +1148,21 @@ const content = heroContent[lang] || heroContent.fr;
     transform: translateY(-2px);
   }
 
-  /* ==============================================================
-     RESPONSIVE — identical breakpoints to plombier
-     ============================================================== */
-  @media (max-width: 1200px) {
-    .hero-title { font-size: 42px; }
-    .hero-visuals { height: 480px; }
-  }
+  /* ============================================================
+     SERVICES
+  ============================================================ */
 
-  @media (max-width: 1024px) {
-    .hero-grid {
-      grid-template-columns: 1fr;
-      gap: 48px;
-    }
-    .hero-content {
-      text-align: center;
-      align-items: center;
-    }
-    .hero-desc { max-width: 100%; }
-    .hero-actions { justify-content: center; }
-    .trust-indicators { justify-content: center; }
-    .hero-visuals {
-      height: 480px;
-      max-width: 600px;
-      margin: 0 auto;
-    }
-    .visual-main {
-      width: 74%;
-      height: 80%;
-      top: 10%;
-      left: 13%;
-    }
-    .support-1, .support-2 {
-      width: 30%;
-      height: 26%;
-    }
-    .floating-card {
-      bottom: 8%;
-      right: 0;
-    }
-  }
-
-  @media (max-width: 768px) {
-    .electrician-hero { padding: 100px 0 60px; }
-    .hero-title { font-size: 34px; }
-    .hero-visuals { height: 400px; }
-    .visual-main {
-      width: 80%;
-      height: 76%;
-      top: 12%;
-      left: 10%;
-    }
-    .support-1, .support-2 {
-      width: 34%;
-      height: 24%;
-    }
-    .support-1 { top: 0; right: 0; }
-    .support-2 { bottom: 0; left: 0; }
-    .support-label {
-      font-size: 10px;
-      padding: 2px 12px;
-      bottom: 6px;
-    }
-    .floating-card {
-      padding: 12px 16px 12px 14px;
-      bottom: 6%;
-      right: 0;
-    }
-    .float-title { font-size: 13px; }
-    .float-sub { font-size: 11px; }
-    .service-tags {
-      gap: 6px;
-      bottom: -4px;
-    }
-    .tag {
-      font-size: 11px;
-      padding: 4px 14px;
-    }
-    .hero-actions {
-      flex-direction: column;
-      align-items: center;
-      width: 100%;
-    }
-    .hero-actions .btn {
-      width: 100%;
-      max-width: 320px;
-      justify-content: center;
-    }
-    .trust-indicators {
-      flex-direction: column;
-      align-items: center;
-      gap: 10px;
-    }
-  }
-
-  @media (max-width: 480px) {
-    .hero-title { font-size: 28px; }
-    .hero-visuals { height: 320px; }
-    .visual-main {
-      width: 85%;
-      height: 74%;
-      top: 13%;
-      left: 7%;
-    }
-    .support-1, .support-2 {
-      width: 36%;
-      height: 22%;
-    }
-    .floating-card { display: none; }
-    .service-tags { gap: 4px; }
-    .tag {
-      font-size: 10px;
-      padding: 3px 10px;
-    }
-  }
-
-  /* ==============================================================
-     PREFERS-REDUCED-MOTION
-     ============================================================== */
-  @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after {
-      animation-duration: 0.01ms !important;
-      transition-duration: 0.01ms !important;
-    }
-    .fade-up {
-      opacity: 1 !important;
-      transform: none !important;
-    }
-    .floating-card { animation: none !important; }
-    .visual-main:hover, .visual-support:hover { transform: none !important; }
-  }
-
-  /* ==============================================================
-     REST OF THE PAGE STYLES — Same as plombier (blue palette)
-     ============================================================== */
   .services-section {
     padding: 100px 0;
     background: var(--color-white);
   }
+
   .services-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 24px;
   }
+
   .service-card {
     background: var(--color-white);
     border-radius: var(--radius-card);
@@ -979,11 +1173,13 @@ const content = heroContent[lang] || heroContent.fr;
     display: flex;
     flex-direction: column;
   }
+
   .service-card:hover {
     transform: translateY(-4px);
     border-color: var(--color-primary);
     box-shadow: var(--shadow-hover);
   }
+
   .service-icon {
     display: inline-flex;
     align-items: center;
@@ -997,16 +1193,19 @@ const content = heroContent[lang] || heroContent.fr;
     transition: all var(--transition);
     flex-shrink: 0;
   }
+
   .service-card:hover .service-icon {
     background: var(--color-primary);
     color: var(--color-white);
   }
+
   .service-title {
     font-size: 19px;
     font-weight: 700;
     color: var(--color-navy);
     margin: 0 0 8px;
   }
+
   .service-desc {
     font-size: 14px;
     color: var(--color-text);
@@ -1014,6 +1213,7 @@ const content = heroContent[lang] || heroContent.fr;
     margin: 0 0 20px;
     flex: 1;
   }
+
   .service-link {
     display: inline-flex;
     align-items: center;
@@ -1025,27 +1225,47 @@ const content = heroContent[lang] || heroContent.fr;
     transition: gap 0.25s ease;
     margin-top: auto;
   }
-  .service-link:hover { gap: 12px; }
-  .service-link svg { transition: transform 0.25s ease; }
-  .service-link:hover svg { transform: translateX(4px); }
+
+  .service-link:hover {
+    gap: 12px;
+  }
+
+  .service-link svg {
+    transition: transform 0.25s ease;
+  }
+
+  .service-link:hover svg {
+    transform: translateX(4px);
+  }
+
+  /* ============================================================
+     WHY SECTION
+  ============================================================ */
 
   .why-section {
     padding: 100px 0;
     background: var(--color-primary-light);
   }
+
   .why-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 60px;
     align-items: center;
   }
-  .why-image-wrapper { position: relative; }
+
+  .why-image-wrapper {
+    position: relative;
+  }
+
   .why-image-container {
     position: relative;
     border-radius: var(--radius-image);
     overflow: hidden;
-    box-shadow: 0 12px 48px rgba(15, 23, 42, 0.08);
+    box-shadow:
+      0 12px 48px rgba(15, 23, 42, 0.08);
   }
+
   .why-image-container img {
     width: 100%;
     height: 420px;
@@ -1053,7 +1273,11 @@ const content = heroContent[lang] || heroContent.fr;
     display: block;
     transition: transform 0.6s ease;
   }
-  .why-image-container:hover img { transform: scale(1.02); }
+
+  .why-image-container:hover img {
+    transform: scale(1.02);
+  }
+
   .why-badge {
     position: absolute;
     bottom: 24px;
@@ -1064,16 +1288,18 @@ const content = heroContent[lang] || heroContent.fr;
     font-size: 14px;
     font-weight: 600;
     color: var(--color-navy);
-    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    box-shadow:
+      0 4px 20px rgba(0, 0, 0, 0.08);
     display: flex;
     align-items: center;
     gap: 8px;
   }
-  .badge-icon {
-    color: var(--color-primary);
-    stroke-width: 2.5;
+
+  .why-content {
+    display: flex;
+    flex-direction: column;
   }
-  .why-content { display: flex; flex-direction: column; }
+
   .why-title {
     font-size: 38px;
     font-weight: 700;
@@ -1082,23 +1308,27 @@ const content = heroContent[lang] || heroContent.fr;
     line-height: 1.15;
     letter-spacing: -0.02em;
   }
+
   .why-desc {
     font-size: 17px;
     line-height: 1.7;
     color: var(--color-text);
     margin: 0 0 28px;
   }
+
   .why-benefits {
     display: flex;
     flex-direction: column;
     gap: 16px;
     margin-bottom: 32px;
   }
+
   .why-benefit {
     display: flex;
     align-items: flex-start;
     gap: 14px;
   }
+
   .benefit-icon {
     display: inline-flex;
     align-items: center;
@@ -1111,23 +1341,37 @@ const content = heroContent[lang] || heroContent.fr;
     flex-shrink: 0;
     margin-top: 2px;
   }
-  .why-benefit div { display: flex; flex-direction: column; }
+
+  .why-benefit div {
+    display: flex;
+    flex-direction: column;
+  }
+
   .why-benefit strong {
     font-size: 15px;
     font-weight: 600;
     color: var(--color-navy);
   }
+
   .why-benefit span:last-child {
     font-size: 14px;
     color: var(--color-text);
     line-height: 1.5;
   }
-  .why-cta { align-self: flex-start; }
+
+  .why-cta {
+    align-self: flex-start;
+  }
+
+  /* ============================================================
+     HOW SECTION
+  ============================================================ */
 
   .how-section {
     padding: 100px 0;
     background: var(--color-white);
   }
+
   .steps {
     display: grid;
     grid-template-columns: 1fr auto 1fr auto 1fr;
@@ -1136,10 +1380,12 @@ const content = heroContent[lang] || heroContent.fr;
     max-width: 960px;
     margin: 0 auto;
   }
+
   .step {
     text-align: center;
     padding: 0 12px;
   }
+
   .step-number {
     font-size: 52px;
     font-weight: 800;
@@ -1148,6 +1394,7 @@ const content = heroContent[lang] || heroContent.fr;
     margin-bottom: 8px;
     letter-spacing: -0.04em;
   }
+
   .step-icon {
     display: inline-flex;
     align-items: center;
@@ -1159,18 +1406,21 @@ const content = heroContent[lang] || heroContent.fr;
     color: var(--color-primary);
     margin-bottom: 14px;
   }
+
   .step-title {
     font-size: 20px;
     font-weight: 700;
     color: var(--color-navy);
     margin: 0 0 8px;
   }
+
   .step-desc {
     font-size: 15px;
     color: var(--color-text);
     line-height: 1.6;
     margin: 0;
   }
+
   .step-connector {
     width: 40px;
     height: 2px;
@@ -1180,19 +1430,30 @@ const content = heroContent[lang] || heroContent.fr;
     flex-shrink: 0;
   }
 
+  /* ============================================================
+     CTA
+  ============================================================ */
+
   .cta-section {
     padding: 80px 0;
     background: var(--color-white);
     position: relative;
     overflow: hidden;
   }
+
   .cta-section::before {
     content: "";
     position: absolute;
     inset: 0;
-    background: radial-gradient(ellipse at 50% 0%, rgba(37, 99, 235, 0.15), transparent 70%);
+    background:
+      radial-gradient(
+        ellipse at 50% 0%,
+        rgba(37, 99, 235, 0.15),
+        transparent 70%
+      );
     pointer-events: none;
   }
+
   .cta-box {
     position: relative;
     z-index: 1;
@@ -1201,18 +1462,20 @@ const content = heroContent[lang] || heroContent.fr;
     margin: 0 auto;
     color: var(--color-navy);
   }
+
   .cta-badge {
     display: inline-block;
     font-size: 13px;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.06em;
-    color: var(--color-primary);
+    color: #044bc5;
     background: rgba(37, 99, 235, 0.2);
     padding: 4px 18px;
     border-radius: 40px;
     margin-bottom: 16px;
   }
+
   .cta-title {
     font-size: 42px;
     font-weight: 700;
@@ -1220,12 +1483,14 @@ const content = heroContent[lang] || heroContent.fr;
     line-height: 1.15;
     letter-spacing: -0.02em;
   }
+
   .cta-desc {
     font-size: 18px;
     opacity: 0.75;
     line-height: 1.7;
     margin: 0 0 32px;
   }
+
   .cta-actions {
     display: flex;
     gap: 16px;
@@ -1233,6 +1498,7 @@ const content = heroContent[lang] || heroContent.fr;
     flex-wrap: wrap;
     margin-bottom: 36px;
   }
+
   .cta-footer {
     display: flex;
     justify-content: center;
@@ -1241,66 +1507,400 @@ const content = heroContent[lang] || heroContent.fr;
     font-size: 14px;
     opacity: 0.6;
   }
+
   .cta-footer span {
     display: flex;
     align-items: center;
     gap: 6px;
   }
+
   .footer-icon {
-    color: var(--color-primary);
+    color: #93bbfc;
     stroke-width: 2.5;
   }
 
+  /* ============================================================
+     RESPONSIVE
+  ============================================================ */
+
+  @media (max-width: 1200px) {
+    .hero-title {
+      font-size: 42px;
+    }
+
+    .hero-visuals {
+      height: 480px;
+    }
+  }
+
   @media (max-width: 1024px) {
-    .services-grid { grid-template-columns: repeat(2, 1fr); }
-    .why-grid { grid-template-columns: 1fr; gap: 40px; }
-    .why-image-container img { height: 320px; }
-    .why-content { text-align: center; }
-    .why-cta { align-self: center; }
-    .why-benefits { align-items: flex-start; text-align: left; }
-    .why-benefit { justify-content: center; }
-    .steps { grid-template-columns: 1fr; gap: 32px; }
-    .step-connector { display: none; }
-    .step { padding: 0; }
-    .cta-title { font-size: 34px; }
+
+    .hero-grid {
+      grid-template-columns: 1fr;
+      gap: 48px;
+    }
+
+    .hero-content {
+      text-align: center;
+      align-items: center;
+    }
+
+    .hero-desc {
+      max-width: 100%;
+    }
+
+    .hero-actions {
+      justify-content: center;
+    }
+
+    .trust-indicators {
+      justify-content: center;
+    }
+
+    .hero-visuals {
+      height: 480px;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .visual-main {
+      width: 74%;
+      height: 80%;
+      top: 10%;
+      left: 13%;
+    }
+
+    .support-1,
+    .support-2 {
+      width: 30%;
+      height: 26%;
+    }
+
+    .floating-card {
+      bottom: 8%;
+      right: 0;
+    }
+
+    .services-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .why-grid {
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
+
+    .why-image-container img {
+      height: 320px;
+    }
+
+    .why-content {
+      text-align: center;
+    }
+
+    .why-cta {
+      align-self: center;
+    }
+
+    .why-benefits {
+      align-items: flex-start;
+      text-align: left;
+    }
+
+    .steps {
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
+
+    .step-connector {
+      display: none;
+    }
+
+    .step {
+      padding: 0;
+    }
+
+    .cta-title {
+      font-size: 34px;
+    }
   }
 
   @media (max-width: 768px) {
-    .container { padding: 0 20px; }
-    .section-title { font-size: 30px; }
-    .services-section { padding: 72px 0; }
-    .services-grid { grid-template-columns: 1fr; max-width: 440px; margin: 0 auto; }
-    .why-section { padding: 72px 0; }
-    .why-title { font-size: 28px; }
-    .why-image-container img { height: 240px; }
-    .why-badge { bottom: 16px; left: 16px; padding: 8px 16px; font-size: 13px; }
-    .how-section { padding: 72px 0; }
-    .cta-section { padding: 56px 0; }
-    .cta-title { font-size: 28px; }
-    .cta-actions { flex-direction: column; align-items: center; }
-    .cta-actions .btn { width: 100%; max-width: 320px; justify-content: center; }
-    .cta-footer { gap: 16px; flex-direction: column; align-items: center; }
-    .btn-large { padding: 16px 32px; font-size: 16px; }
+
+    .container {
+      padding: 0 20px;
+    }
+
+    .tiling-hero {
+      padding: 100px 0 60px;
+    }
+
+    .hero-title {
+      font-size: 34px;
+    }
+
+    .hero-visuals {
+      height: 400px;
+    }
+
+    .visual-main {
+      width: 80%;
+      height: 76%;
+      top: 12%;
+      left: 10%;
+    }
+
+    .support-1,
+    .support-2 {
+      width: 34%;
+      height: 24%;
+    }
+
+    .support-1 {
+      top: 0;
+      right: 0;
+    }
+
+    .support-2 {
+      bottom: 0;
+      left: 0;
+    }
+
+    .support-label {
+      font-size: 10px;
+      padding: 2px 12px;
+      bottom: 6px;
+    }
+
+    .floating-card {
+      padding: 12px 16px 12px 14px;
+      bottom: 6%;
+      right: 0;
+    }
+
+    .float-title {
+      font-size: 13px;
+    }
+
+    .float-sub {
+      font-size: 11px;
+    }
+
+    .service-tags {
+      gap: 6px;
+      bottom: -4px;
+    }
+
+    .tag {
+      font-size: 11px;
+      padding: 4px 14px;
+    }
+
+    .hero-actions {
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+    }
+
+    .hero-actions .btn {
+      width: 100%;
+      max-width: 320px;
+      justify-content: center;
+    }
+
+    .trust-indicators {
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .section-title {
+      font-size: 30px;
+    }
+
+    .services-section {
+      padding: 72px 0;
+    }
+
+    .services-grid {
+      grid-template-columns: 1fr;
+      max-width: 440px;
+      margin: 0 auto;
+    }
+
+    .why-section {
+      padding: 72px 0;
+    }
+
+    .why-title {
+      font-size: 28px;
+    }
+
+    .why-image-container img {
+      height: 240px;
+    }
+
+    .why-badge {
+      bottom: 16px;
+      left: 16px;
+      padding: 8px 16px;
+      font-size: 13px;
+    }
+
+    .how-section {
+      padding: 72px 0;
+    }
+
+    .cta-section {
+      padding: 56px 0;
+    }
+
+    .cta-title {
+      font-size: 28px;
+    }
+
+    .cta-actions {
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .cta-actions .btn {
+      width: 100%;
+      max-width: 320px;
+      justify-content: center;
+    }
+
+    .cta-footer {
+      gap: 16px;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .btn-large {
+      padding: 16px 32px;
+      font-size: 16px;
+    }
   }
 
   @media (max-width: 480px) {
-    .section-title { font-size: 26px; }
-    .service-card { padding: 24px 20px; }
-    .why-title { font-size: 24px; }
-    .step-number { font-size: 40px; }
-    .cta-title { font-size: 24px; }
-    .cta-desc { font-size: 16px; }
-    .why-benefit { flex-direction: column; align-items: center; text-align: center; }
-    .why-benefits { align-items: center; }
-    .why-badge { bottom: 12px; left: 12px; font-size: 12px; padding: 6px 14px; }
+
+    .hero-title {
+      font-size: 28px;
+    }
+
+    .hero-visuals {
+      height: 320px;
+    }
+
+    .visual-main {
+      width: 85%;
+      height: 74%;
+      top: 13%;
+      left: 7%;
+    }
+
+    .support-1,
+    .support-2 {
+      width: 36%;
+      height: 22%;
+    }
+
+    .floating-card {
+      display: none;
+    }
+
+    .service-tags {
+      gap: 4px;
+    }
+
+    .tag {
+      font-size: 10px;
+      padding: 3px 10px;
+    }
+
+    .section-title {
+      font-size: 26px;
+    }
+
+    .service-card {
+      padding: 24px 20px;
+    }
+
+    .why-title {
+      font-size: 24px;
+    }
+
+    .step-number {
+      font-size: 40px;
+    }
+
+    .cta-title {
+      font-size: 24px;
+    }
+
+    .cta-desc {
+      font-size: 16px;
+    }
+
+    .why-benefit {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .why-benefits {
+      align-items: center;
+    }
+
+    .why-badge {
+      bottom: 12px;
+      left: 12px;
+      font-size: 12px;
+      padding: 6px 14px;
+    }
   }
 
+  /* ============================================================
+     REDUCED MOTION
+  ============================================================ */
+
   @media (prefers-reduced-motion: reduce) {
-    * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
-    .fade-up { opacity: 1 !important; transform: none !important; }
-    .service-card:hover { transform: none !important; }
-    .why-image-container:hover img { transform: none !important; }
-    .btn-primary:hover svg { transform: none !important; }
-    .service-link:hover svg { transform: none !important; }
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+
+    .fade-up {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+
+    .floating-card {
+      animation: none !important;
+    }
+
+    .visual-main:hover,
+    .visual-support:hover {
+      transform: none !important;
+    }
+
+    .service-card:hover {
+      transform: none !important;
+    }
+
+    .why-image-container:hover img {
+      transform: none !important;
+    }
+
+    .btn-primary:hover svg {
+      transform: none !important;
+    }
+
+    .service-link:hover svg {
+      transform: none !important;
+    }
   }
 </style>

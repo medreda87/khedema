@@ -1,5 +1,5 @@
 ---
-// Composant Footer — Design repensé
+// Composant Footer — Design repensé et 100% Responsive
 import { t, type Lang, LANG_LABELS } from "../lib/i18n";
 import { icons } from "../lib/icons";
 import { SERVICES } from "../lib/services";
@@ -15,52 +15,50 @@ interface Props {
 const {
   lang = "fr",
   logoText = "Servio",
-  phone = "+212 6 00 00 00 00",
-  whatsapp = "+212600000000",
-  email = "contact@servio.ma",
+  phone = "+212 7 16 88 54 41",
+  whatsapp = "+212716885441",
+  email = "allomealeam@gmail.com",
 } = Astro.props;
 
 const langs: Lang[] = ["ar", "fr", "en"];
 const topServices = SERVICES.slice(0, 6);
 
 const platform = [
-  { label: t(lang, "nav.about"), href: `/${lang}/#about` },
-  { label: t(lang, "nav.how"), href: `/${lang}/#how` },
-  { label: t(lang, "nav.technicians"), href: `/${lang}/#technicians` },
-  { label: t(lang, "nav.faq"), href: `/${lang}/#faq` },
-  { label: t(lang, "nav.contact"), href: `/${lang}/#contact` },
+  { label: t(lang, "À propos") || "À propos", href: `/propos` },
+  { label: t(lang, "Comment ça marche") || "Comment ça marche", href: '/comment-ca-marche'},
+  { label: t(lang, "nav.contact") || "Contact", href: `/contact` },
 ];
 
-// Icons supplémentaires pour le nouveau design
 const iconMap = {
-  location: `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>`,
   clock: `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`,
-  arrowRight: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>`,
+  arrowRight: `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>`,
 };
+
+const isRTL = lang === "ar";
 ---
 
-<footer class="footer">
+<footer class="footer" dir={isRTL ? "rtl" : "ltr"}>
   <div class="footer__container">
+    
     <!-- Haut du footer : grille principale -->
     <div class="footer__grid">
+      
       <!-- Colonne Brand -->
       <div class="footer__brand">
-        <a href={`/${lang}/`} class="footer__logo">
-          <span class="footer__logo-mark">S</span>
-          <span class="footer__logo-text">{logoText}</span>
+        <a href='/' class="footer__logo">
+          <img src='logo.png' alt='logo' class='logo'/>
         </a>
-        <p class="footer__tagline">{t(lang, "footer.tagline")}</p>
+        <p class="footer__tagline">{t(lang, "footer.tagline") || "Votre partenaire de confiance pour tous vos travaux à Tanger."}</p>
+        
         <div class="footer__socials">
           <a href={`https://wa.me/${whatsapp.replace(/[^\d]/g, "")}`} target="_blank" rel="noopener" aria-label="WhatsApp">
-            <span set:html={icons.whatsapp}></span>
+            <span set:html={icons.whatsapp || "WA"}></span>
           </a>
           <a href={`tel:${phone}`} aria-label="Phone">
-            <span set:html={icons.phone}></span>
-          </a>
-          <a href={`mailto:${email}`} aria-label="Email">
-            <span set:html={icons.email || `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>`}></span>
+            <span set:html={icons.phone || "📞"}></span>
           </a>
         </div>
+        
         <div class="footer__info">
           <span class="footer__info-item">
             <span set:html={iconMap.location}></span>
@@ -75,17 +73,17 @@ const iconMap = {
 
       <!-- Colonne Services -->
       <div class="footer__col">
-        <h4 class="footer__col-title">{t(lang, "footer.services")}</h4>
+        <h4 class="footer__col-title">{t(lang, "footer.services") || "Services"}</h4>
         <ul class="footer__col-list">
           {topServices.map((s) => (
-            <li><a href={`/${lang}/services/${s.slug}`}>{s.name[lang]}</a></li>
+            <li><a href='#services'>{s.name[lang]}</a></li>
           ))}
         </ul>
       </div>
 
       <!-- Colonne Plateforme -->
       <div class="footer__col">
-        <h4 class="footer__col-title">{t(lang, "footer.platform")}</h4>
+        <h4 class="footer__col-title">{t(lang, "footer.platform") || "Plateforme"}</h4>
         <ul class="footer__col-list">
           {platform.map((p) => (
             <li><a href={p.href}>{p.label}</a></li>
@@ -95,16 +93,23 @@ const iconMap = {
 
       <!-- Colonne Contact & Newsletter -->
       <div class="footer__col footer__col--contact">
-        <h4 class="footer__col-title">{t(lang, "footer.contact")}</h4>
-        <ul class="footer__contact-list">
-          <li><a href={`https://wa.me/${whatsapp.replace(/[^\d]/g, "")}`} target="_blank" rel="noopener">WhatsApp · {whatsapp}</a></li>
-          <li><a href={`tel:${phone}`}>{phone}</a></li>
-          <li><a href={`mailto:${email}`}>{email}</a></li>
-        </ul>
+        <div>
+          <h4 class="footer__col-title">{t(lang, "footer.contact") || "Contact"}</h4>
+          <ul class="footer__contact-list">
+            <li>
+              <a href={`https://wa.me/${whatsapp.replace(/[^\d]/g, "")}`} target="_blank" rel="noopener">
+                WhatsApp · {whatsapp}
+              </a>
+            </li>
+            <li><a href={`tel:${phone}`}>{phone}</a></li>
+            <li><a href={`mailto:${email}`}>{email}</a></li>
+          </ul>
+        </div>
+        
         <div class="footer__newsletter">
-          <span class="footer__newsletter-label">Restez informé</span>
-          <form class="footer__newsletter-form" action="#" method="POST">
-            <input type="email" placeholder="Votre email" required />
+          <span class="footer__newsletter-label">{t(lang, "footer.newsletter") || "Restez informé"}</span>
+          <form class="footer__newsletter-form" action="#" method="POST" aria-label="Newsletter">
+            <input type="email" placeholder="votre@email.com" required aria-label="Adresse email" />
             <button type="submit" aria-label="S'abonner">
               <span set:html={iconMap.arrowRight}></span>
             </button>
@@ -112,36 +117,24 @@ const iconMap = {
         </div>
       </div>
     </div>
-
-    <!-- Bas du footer -->
-    <div class="footer__bottom">
-      <div class="footer__legal">
-        <span>© 2026 {logoText} — {t(lang, "footer.rights")}</span>
-        <a href={`/${lang}/privacy`}>{t(lang, "footer.privacy")}</a>
-        <a href={`/${lang}/terms`}>{t(lang, "footer.terms")}</a>
-      </div>
-      <div class="footer__langs">
-        {langs.map((l) => (
-          <a href={`/${l}/`} class:list={["footer__lang", { "footer__lang--active": l === lang }]}>
-            {LANG_LABELS[l]}
-          </a>
-        ))}
-      </div>
-    </div>
   </div>
 </footer>
 
 <style>
   /* ============================================================
-     FOOTER — Design repensé
+     VARIABLES & RESET
      ============================================================ */
   .footer {
+    --color-primary: #2563eb;
+    --color-primary-dark: #1d4ed8;
+    
     background: #0b1220;
     color: #cbd5e1;
     padding: 64px 0 28px;
     margin-top: 40px;
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
     border-top: 1px solid rgba(255, 255, 255, 0.04);
+    line-height: 1.5;
   }
 
   .footer__container {
@@ -150,7 +143,9 @@ const iconMap = {
     padding: 0 28px;
   }
 
-  /* ---- Grille principale ---- */
+  /* ============================================================
+     GRILLE PRINCIPALE
+     ============================================================ */
   .footer__grid {
     display: grid;
     grid-template-columns: 1.5fr 1fr 1fr 1.2fr;
@@ -159,7 +154,9 @@ const iconMap = {
     border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   }
 
-  /* --- Brand --- */
+  /* ============================================================
+     BRAND
+     ============================================================ */
   .footer__logo {
     display: inline-flex;
     align-items: center;
@@ -167,19 +164,24 @@ const iconMap = {
     text-decoration: none;
     margin-bottom: 16px;
   }
+  .logo{
+    width:100px;
+    height:auto;
+  }
   .footer__logo-mark {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     width: 38px;
     height: 38px;
-    background: linear-gradient(135deg, var(--color-primary), #1d4ed8);
+    background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
     color: #fff;
     font-weight: 800;
     font-size: 18px;
     border-radius: 12px;
     box-shadow: 0 4px 16px rgba(37, 99, 235, 0.3);
   }
+  
   .footer__logo-text {
     font-size: 20px;
     font-weight: 700;
@@ -192,14 +194,15 @@ const iconMap = {
     line-height: 1.7;
     color: #94a3b8;
     max-width: 300px;
-    margin: 0 0 20px;
+    margin: 0 0 24px;
   }
 
   .footer__socials {
     display: flex;
     gap: 10px;
-    margin-bottom: 20px;
+    margin-bottom: 24px;
   }
+  
   .footer__socials a {
     width: 40px;
     height: 40px;
@@ -210,12 +213,15 @@ const iconMap = {
     color: #94a3b8;
     transition: all 0.25s ease;
   }
-  .footer__socials a:hover {
+  
+  .footer__socials a:hover, .footer__socials a:focus-visible {
     background: var(--color-primary);
     color: #fff;
     transform: translateY(-2px);
     box-shadow: 0 4px 16px rgba(37, 99, 235, 0.3);
+    outline: none;
   }
+  
   .footer__socials :global(svg) {
     width: 18px;
     height: 18px;
@@ -225,8 +231,9 @@ const iconMap = {
   .footer__info {
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 8px;
   }
+  
   .footer__info-item {
     display: flex;
     align-items: center;
@@ -234,6 +241,7 @@ const iconMap = {
     font-size: 0.85rem;
     color: #64748b;
   }
+  
   .footer__info-item :global(svg) {
     width: 16px;
     height: 16px;
@@ -242,27 +250,29 @@ const iconMap = {
     flex-shrink: 0;
   }
 
-  /* --- Colonnes --- */
+  /* ============================================================
+     COLONNES
+     ============================================================ */
   .footer__col-title {
     color: #fff;
-    font-size: 0.9rem;
+    font-size: 0.75rem;
     font-weight: 700;
     margin: 0 0 18px;
-    letter-spacing: 0.02em;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
-    font-size: 0.75rem;
     opacity: 0.6;
   }
 
-  .footer__col-list {
+  .footer__col-list, .footer__contact-list {
     list-style: none;
     padding: 0;
     margin: 0;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 12px;
   }
-  .footer__col-list a {
+  
+  .footer__col-list a, .footer__contact-list a {
     color: #94a3b8;
     font-size: 0.9rem;
     text-decoration: none;
@@ -270,95 +280,94 @@ const iconMap = {
     display: inline-flex;
     align-items: center;
     gap: 4px;
+    padding: 2px 0;
   }
-  .footer__col-list a:hover {
+  
+  .footer__col-list a:hover, .footer__contact-list a:hover,
+  .footer__col-list a:focus-visible, .footer__contact-list a:focus-visible {
     color: #fff;
-    transform: translateX(4px);
+    outline: none;
   }
 
-  /* --- Contact & Newsletter --- */
-  .footer__contact-list {
-    list-style: none;
-    padding: 0;
-    margin: 0 0 24px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-  .footer__contact-list a {
-    color: #94a3b8;
-    font-size: 0.9rem;
-    text-decoration: none;
-    transition: color 0.2s ease;
-  }
-  .footer__contact-list a:hover {
-    color: #fff;
-  }
-
+  /* ============================================================
+     NEWSLETTER
+     ============================================================ */
   .footer__newsletter-label {
     display: block;
-    font-size: 0.8rem;
-    font-weight: 600;
+    font-size: 0.75rem;
+    font-weight: 700;
     color: #94a3b8;
     margin-bottom: 10px;
     text-transform: uppercase;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.06em;
   }
 
   .footer__newsletter-form {
     display: flex;
     align-items: center;
-    gap: 0;
     background: rgba(255, 255, 255, 0.04);
     border-radius: 60px;
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     overflow: hidden;
-    transition: border-color 0.25s ease;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease;
   }
+  
   .footer__newsletter-form:focus-within {
     border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
   }
+  
   .footer__newsletter-form input {
     flex: 1;
     background: transparent;
     border: none;
-    padding: 10px 16px;
+    padding: 12px 16px;
     color: #fff;
-    font-size: 0.85rem;
+    font-size: 0.9rem;
     outline: none;
     font-family: inherit;
     min-width: 0;
   }
+  
   .footer__newsletter-form input::placeholder {
     color: #64748b;
   }
+  
   .footer__newsletter-form button {
     background: var(--color-primary);
     border: none;
     color: #fff;
-    width: 42px;
-    height: 42px;
+    width: 44px;
+    height: 44px;
+    margin: 3px;
+    border-radius: 50%;
     display: grid;
     place-items: center;
     cursor: pointer;
-    transition: background 0.25s ease;
+    transition: background 0.25s ease, transform 0.2s ease;
     flex-shrink: 0;
   }
-  .footer__newsletter-form button:hover {
+  
+  .footer__newsletter-form button:hover, .footer__newsletter-form button:focus-visible {
     background: var(--color-primary-dark);
+    transform: scale(1.05);
+    outline: none;
   }
+  
   .footer__newsletter-form :global(svg) {
     width: 18px;
     height: 18px;
     stroke-width: 2;
   }
 
-  /* ---- Bas du footer ---- */
+  /* ============================================================
+     BAS DU FOOTER
+     ============================================================ */
   .footer__bottom {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-top: 28px;
+    padding-top: 32px;
     gap: 20px;
     flex-wrap: wrap;
   }
@@ -370,22 +379,27 @@ const iconMap = {
     color: #64748b;
     flex-wrap: wrap;
   }
+  
   .footer__legal a {
     color: #64748b;
     text-decoration: none;
     transition: color 0.2s ease;
   }
-  .footer__legal a:hover {
+  
+  .footer__legal a:hover, .footer__legal a:focus-visible {
     color: #cbd5e1;
+    outline: none;
+    text-decoration: underline;
   }
 
   .footer__langs {
     display: flex;
-    gap: 2px;
+    gap: 4px;
     background: rgba(255, 255, 255, 0.04);
     padding: 4px;
     border-radius: 40px;
   }
+  
   .footer__lang {
     padding: 6px 14px;
     border-radius: 40px;
@@ -397,80 +411,190 @@ const iconMap = {
     text-transform: uppercase;
     letter-spacing: 0.04em;
   }
+  
   .footer__lang--active {
-    background: rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.1);
     color: #fff;
   }
-  .footer__lang:hover:not(.footer__lang--active) {
+  
+  .footer__lang:hover:not(.footer__lang--active),
+  .footer__lang:focus-visible:not(.footer__lang--active) {
     color: #fff;
+    outline: none;
   }
 
   /* ============================================================
-     RESPONSIVE
+     SUPPORT RTL (Arabe)
+     ============================================================ */
+  [dir="rtl"] .footer__col-list a:hover,
+  [dir="rtl"] .footer__contact-list a:hover {
+    transform: translateX(-4px);
+  }
+  
+  [dir="rtl"] .footer__info-item {
+    flex-direction: row-reverse;
+  }
+  
+  [dir="rtl"] .footer__newsletter-form button {
+    border-radius: 50%;
+  }
+  
+  [dir="rtl"] .footer__newsletter-form :global(svg) {
+    transform: rotate(180deg);
+  }
+
+  /* ============================================================
+     RESPONSIVE : TABLETTE (<= 1024px)
      ============================================================ */
   @media (max-width: 1024px) {
     .footer__grid {
       grid-template-columns: 1fr 1fr;
       gap: 40px;
     }
+    
     .footer__brand {
       grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      align-items: start;
     }
+    
+    .footer__brand > .footer__info {
+      grid-column: 1 / -1;
+      flex-direction: row;
+      gap: 24px;
+      margin-top: 8px;
+    }
+
     .footer__col--contact {
       grid-column: 1 / -1;
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 40px;
     }
-    .footer__contact-list {
-      margin-bottom: 0;
-    }
   }
 
+  /* ============================================================
+     RESPONSIVE : MOBILE (<= 768px)
+     ============================================================ */
   @media (max-width: 768px) {
     .footer {
-      padding: 48px 0 20px;
+      padding: 48px 0 24px;
+      margin-top: 24px;
     }
+    
     .footer__container {
       padding: 0 20px;
     }
+    
     .footer__grid {
       grid-template-columns: 1fr;
-      gap: 32px;
-      padding-bottom: 32px;
+      gap: 36px;
+      padding-bottom: 36px;
     }
+    
+    .footer__brand {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+    
+    .footer__brand > .footer__info {
+      flex-direction: column;
+      gap: 8px;
+    }
+
     .footer__col--contact {
       grid-template-columns: 1fr;
-      gap: 24px;
+      gap: 32px;
     }
+    
     .footer__bottom {
       flex-direction: column;
       align-items: flex-start;
-      gap: 16px;
+      gap: 20px;
     }
+    
     .footer__legal {
-      gap: 16px;
+      flex-direction: column;
+      gap: 12px;
     }
+    
     .footer__tagline {
       max-width: 100%;
     }
   }
 
+  /* ============================================================
+     RESPONSIVE : PETIT MOBILE (<= 480px)
+     ============================================================ */
   @media (max-width: 480px) {
-    .footer__legal {
+    .footer__container {
+      padding: 0 16px;
+    }
+
+    .footer__logo-text {
+      font-size: 18px;
+    }
+
+    /* Newsletter empilée pour un meilleur toucher sur petit écran */
+    .footer__newsletter-form {
       flex-direction: column;
+      background: transparent;
+      border: none;
+      gap: 12px;
+      align-items: stretch;
+    }
+    
+    .footer__newsletter-form:focus-within {
+      box-shadow: none;
+    }
+    
+    .footer__newsletter-form input {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      height: 48px; /* Zone de toucher optimale */
+      padding: 0 16px;
+      font-size: 16px; /* Empêche le zoom auto sur iOS */
+    }
+    
+    .footer__newsletter-form input:focus {
+      border-color: var(--color-primary);
+    }
+    
+    .footer__newsletter-form button {
+      width: 100%;
+      height: 48px;
+      border-radius: 12px;
+      margin: 0;
+      font-size: 0.9rem;
+      font-weight: 600;
       gap: 8px;
     }
-    .footer__newsletter-form input {
-      padding: 8px 12px;
-      font-size: 0.8rem;
+    
+    .footer__newsletter-form button::after {
+      content: "S'abonner";
     }
-    .footer__newsletter-form button {
-      width: 38px;
-      height: 38px;
+    
+    .footer__newsletter-form :global(svg) {
+      display: none; /* On cache la flèche sur mobile car on a le texte */
     }
+    
+    [dir="rtl"] .footer__newsletter-form button::after {
+      content: "اشتراك";
+    }
+
     .footer__langs {
+      width: 100%;
+      justify-content: center;
       flex-wrap: wrap;
+    }
+    
+    .footer__lang {
+      flex: 1;
+      text-align: center;
+      min-width: 60px;
     }
   }
 </style>

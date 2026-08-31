@@ -58,55 +58,10 @@ export const SERVICES: Service[] = [
       ar: "دهان داخلي وخارجي، تشطيبات راقية.",
       en: "Interior and exterior painting, premium finishes.",
     },
-  },
-  {
-    slug: "platre",
-    icon: "plaster",
-    name: { fr: "Plâtre / Gypsum", ar: "الجبس", en: "Plaster / Gypsum" },
-    desc: {
-      fr: "Faux plafonds, cloisons et décorations en plâtre.",
-      ar: "أسقف مستعارة، جدران فاصلة وديكورات جبسية.",
-      en: "False ceilings, partitions and plaster decorations.",
-    },
-  },
-  {
-    slug: "menuiserie",
-    icon: "carpentry",
-    name: { fr: "Menuiserie", ar: "النجارة", en: "Carpentry" },
-    desc: {
-      fr: "Portes, placards, meubles sur mesure en bois.",
-      ar: "أبواب، خزائن وأثاث خشبي مخصص.",
-      en: "Doors, wardrobes and custom wooden furniture.",
-    },
-  },
-  {
-    slug: "serrurerie",
-    icon: "lock",
-    name: { fr: "Serrurerie", ar: "الإقفال", en: "Locksmith" },
-    desc: {
-      fr: "Ouverture, changement de serrures et sécurité.",
-      ar: "فتح، تغيير الأقفال وأنظمة الأمان.",
-      en: "Opening, lock changes and security.",
-    },
-  },
-  {
-    slug: "nettoyage",
-    icon: "cleaning",
-    name: { fr: "Nettoyage", ar: "التنظيف", en: "Cleaning" },
-    desc: {
-      fr: "Nettoyage professionnel de maisons et bureaux.",
-      ar: "تنظيف احترافي للمنازل والمكاتب.",
-      en: "Professional home and office cleaning.",
-    },
-  },
-  {
-    slug: "renovation",
-    icon: "renovation",
-    name: { fr: "Rénovation", ar: "التجديد", en: "Renovation" },
-    desc: {
-      fr: "Rénovation complète, petits et grands travaux.",
-      ar: "تجديد شامل، أشغال صغيرة وكبيرة.",
-      en: "Full renovation, small and big works.",
-    },
-  },
+  }
+
+
+
+
+
 ];

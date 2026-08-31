@@ -37,7 +37,7 @@ const heroContent: Record<string, any> = {
   fr: {
     badge: "Plomberie à Tanger",
     title: "Votre maison à Tanger,<br/>entre de <span class=\"highlight\">bonnes mains</span>.",
-    subtitle: "Besoin d'un plombier, électricien, climatiseur ou autre professionnel ? MyHandy vous met en relation avec des techniciens de confiance à Tanger.",
+    subtitle: "Besoin d'un plombier, électricien, climatiseur ou autre professionnel ? AlloMealem vous met en relation avec des techniciens de confiance à Tanger.",
     primaryCta: "Trouver un professionnel",
     secondaryCta: "Voir les services",
     trust: [
@@ -51,7 +51,7 @@ const heroContent: Record<string, any> = {
   ar: {
     badge: "سباكة في طنجة",
     title: "منزلك في طنجة،<br/>بين <span class=\"highlight\">أيدٍ أمينة</span>.",
-    subtitle: "هل تحتاج سباكًا، كهربائيًا، مكيفًا أو أي حرفي آخر؟ يوصلك MyHandy بتقنيين موثوقين في طنجة.",
+    subtitle: "هل تحتاج سباكًا، كهربائيًا، مكيفًا أو أي حرفي آخر؟ يوصلك AlloMealem بتقنيين موثوقين في طنجة.",
     primaryCta: "ابحث عن حرفي",
     secondaryCta: "عرض الخدمات",
     trust: [
@@ -65,7 +65,7 @@ const heroContent: Record<string, any> = {
   en: {
     badge: "Plumbing in Tangier",
     title: "Your home in Tangier,<br/>in <span class=\"highlight\">good hands</span>.",
-    subtitle: "Need a plumber, electrician, air conditioner or other professional? MyHandy connects you with trusted technicians in Tangier.",
+    subtitle: "Need a plumber, electrician, air conditioner or other professional? AlloMealem connects you with trusted technicians in Tangier.",
     primaryCta: "Find a professional",
     secondaryCta: "View services",
     trust: [
@@ -102,7 +102,7 @@ const content = heroContent[lang] || heroContent.fr;
           <p class="hero-desc">{content.subtitle}</p>
 
           <div class="hero-actions">
-            <a href={`${baseUrl}/#contact`} class="btn btn-primary">
+            <a href='/contact' class="btn btn-primary">
               {content.primaryCta}
               <span set:html={icon("arrow-right", 18)}></span>
             </a>
@@ -256,7 +256,7 @@ const content = heroContent[lang] || heroContent.fr;
               <div><strong>Prix transparents</strong><span>Des informations claires avant l'intervention.</span></div>
             </div>
           </div>
-          <a href={`${baseUrl}/#contact`} class="btn btn-primary why-cta">Demander un service <span set:html={icon("arrow-right", 18)}></span></a>
+          <a href=`/contact` class="btn btn-primary why-cta">Demander un service <span set:html={icon("arrow-right", 18)}></span></a>
         </div>
       </div>
     </div>
@@ -301,7 +301,7 @@ const content = heroContent[lang] || heroContent.fr;
         <h2 class="cta-title">Besoin d'un plombier ?</h2>
         <p class="cta-desc">Décrivez votre besoin et trouvez un professionnel adapté à Tanger.</p>
         <div class="cta-actions">
-          <a href={`${baseUrl}/#contact`} class="btn btn-primary btn-large">Demander un service <span set:html={icon("arrow-right", 20)}></span></a>
+          <a href=`/contact` class="btn btn-primary btn-large">Demander un service <span set:html={icon("arrow-right", 20)}></span></a>
 <a href="#services" class="btn btn-secondary btn-large">
   Voir nos services
   <span set:html={icon("arrow-down", 20)}></span>
