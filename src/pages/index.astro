@@ -13,14 +13,91 @@ const lang = getLangFromUrl(Astro.url);
 ---
 <!doctype html>
 <html lang={lang} dir={DIRS[lang]}>
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <title>AlloMealem — Trouvez le bon technicien</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet" />
-  </head>
+<head>
+  <meta charset="UTF-8" />
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, viewport-fit=cover"
+  />
+
+  <!-- SEO -->
+  <title>
+    AlloMealem | Plombier, Électricien, Peintre & Climatisation
+  </title>
+
+  <meta
+    name="description"
+    content="Besoin d'un plombier, électricien, peintre, carreleur ou technicien climatisation à Tanger ? AlloMealem vous aide à trouver le bon professionnel pour vos travaux et réparations."
+  />
+
+  <meta
+    name="keywords"
+    content="plombier Tanger, plombier à Tanger, électricien Tanger, électricien à Tanger, peintre Tanger, peinture Tanger, carreleur Tanger, carrelage Tanger, climatisation Tanger, technicien climatisation Tanger, travaux Tanger, dépannage Tanger, artisan Tanger, technicien Tanger, AlloMealem Tanger"
+  />
+
+  <meta name="author" content="AlloMealem" />
+  <meta name="robots" content="index, follow" />
+
+  <!-- Local SEO -->
+  <meta name="geo.region" content="MA-TNG" />
+  <meta name="geo.placename" content="Tanger" />
+  <meta name="geo.country" content="MA" />
+
+  <!-- Canonical -->
+  <link
+    rel="canonical"
+    href="https://mealem.ma/"
+  />
+
+  <!-- Open Graph -->
+  <meta
+    property="og:title"
+    content="AlloMealem Tanger | Trouvez le bon technicien"
+  />
+
+  <meta
+    property="og:description"
+    content="Trouvez un plombier, électricien, peintre, carreleur ou technicien climatisation à Tanger avec AlloMealem."
+  />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://mealem.ma/" />
+  <meta property="og:site_name" content="AlloMealem" />
+  <meta property="og:locale" content="fr_MA" />
+
+  <meta
+    property="og:image"
+    content="https://mealem.ma/og-image.jpg"
+  />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <meta
+    name="twitter:title"
+    content="AlloMealem Tanger | Trouvez le bon technicien"
+  />
+
+  <meta
+    name="twitter:description"
+    content="Plombier, électricien, peintre, carreleur et climatisation à Tanger."
+  />
+
+  <meta
+    name="twitter:image"
+    content="https://mealem.ma/og-image.jpg"
+  />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" />
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Tajawal:wght@400;500;700;800&display=swap"
+    rel="stylesheet"
+  />
+</head>
   <body>
     <Header lang={lang} />
     <main>
