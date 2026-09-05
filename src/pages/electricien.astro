@@ -9,10 +9,7 @@ export interface Props {
   currentPath?: string;
 }
 
-const {
-  lang = "fr",
-  currentPath = "/services/electricien",
-} = Astro.props;
+const { lang = "fr", currentPath = "/services/electricien" } = Astro.props;
 
 const baseUrl = `/${lang}`;
 
@@ -20,11 +17,7 @@ const baseUrl = `/${lang}`;
 // ICON SYSTEM
 // ============================================================
 
-function icon(
-  name: string,
-  size: number = 24,
-  className: string = ""
-): string {
+function icon(name: string, size: number = 24, className: string = ""): string {
   const icons: Record<string, string> = {
     "map-pin": `
       <svg xmlns="http://www.w3.org/2000/svg"
@@ -183,12 +176,7 @@ const heroContent = {
       "هل تحتاج إلى كهربائي للتركيب أو الإصلاح أو حل عطل كهربائي؟ يوصلك AlloMealem بكهربائيين موثوقين في طنجة.",
     primaryCta: "ابحث عن حرفي",
     secondaryCta: "عرض الخدمات",
-    trust: [
-      "كهربائيون محليون",
-      "تدخل في طنجة",
-      "تدخل سريع",
-      "محترفون موثوقون",
-    ],
+    trust: ["كهربائيون محليون", "تدخل في طنجة", "تدخل سريع", "محترفون موثوقون"],
     imgAlt: "كهربائي محترف يقدم خدمات الكهرباء في طنجة",
   },
 
@@ -222,71 +210,48 @@ const content = heroContent[lang] || heroContent.fr;
   <section class="electrician-hero" id="hero">
     <div class="container">
       <div class="hero-grid">
-
         <!-- CONTENT -->
         <div class="hero-content">
-
           <span class="hero-badge">
             <span set:html={icon("map-pin", 16, "badge-icon")} />
             {content.badge}
           </span>
 
-          <h1
-            class="hero-title"
-            set:html={content.title}
-          />
+          <h1 class="hero-title" set:html={content.title} />
 
           <p class="hero-desc">
             {content.subtitle}
           </p>
 
           <div class="hero-actions">
-
-            <a
-              href='/contact'
-              class="btn btn-primary"
-            >
+            <a href="/contact" class="btn btn-primary">
               {content.primaryCta}
-              <span
-                set:html={icon("arrow-right", 18)}
-              />
+              <span set:html={icon("arrow-right", 18)} />
             </a>
 
-            <a
-              href="#services"
-              class="btn btn-secondary"
-            >
+            <a href="#services" class="btn btn-secondary">
               {content.secondaryCta}
             </a>
-
           </div>
 
           <div class="trust-indicators">
             {
               content.trust.map((item) => (
                 <span class="trust-item">
-                  <span
-                    set:html={icon(
-                      "check-circle",
-                      18,
-                      "trust-icon"
-                    )}
-                  />
+                  <span set:html={icon("check-circle", 18, "trust-icon")} />
                   {item}
                 </span>
               ))
             }
           </div>
-
         </div>
 
         <!-- VISUAL -->
         <div class="hero-visuals">
-
           <!-- Main image -->
           <div class="visual-main">
             <img
-              src="/elictricien2.png"
+              src="/elictricien2.avif"
               alt={content.imgAlt}
               loading="eager"
               decoding="async"
@@ -296,49 +261,36 @@ const content = heroContent[lang] || heroContent.fr;
           <!-- Supporting image 1 -->
           <div class="visual-support support-1">
             <img
-              src="/elictricien.png"
+              src="/elictricien.avif"
               alt="Électricien travaillant sur un tableau électrique"
               loading="lazy"
               decoding="async"
             />
 
-            <span class="support-label">
-              Installation électrique
-            </span>
+            <span class="support-label"> Installation électrique </span>
           </div>
 
           <!-- Supporting image 2 -->
           <div class="visual-support support-2">
             <img
-              src="/elictricien1.png"
+              src="/elictricien1.avif"
               alt="Électricien installant une prise"
               loading="lazy"
               decoding="async"
             />
 
-            <span class="support-label">
-              Dépannage
-            </span>
+            <span class="support-label"> Dépannage </span>
           </div>
 
           <!-- Floating card -->
           <div class="floating-card">
-
-            <span
-              class="float-icon"
-              set:html={icon("check-circle", 20)}
-            />
+            <span class="float-icon" set:html={icon("check-circle", 20)} />
 
             <div>
-              <span class="float-title">
-                Intervention rapide
-              </span>
+              <span class="float-title"> Intervention rapide </span>
 
-              <span class="float-sub">
-                À Tanger
-              </span>
+              <span class="float-sub"> À Tanger </span>
             </div>
-
           </div>
 
           <!-- Tags -->
@@ -349,7 +301,6 @@ const content = heroContent[lang] || heroContent.fr;
             <span class="tag">Éclairage</span>
             <span class="tag">Prises électriques</span>
           </div>
-
         </div>
       </div>
     </div>
@@ -361,38 +312,32 @@ const content = heroContent[lang] || heroContent.fr;
 
   <section class="services-section" id="services">
     <div class="container">
-
       <div class="section-header">
-        <span class="eyebrow">
-          Nos services
-        </span>
+        <span class="eyebrow"> Nos services </span>
 
         <h2 class="section-title">
           Des solutions pour tous vos besoins en électricité
         </h2>
 
         <p class="section-desc">
-          Installation, réparation ou dépannage : trouvez un
-          électricien adapté à votre besoin.
+          Installation, réparation ou dépannage : trouvez un électricien adapté
+          à votre besoin.
         </p>
       </div>
 
       <div class="services-grid">
-
         <div class="service-card">
           <div class="service-icon">
             <span set:html={icon("zap", 28)} />
           </div>
 
-          <h3 class="service-title">
-            Dépannage électrique
-          </h3>
+          <h3 class="service-title">Dépannage électrique</h3>
 
           <p class="service-desc">
             Intervention rapide pour vos pannes et problèmes électriques.
           </p>
 
-          <a href='/contact' class="service-link">
+          <a href="/contact" class="service-link">
             En savoir plus
             <span set:html={icon("arrow-right", 16)} />
           </a>
@@ -403,15 +348,13 @@ const content = heroContent[lang] || heroContent.fr;
             <span set:html={icon("zap", 28)} />
           </div>
 
-          <h3 class="service-title">
-            Installation électrique
-          </h3>
+          <h3 class="service-title">Installation électrique</h3>
 
           <p class="service-desc">
             Installation et mise en place de vos équipements électriques.
           </p>
 
-          <a href='/contact' class="service-link">
+          <a href="/contact" class="service-link">
             En savoir plus
             <span set:html={icon("arrow-right", 16)} />
           </a>
@@ -422,16 +365,14 @@ const content = heroContent[lang] || heroContent.fr;
             <span set:html={icon("settings", 28)} />
           </div>
 
-          <h3 class="service-title">
-            Tableau électrique
-          </h3>
+          <h3 class="service-title">Tableau électrique</h3>
 
           <p class="service-desc">
-            Installation, remplacement et mise en conformité
-            de votre tableau électrique.
+            Installation, remplacement et mise en conformité de votre tableau
+            électrique.
           </p>
 
-          <a href='/contact' class="service-link">
+          <a href="/contact" class="service-link">
             En savoir plus
             <span set:html={icon("arrow-right", 16)} />
           </a>
@@ -442,15 +383,13 @@ const content = heroContent[lang] || heroContent.fr;
             <span set:html={icon("lightbulb", 28)} />
           </div>
 
-          <h3 class="service-title">
-            Éclairage
-          </h3>
+          <h3 class="service-title">Éclairage</h3>
 
           <p class="service-desc">
             Installation de luminaires, spots et solutions d'éclairage.
           </p>
 
-          <a href='/contact' class="service-link">
+          <a href="/contact" class="service-link">
             En savoir plus
             <span set:html={icon("arrow-right", 16)} />
           </a>
@@ -461,15 +400,13 @@ const content = heroContent[lang] || heroContent.fr;
             <span set:html={icon("plug", 28)} />
           </div>
 
-          <h3 class="service-title">
-            Prises et interrupteurs
-          </h3>
+          <h3 class="service-title">Prises et interrupteurs</h3>
 
           <p class="service-desc">
             Installation et remplacement de prises et interrupteurs électriques.
           </p>
 
-          <a href='/contact' class="service-link">
+          <a href="/contact" class="service-link">
             En savoir plus
             <span set:html={icon("arrow-right", 16)} />
           </a>
@@ -480,20 +417,17 @@ const content = heroContent[lang] || heroContent.fr;
             <span set:html={icon("wrench", 28)} />
           </div>
 
-          <h3 class="service-title">
-            Rénovation électrique
-          </h3>
+          <h3 class="service-title">Rénovation électrique</h3>
 
           <p class="service-desc">
             Rénovation et modernisation de vos installations électriques.
           </p>
 
-          <a href='/contact' class="service-link">
+          <a href="/contact" class="service-link">
             En savoir plus
             <span set:html={icon("arrow-right", 16)} />
           </a>
         </div>
-
       </div>
     </div>
   </section>
@@ -504,46 +438,34 @@ const content = heroContent[lang] || heroContent.fr;
 
   <section class="why-section" id="why">
     <div class="container">
-
       <div class="why-grid">
-
         <div class="why-image-wrapper">
           <div class="why-image-container">
-
             <img
-              src="/elictricien2.png"
+              src="/elictricien2.avif"
               alt="Électricien professionnel en intervention"
               loading="lazy"
               decoding="async"
             />
 
             <div class="why-badge">
-              <span
-                set:html={icon("check-circle", 18, "badge-icon")}
-              />
+              <span set:html={icon("check-circle", 18, "badge-icon")} />
               Professionnels vérifiés
             </div>
-
           </div>
         </div>
 
         <div class="why-content">
+          <span class="eyebrow"> Pourquoi nous choisir ? </span>
 
-          <span class="eyebrow">
-            Pourquoi nous choisir ?
-          </span>
-
-          <h2 class="why-title">
-            Une intervention simple, rapide et fiable
-          </h2>
+          <h2 class="why-title">Une intervention simple, rapide et fiable</h2>
 
           <p class="why-desc">
-            Nous vous aidons à trouver un électricien adapté à votre
-            besoin, avec une expérience claire et sans complication.
+            Nous vous aidons à trouver un électricien adapté à votre besoin,
+            avec une expérience claire et sans complication.
           </p>
 
           <div class="why-benefits">
-
             <div class="why-benefit">
               <span class="benefit-icon">
                 <span set:html={icon("check-circle", 20)} />
@@ -551,9 +473,7 @@ const content = heroContent[lang] || heroContent.fr;
 
               <div>
                 <strong>Électriciens locaux</strong>
-                <span>
-                  Des professionnels disponibles à Tanger.
-                </span>
+                <span> Des professionnels disponibles à Tanger. </span>
               </div>
             </div>
 
@@ -564,9 +484,7 @@ const content = heroContent[lang] || heroContent.fr;
 
               <div>
                 <strong>Intervention rapide</strong>
-                <span>
-                  Une prise en charge adaptée à votre situation.
-                </span>
+                <span> Une prise en charge adaptée à votre situation. </span>
               </div>
             </div>
 
@@ -577,24 +495,16 @@ const content = heroContent[lang] || heroContent.fr;
 
               <div>
                 <strong>Prix transparents</strong>
-                <span>
-                  Des informations claires avant l'intervention.
-                </span>
+                <span> Des informations claires avant l'intervention. </span>
               </div>
             </div>
-
           </div>
 
-          <a
-            href='/contact'
-            class="btn btn-primary why-cta"
-          >
+          <a href="/contact" class="btn btn-primary why-cta">
             Demander un service
             <span set:html={icon("arrow-right", 18)} />
           </a>
-
         </div>
-
       </div>
     </div>
   </section>
@@ -605,26 +515,18 @@ const content = heroContent[lang] || heroContent.fr;
 
   <section class="how-section" id="how">
     <div class="container">
-
       <div class="section-header">
+        <span class="eyebrow"> Comment ça marche </span>
 
-        <span class="eyebrow">
-          Comment ça marche
-        </span>
-
-        <h2 class="section-title">
-          Trouver un électricien en quelques étapes
-        </h2>
+        <h2 class="section-title">Trouver un électricien en quelques étapes</h2>
 
         <p class="section-desc">
-          Un processus simple pour vous permettre de trouver rapidement
-          le professionnel adapté.
+          Un processus simple pour vous permettre de trouver rapidement le
+          professionnel adapté.
         </p>
-
       </div>
 
       <div class="steps">
-
         <div class="step">
           <div class="step-number">01</div>
 
@@ -632,13 +534,11 @@ const content = heroContent[lang] || heroContent.fr;
             <span set:html={icon("file-text", 28)} />
           </div>
 
-          <h3 class="step-title">
-            Décrivez votre besoin
-          </h3>
+          <h3 class="step-title">Décrivez votre besoin</h3>
 
           <p class="step-desc">
-            Expliquez simplement le problème ou le travail électrique
-            à réaliser.
+            Expliquez simplement le problème ou le travail électrique à
+            réaliser.
           </p>
         </div>
 
@@ -651,9 +551,7 @@ const content = heroContent[lang] || heroContent.fr;
             <span set:html={icon("wrench", 28)} />
           </div>
 
-          <h3 class="step-title">
-            Choisissez un professionnel
-          </h3>
+          <h3 class="step-title">Choisissez un professionnel</h3>
 
           <p class="step-desc">
             Consultez les électriciens disponibles pour votre demande.
@@ -669,15 +567,12 @@ const content = heroContent[lang] || heroContent.fr;
             <span set:html={icon("clock", 28)} />
           </div>
 
-          <h3 class="step-title">
-            Planifiez l'intervention
-          </h3>
+          <h3 class="step-title">Planifiez l'intervention</h3>
 
           <p class="step-desc">
             Convenez directement des détails de l'intervention.
           </p>
         </div>
-
       </div>
     </div>
   </section>
@@ -688,67 +583,43 @@ const content = heroContent[lang] || heroContent.fr;
 
   <section class="cta-section" id="cta">
     <div class="container">
-
       <div class="cta-box">
+        <span class="cta-badge"> Électricité à Tanger </span>
 
-        <span class="cta-badge">
-          Électricité à Tanger
-        </span>
-
-        <h2 class="cta-title">
-          Besoin d'un électricien ?
-        </h2>
+        <h2 class="cta-title">Besoin d'un électricien ?</h2>
 
         <p class="cta-desc">
-          Décrivez votre besoin et trouvez un professionnel adapté
-          à Tanger.
+          Décrivez votre besoin et trouvez un professionnel adapté à Tanger.
         </p>
 
         <div class="cta-actions">
-
-          <a
-            href='/contact'
-            class="btn btn-primary btn-large"
-          >
+          <a href="/contact" class="btn btn-primary btn-large">
             Demander un service
             <span set:html={icon("arrow-right", 20)} />
           </a>
 
-          <a
-            href="#services"
-            class="btn btn-secondary btn-large"
-          >
+          <a href="#services" class="btn btn-secondary btn-large">
             Voir nos services
             <span set:html={icon("arrow-down", 20)} />
           </a>
-
         </div>
 
         <div class="cta-footer">
-
           <span>
-            <span
-              set:html={icon("check-circle", 16, "footer-icon")}
-            />
+            <span set:html={icon("check-circle", 16, "footer-icon")} />
             Électriciens locaux
           </span>
 
           <span>
-            <span
-              set:html={icon("check-circle", 16, "footer-icon")}
-            />
+            <span set:html={icon("check-circle", 16, "footer-icon")} />
             Intervention à Tanger
           </span>
 
           <span>
-            <span
-              set:html={icon("check-circle", 16, "footer-icon")}
-            />
+            <span set:html={icon("check-circle", 16, "footer-icon")} />
             Professionnels vérifiés
           </span>
-
         </div>
-
       </div>
     </div>
   </section>
@@ -762,11 +633,11 @@ const content = heroContent[lang] || heroContent.fr;
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       const reducedMotion = window.matchMedia(
-        "(prefers-reduced-motion: reduce)"
+        "(prefers-reduced-motion: reduce)",
       );
 
       const elements = document.querySelectorAll(
-        ".section-header, .service-card, .why-image-wrapper, .why-content, .step, .cta-box"
+        ".section-header, .service-card, .why-image-wrapper, .why-content, .step, .cta-box",
       );
 
       if (reducedMotion.matches) {
@@ -789,7 +660,7 @@ const content = heroContent[lang] || heroContent.fr;
         {
           threshold: 0.12,
           rootMargin: "0px 0px -40px 0px",
-        }
+        },
       );
 
       elements.forEach((element, index) => {
@@ -831,14 +702,11 @@ const content = heroContent[lang] || heroContent.fr;
     --radius-card: 22px;
     --radius-image: 28px;
 
-    --shadow-card:
-      0 4px 24px rgba(15, 23, 42, 0.06);
+    --shadow-card: 0 4px 24px rgba(15, 23, 42, 0.06);
 
-    --shadow-hover:
-      0 12px 40px rgba(15, 23, 42, 0.10);
+    --shadow-hover: 0 12px 40px rgba(15, 23, 42, 0.1);
 
-    --transition:
-      0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    --transition: 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
     font-family:
       "Inter",
@@ -995,8 +863,7 @@ const content = heroContent[lang] || heroContent.fr;
     background: var(--color-primary);
     color: var(--color-white);
 
-    box-shadow:
-      0 5px 22px rgba(37, 99, 235, 0.28);
+    box-shadow: 0 5px 22px rgba(37, 99, 235, 0.28);
   }
 
   .btn-primary:hover {
@@ -1004,8 +871,7 @@ const content = heroContent[lang] || heroContent.fr;
 
     transform: translateY(-3px);
 
-    box-shadow:
-      0 10px 32px rgba(37, 99, 235, 0.36);
+    box-shadow: 0 10px 32px rgba(37, 99, 235, 0.36);
   }
 
   .btn-primary svg {
@@ -1046,9 +912,7 @@ const content = heroContent[lang] || heroContent.fr;
   .electrician-hero {
     position: relative;
 
-    padding:
-      70px 0
-      90px;
+    padding: 70px 0 90px;
 
     background: var(--color-bg);
 
@@ -1070,12 +934,11 @@ const content = heroContent[lang] || heroContent.fr;
 
     border-radius: 50%;
 
-    background:
-      radial-gradient(
-        circle,
-        rgba(37, 99, 235, 0.08),
-        transparent 68%
-      );
+    background: radial-gradient(
+      circle,
+      rgba(37, 99, 235, 0.08),
+      transparent 68%
+    );
 
     pointer-events: none;
   }
@@ -1093,12 +956,11 @@ const content = heroContent[lang] || heroContent.fr;
 
     border-radius: 50%;
 
-    background:
-      radial-gradient(
-        circle,
-        rgba(37, 99, 235, 0.05),
-        transparent 70%
-      );
+    background: radial-gradient(
+      circle,
+      rgba(37, 99, 235, 0.05),
+      transparent 70%
+    );
 
     pointer-events: none;
   }
@@ -1280,13 +1142,11 @@ const content = heroContent[lang] || heroContent.fr;
 
     background: #e2e8f0;
 
-    box-shadow:
-      0 24px 65px rgba(15, 23, 42, 0.14);
+    box-shadow: 0 24px 65px rgba(15, 23, 42, 0.14);
 
     z-index: 2;
 
-    transition:
-      transform 0.5s ease;
+    transition: transform 0.5s ease;
   }
 
   .visual-main:hover {
@@ -1313,8 +1173,7 @@ const content = heroContent[lang] || heroContent.fr;
 
     border-radius: 18px;
 
-    box-shadow:
-      0 10px 34px rgba(15, 23, 42, 0.12);
+    box-shadow: 0 10px 34px rgba(15, 23, 42, 0.12);
 
     z-index: 4;
 
@@ -1324,12 +1183,9 @@ const content = heroContent[lang] || heroContent.fr;
   }
 
   .visual-support:hover {
-    transform:
-      translateY(-5px)
-      scale(1.04);
+    transform: translateY(-5px) scale(1.04);
 
-    box-shadow:
-      0 18px 50px rgba(15, 23, 42, 0.16);
+    box-shadow: 0 18px 50px rgba(15, 23, 42, 0.16);
 
     z-index: 8;
   }
@@ -1413,15 +1269,13 @@ const content = heroContent[lang] || heroContent.fr;
 
     border-radius: 17px;
 
-    box-shadow:
-      0 13px 40px rgba(15, 23, 42, 0.13);
+    box-shadow: 0 13px 40px rgba(15, 23, 42, 0.13);
 
     backdrop-filter: blur(10px);
 
     z-index: 7;
 
-    animation:
-      floatingCard 4s ease-in-out infinite;
+    animation: floatingCard 4s ease-in-out infinite;
   }
 
   @keyframes floatingCard {
@@ -1518,11 +1372,9 @@ const content = heroContent[lang] || heroContent.fr;
 
     white-space: nowrap;
 
-    box-shadow:
-      0 4px 13px rgba(15, 23, 42, 0.05);
+    box-shadow: 0 4px 13px rgba(15, 23, 42, 0.05);
 
-    transition:
-      all var(--transition);
+    transition: all var(--transition);
   }
 
   .tag:hover {
@@ -1548,8 +1400,7 @@ const content = heroContent[lang] || heroContent.fr;
   .services-grid {
     display: grid;
 
-    grid-template-columns:
-      repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
 
     gap: 24px;
   }
@@ -1564,8 +1415,7 @@ const content = heroContent[lang] || heroContent.fr;
 
     background: var(--color-white);
 
-    border:
-      1px solid rgba(15, 23, 42, 0.055);
+    border: 1px solid rgba(15, 23, 42, 0.055);
 
     border-radius: var(--radius-card);
 
@@ -1692,8 +1542,7 @@ const content = heroContent[lang] || heroContent.fr;
 
     border-radius: var(--radius-image);
 
-    box-shadow:
-      0 16px 52px rgba(15, 23, 42, 0.10);
+    box-shadow: 0 16px 52px rgba(15, 23, 42, 0.1);
   }
 
   .why-image-container img {
@@ -1704,8 +1553,7 @@ const content = heroContent[lang] || heroContent.fr;
 
     object-fit: cover;
 
-    transition:
-      transform 0.6s ease;
+    transition: transform 0.6s ease;
   }
 
   .why-image-container:hover img {
@@ -1734,8 +1582,7 @@ const content = heroContent[lang] || heroContent.fr;
     font-size: 13px;
     font-weight: 700;
 
-    box-shadow:
-      0 5px 22px rgba(0, 0, 0, 0.10);
+    box-shadow: 0 5px 22px rgba(0, 0, 0, 0.1);
   }
 
   .why-content {
@@ -1810,8 +1657,7 @@ const content = heroContent[lang] || heroContent.fr;
 
     color: var(--color-primary);
 
-    box-shadow:
-      0 2px 8px rgba(15, 23, 42, 0.04);
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
   }
 
   .why-benefit div {
@@ -1935,7 +1781,7 @@ const content = heroContent[lang] || heroContent.fr;
 
     background: var(--color-primary);
 
-    opacity: 0.20;
+    opacity: 0.2;
   }
 
   /* ============================================================
@@ -1959,12 +1805,11 @@ const content = heroContent[lang] || heroContent.fr;
 
     inset: 0;
 
-    background:
-      radial-gradient(
-        ellipse at 50% 0%,
-        rgba(37, 99, 235, 0.14),
-        transparent 68%
-      );
+    background: radial-gradient(
+      ellipse at 50% 0%,
+      rgba(37, 99, 235, 0.14),
+      transparent 68%
+    );
 
     pointer-events: none;
   }
@@ -1993,7 +1838,7 @@ const content = heroContent[lang] || heroContent.fr;
 
     border-radius: 999px;
 
-    background: rgba(37, 99, 235, 0.10);
+    background: rgba(37, 99, 235, 0.1);
 
     color: var(--color-primary);
 
@@ -2078,7 +1923,6 @@ const content = heroContent[lang] || heroContent.fr;
   ============================================================ */
 
   @media (max-width: 1100px) {
-
     .hero-grid {
       grid-template-columns:
         minmax(0, 1fr)
@@ -2096,8 +1940,7 @@ const content = heroContent[lang] || heroContent.fr;
     }
 
     .services-grid {
-      grid-template-columns:
-        repeat(2, minmax(0, 1fr));
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
     .why-title {
@@ -2114,11 +1957,8 @@ const content = heroContent[lang] || heroContent.fr;
   ============================================================ */
 
   @media (max-width: 900px) {
-
     .electrician-hero {
-      padding:
-        60px 0
-        75px;
+      padding: 60px 0 75px;
     }
 
     .hero-grid {
@@ -2225,7 +2065,6 @@ const content = heroContent[lang] || heroContent.fr;
   ============================================================ */
 
   @media (max-width: 768px) {
-
     .container {
       padding-left: 20px;
       padding-right: 20px;
@@ -2234,9 +2073,7 @@ const content = heroContent[lang] || heroContent.fr;
     .electrician-hero {
       margin-top: var(--header-h, 70px);
 
-      padding:
-        48px 0
-        60px;
+      padding: 48px 0 60px;
     }
 
     .hero-grid {
@@ -2250,8 +2087,7 @@ const content = heroContent[lang] || heroContent.fr;
     .hero-badge {
       font-size: 11px;
 
-      padding:
-        6px 13px 6px 10px;
+      padding: 6px 13px 6px 10px;
     }
 
     .hero-title {
@@ -2350,8 +2186,7 @@ const content = heroContent[lang] || heroContent.fr;
 
       min-width: auto;
 
-      padding:
-        11px 14px 11px 11px;
+      padding: 11px 14px 11px 11px;
 
       gap: 8px;
 
@@ -2404,8 +2239,7 @@ const content = heroContent[lang] || heroContent.fr;
     .eyebrow {
       font-size: 11px;
 
-      padding:
-        5px 14px;
+      padding: 5px 14px;
     }
 
     .section-title {
@@ -2471,8 +2305,7 @@ const content = heroContent[lang] || heroContent.fr;
       left: 14px;
       bottom: 14px;
 
-      padding:
-        8px 13px;
+      padding: 8px 13px;
 
       font-size: 11px;
     }
@@ -2567,8 +2400,7 @@ const content = heroContent[lang] || heroContent.fr;
     .btn-large {
       min-height: 52px;
 
-      padding:
-        14px 27px;
+      padding: 14px 27px;
 
       font-size: 15px;
     }
@@ -2587,16 +2419,13 @@ const content = heroContent[lang] || heroContent.fr;
   ============================================================ */
 
   @media (max-width: 480px) {
-
     .container {
       padding-left: 16px;
       padding-right: 16px;
     }
 
     .electrician-hero {
-      padding:
-        38px 0
-        45px;
+      padding: 38px 0 45px;
     }
 
     .hero-grid {
@@ -2620,8 +2449,7 @@ const content = heroContent[lang] || heroContent.fr;
 
       font-size: 14px;
 
-      padding:
-        13px 22px;
+      padding: 13px 22px;
     }
 
     .trust-item {
@@ -2669,8 +2497,7 @@ const content = heroContent[lang] || heroContent.fr;
     .tag {
       font-size: 8px;
 
-      padding:
-        3px 7px;
+      padding: 3px 7px;
     }
 
     /* Sections */
@@ -2694,8 +2521,7 @@ const content = heroContent[lang] || heroContent.fr;
     }
 
     .service-card {
-      padding:
-        22px 18px;
+      padding: 22px 18px;
 
       border-radius: 17px;
     }
@@ -2723,8 +2549,7 @@ const content = heroContent[lang] || heroContent.fr;
     .why-badge {
       font-size: 10px;
 
-      padding:
-        6px 10px;
+      padding: 6px 10px;
     }
 
     .why-title {
@@ -2782,8 +2607,7 @@ const content = heroContent[lang] || heroContent.fr;
     .cta-badge {
       font-size: 10px;
 
-      padding:
-        5px 13px;
+      padding: 5px 13px;
     }
 
     .cta-title {
@@ -2804,7 +2628,6 @@ const content = heroContent[lang] || heroContent.fr;
   ============================================================ */
 
   @media (max-width: 360px) {
-
     .hero-title {
       font-size: 26px;
     }
@@ -2816,8 +2639,7 @@ const content = heroContent[lang] || heroContent.fr;
     .tag {
       font-size: 7px;
 
-      padding:
-        3px 6px;
+      padding: 3px 6px;
     }
 
     .section-title {
@@ -2869,7 +2691,6 @@ const content = heroContent[lang] || heroContent.fr;
   }
 
   @media (max-width: 900px) {
-
     :global([dir="rtl"]) .hero-content,
     :global([dir="rtl"]) .why-content {
       text-align: center;
@@ -2889,7 +2710,6 @@ const content = heroContent[lang] || heroContent.fr;
   }
 
   @media (max-width: 480px) {
-
     :global([dir="rtl"]) .why-badge {
       right: 12px;
     }
@@ -2900,7 +2720,6 @@ const content = heroContent[lang] || heroContent.fr;
   ============================================================ */
 
   @media (prefers-reduced-motion: reduce) {
-
     html {
       scroll-behavior: auto;
     }

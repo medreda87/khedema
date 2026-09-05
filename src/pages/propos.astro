@@ -420,18 +420,15 @@ const t = {
 const contactUrl = `/contact`;
 const homeUrl = `/${lang}/`;
 const servicesUrl = `/#service`;
-
 ---
 
 <Layout
   lang={lang}
-  title={
-    lang === "ar"
-      ? "حول AlloMealem"
-      : lang === "en"
-        ? "About AlloMealem"
-        : "À propos - AlloMealem"
-  }
+  title={lang === "ar"
+    ? "حول AlloMealem"
+    : lang === "en"
+      ? "About AlloMealem"
+      : "À propos - AlloMealem"}
   dir={dir}
 >
   <main class:list={["about-page", { rtl: isRTL }]}>
@@ -491,7 +488,7 @@ const servicesUrl = `/#service`;
             <div class="hero-image-glow"></div>
 
             <img
-              src="/props1.png"
+              src="/props1.avif"
               alt="Artisan professionnel AlloMealem"
               width="620"
               height="465"
@@ -499,27 +496,49 @@ const servicesUrl = `/#service`;
             />
 
             <div class="floating-icon floating-1" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+              >
                 <path d="M4 12h16M12 4v16M4 4l16 16"></path>
               </svg>
             </div>
 
             <div class="floating-icon floating-2" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+              >
                 <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
               </svg>
             </div>
 
             <div class="floating-icon floating-3" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+              >
                 <circle cx="12" cy="12" r="3"></circle>
-                <path d="M19.4 15a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H5.78a1.65 1.65 0 0 0-1.51 1 1.65 1.65 0 0 0 .33 1.82L12 22z"></path>
+                <path
+                  d="M19.4 15a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H5.78a1.65 1.65 0 0 0-1.51 1 1.65 1.65 0 0 0 .33 1.82L12 22z"
+                ></path>
                 <path d="M4 10h16"></path>
               </svg>
             </div>
 
             <div class="floating-icon floating-4" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+              >
                 <rect x="3" y="3" width="7" height="7"></rect>
                 <rect x="14" y="3" width="7" height="7"></rect>
                 <rect x="3" y="14" width="7" height="7"></rect>
@@ -557,7 +576,7 @@ const servicesUrl = `/#service`;
         <div class="mission-visual">
           <div class="mission-image">
             <img
-              src="/image1.png"
+              src="/image1.avif"
               alt="Équipe AlloMealem"
               width="600"
               height="450"
@@ -600,30 +619,50 @@ const servicesUrl = `/#service`;
               <article class="why-card">
                 <div class="why-icon">
                   {i === 0 && (
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"></path>
-                      <circle cx="12" cy="10" r="3"></circle>
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z" />
+                      <circle cx="12" cy="10" r="3" />
                     </svg>
                   )}
 
                   {i === 1 && (
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <circle cx="11" cy="11" r="8"></circle>
-                      <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <circle cx="11" cy="11" r="8" />
+                      <line x1="21" y1="21" x2="16.65" y2="16.65" />
                     </svg>
                   )}
 
                   {i === 2 && (
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                      <circle cx="12" cy="7" r="4"></circle>
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                      <circle cx="12" cy="7" r="4" />
                     </svg>
                   )}
 
                   {i === 3 && (
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-                      <polyline points="9 12 11 14 15 10"></polyline>
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                      <polyline points="9 12 11 14 15 10" />
                     </svg>
                   )}
                 </div>
@@ -652,9 +691,7 @@ const servicesUrl = `/#service`;
           {
             t.steps.items.map((step, i) => (
               <article class="step-item">
-                <div class="step-number">
-                  {step.label}
-                </div>
+                <div class="step-number">{step.label}</div>
 
                 <div class="step-content">
                   <h3>{step.title[lang]}</h3>
@@ -663,9 +700,14 @@ const servicesUrl = `/#service`;
 
                 {i < t.steps.items.length - 1 && (
                   <div class="step-arrow" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <line x1="5" y1="12" x2="19" y2="12"></line>
-                      <polyline points="12 5 19 12 12 19"></polyline>
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <line x1="5" y1="12" x2="19" y2="12" />
+                      <polyline points="12 5 19 12 12 19" />
                     </svg>
                   </div>
                 )}
@@ -693,49 +735,79 @@ const servicesUrl = `/#service`;
               <article class="service-card">
                 <div class="service-icon">
                   {i === 0 && (
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                      <path d="M4 12h16M12 4v16M4 4l16 16"></path>
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.8"
+                    >
+                      <path d="M4 12h16M12 4v16M4 4l16 16" />
                     </svg>
                   )}
 
                   {i === 1 && (
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                      <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.8"
+                    >
+                      <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
                     </svg>
                   )}
 
                   {i === 2 && (
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                      <circle cx="12" cy="12" r="3"></circle>
-                      <path d="M19.4 15a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H5.78a1.65 1.65 0 0 0-1.51 1 1.65 1.65 0 0 0 .33 1.82L12 22z"></path>
-                      <path d="M4 10h16"></path>
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.8"
+                    >
+                      <circle cx="12" cy="12" r="3" />
+                      <path d="M19.4 15a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H5.78a1.65 1.65 0 0 0-1.51 1 1.65 1.65 0 0 0 .33 1.82L12 22z" />
+                      <path d="M4 10h16" />
                     </svg>
                   )}
 
                   {i === 3 && (
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                      <rect x="3" y="3" width="7" height="7"></rect>
-                      <rect x="14" y="3" width="7" height="7"></rect>
-                      <rect x="3" y="14" width="7" height="7"></rect>
-                      <rect x="14" y="14" width="7" height="7"></rect>
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.8"
+                    >
+                      <rect x="3" y="3" width="7" height="7" />
+                      <rect x="14" y="3" width="7" height="7" />
+                      <rect x="3" y="14" width="7" height="7" />
+                      <rect x="14" y="14" width="7" height="7" />
                     </svg>
                   )}
 
                   {i === 4 && (
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                      <path d="M12 2v4"></path>
-                      <path d="M12 22v-4"></path>
-                      <path d="M4 12H2"></path>
-                      <path d="M22 12h-2"></path>
-                      <circle cx="12" cy="12" r="3"></circle>
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.8"
+                    >
+                      <path d="M12 2v4" />
+                      <path d="M12 22v-4" />
+                      <path d="M4 12H2" />
+                      <path d="M22 12h-2" />
+                      <circle cx="12" cy="12" r="3" />
                     </svg>
                   )}
 
                   {i === 5 && (
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                      <path d="M4 4h16v4H4z"></path>
-                      <path d="M4 12h10v4H4z"></path>
-                      <path d="M4 20h16v-4H4z"></path>
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.8"
+                    >
+                      <path d="M4 4h16v4H4z" />
+                      <path d="M4 12h10v4H4z" />
+                      <path d="M4 20h16v-4H4z" />
                     </svg>
                   )}
                 </div>
@@ -810,14 +882,17 @@ const servicesUrl = `/#service`;
                 d="M80 200 Q150 80 220 140 T350 200 Q280 350 200 280 T80 200Z"
                 stroke="rgba(255,255,255,0.18)"
                 stroke-width="2"
-                fill="rgba(255,255,255,0.03)"
-              />
+                fill="rgba(255,255,255,0.03)"></path>
 
               <circle cx="200" cy="180" r="7" fill="#2563EB"></circle>
-              <circle cx="160" cy="150" r="4" fill="rgba(255,255,255,0.5)"></circle>
-              <circle cx="260" cy="130" r="4" fill="rgba(255,255,255,0.5)"></circle>
-              <circle cx="280" cy="220" r="4" fill="rgba(255,255,255,0.5)"></circle>
-              <circle cx="140" cy="240" r="4" fill="rgba(255,255,255,0.5)"></circle>
+              <circle cx="160" cy="150" r="4" fill="rgba(255,255,255,0.5)"
+              ></circle>
+              <circle cx="260" cy="130" r="4" fill="rgba(255,255,255,0.5)"
+              ></circle>
+              <circle cx="280" cy="220" r="4" fill="rgba(255,255,255,0.5)"
+              ></circle>
+              <circle cx="140" cy="240" r="4" fill="rgba(255,255,255,0.5)"
+              ></circle>
             </svg>
 
             <span class="map-pin pin-1"></span>
@@ -852,22 +927,37 @@ const servicesUrl = `/#service`;
               <article class="value-card">
                 <div class="value-icon">
                   {value.icon === "shield" && (
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-                      <polyline points="9 12 11 14 15 10"></polyline>
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.8"
+                    >
+                      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                      <polyline points="9 12 11 14 15 10" />
                     </svg>
                   )}
 
                   {value.icon === "zap" && (
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                      <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.8"
+                    >
+                      <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
                     </svg>
                   )}
 
                   {value.icon === "map-pin" && (
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                      <path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"></path>
-                      <circle cx="12" cy="10" r="3"></circle>
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.8"
+                    >
+                      <path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z" />
+                      <circle cx="12" cy="10" r="3" />
                     </svg>
                   )}
                 </div>
@@ -1088,8 +1178,7 @@ const servicesUrl = `/#service`;
 
     border: 1px solid var(--primary);
 
-    box-shadow:
-      0 12px 28px rgba(37, 99, 235, 0.24);
+    box-shadow: 0 12px 28px rgba(37, 99, 235, 0.24);
   }
 
   .btn-primary:hover {
@@ -1098,8 +1187,7 @@ const servicesUrl = `/#service`;
 
     transform: translateY(-3px);
 
-    box-shadow:
-      0 18px 35px rgba(37, 99, 235, 0.3);
+    box-shadow: 0 18px 35px rgba(37, 99, 235, 0.3);
   }
 
   .btn-secondary {
@@ -1152,11 +1240,7 @@ const servicesUrl = `/#service`;
         rgba(37, 99, 235, 0.08),
         transparent 35%
       ),
-      linear-gradient(
-        180deg,
-        #ffffff 0%,
-        #f8fafc 100%
-      );
+      linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
   }
 
   .hero-background {
@@ -1174,12 +1258,11 @@ const servicesUrl = `/#service`;
     position: absolute;
     inset: 0;
 
-    background:
-      radial-gradient(
-        circle at 80% 15%,
-        rgba(245, 158, 11, 0.06),
-        transparent 25%
-      );
+    background: radial-gradient(
+      circle at 80% 15%,
+      rgba(245, 158, 11, 0.06),
+      transparent 25%
+    );
   }
 
   .hero-orb {
@@ -1199,12 +1282,11 @@ const servicesUrl = `/#service`;
     top: -220px;
     left: -180px;
 
-    background:
-      radial-gradient(
-        circle,
-        rgba(37, 99, 235, 0.1),
-        transparent 70%
-      );
+    background: radial-gradient(
+      circle,
+      rgba(37, 99, 235, 0.1),
+      transparent 70%
+    );
   }
 
   .hero-orb-2 {
@@ -1214,12 +1296,11 @@ const servicesUrl = `/#service`;
     right: -180px;
     bottom: -200px;
 
-    background:
-      radial-gradient(
-        circle,
-        rgba(245, 158, 11, 0.07),
-        transparent 70%
-      );
+    background: radial-gradient(
+      circle,
+      rgba(245, 158, 11, 0.07),
+      transparent 70%
+    );
 
     animation-delay: -5s;
   }
@@ -1316,8 +1397,7 @@ const servicesUrl = `/#service`;
 
     border: 1px solid rgba(255, 255, 255, 0.8);
 
-    box-shadow:
-      0 40px 90px rgba(15, 23, 42, 0.14);
+    box-shadow: 0 40px 90px rgba(15, 23, 42, 0.14);
 
     transition: transform 0.5s ease;
   }
@@ -1330,12 +1410,11 @@ const servicesUrl = `/#service`;
     position: absolute;
     inset: 5%;
 
-    background:
-      radial-gradient(
-        circle,
-        rgba(37, 99, 235, 0.2),
-        transparent 65%
-      );
+    background: radial-gradient(
+      circle,
+      rgba(37, 99, 235, 0.2),
+      transparent 65%
+    );
 
     filter: blur(40px);
 
@@ -1364,8 +1443,7 @@ const servicesUrl = `/#service`;
 
     border-radius: 17px;
 
-    box-shadow:
-      0 14px 35px rgba(15, 23, 42, 0.12);
+    box-shadow: 0 14px 35px rgba(15, 23, 42, 0.12);
 
     backdrop-filter: blur(12px);
 
@@ -1475,8 +1553,7 @@ const servicesUrl = `/#service`;
 
     border-radius: 30px;
 
-    box-shadow:
-      0 35px 70px rgba(15, 23, 42, 0.14);
+    box-shadow: 0 35px 70px rgba(15, 23, 42, 0.14);
   }
 
   .mission-card {
@@ -1501,8 +1578,7 @@ const servicesUrl = `/#service`;
     font-size: 0.88rem;
     font-weight: 700;
 
-    box-shadow:
-      0 15px 35px rgba(15, 23, 42, 0.12);
+    box-shadow: 0 15px 35px rgba(15, 23, 42, 0.12);
 
     backdrop-filter: blur(12px);
 
@@ -1593,8 +1669,7 @@ const servicesUrl = `/#service`;
   .why-card:hover {
     transform: translateY(-7px);
 
-    box-shadow:
-      0 20px 45px rgba(15, 23, 42, 0.08);
+    box-shadow: 0 20px 45px rgba(15, 23, 42, 0.08);
   }
 
   .why-icon {
@@ -1704,8 +1779,7 @@ const servicesUrl = `/#service`;
     font-size: 0.95rem;
     font-weight: 800;
 
-    box-shadow:
-      0 8px 25px rgba(37, 99, 235, 0.28);
+    box-shadow: 0 8px 25px rgba(37, 99, 235, 0.28);
 
     border: 5px solid #fff;
   }
@@ -1794,8 +1868,7 @@ const servicesUrl = `/#service`;
   .service-card:hover {
     transform: translateY(-6px);
 
-    box-shadow:
-      0 20px 45px rgba(15, 23, 42, 0.08);
+    box-shadow: 0 20px 45px rgba(15, 23, 42, 0.08);
   }
 
   .service-icon {
@@ -1957,17 +2030,15 @@ const servicesUrl = `/#service`;
 
     border-radius: 30px;
 
-    background:
-      radial-gradient(
-        circle at 30% 40%,
-        rgba(37, 99, 235, 0.2),
-        rgba(15, 23, 42, 0.7)
-      );
+    background: radial-gradient(
+      circle at 30% 40%,
+      rgba(37, 99, 235, 0.2),
+      rgba(15, 23, 42, 0.7)
+    );
 
     border: 1px solid rgba(255, 255, 255, 0.08);
 
-    box-shadow:
-      0 30px 70px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 30px 70px rgba(0, 0, 0, 0.2);
   }
 
   .map-grid {
@@ -1977,15 +2048,8 @@ const servicesUrl = `/#service`;
     opacity: 0.15;
 
     background-image:
-      linear-gradient(
-        rgba(255, 255, 255, 0.1) 1px,
-        transparent 1px
-      ),
-      linear-gradient(
-        90deg,
-        rgba(255, 255, 255, 0.1) 1px,
-        transparent 1px
-      );
+      linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
 
     background-size: 45px 45px;
   }
@@ -2196,8 +2260,7 @@ const servicesUrl = `/#service`;
 
     border-radius: 32px;
 
-    box-shadow:
-      0 25px 60px rgba(15, 23, 42, 0.07);
+    box-shadow: 0 25px 60px rgba(15, 23, 42, 0.07);
   }
 
   .cta-decoration {
@@ -2211,12 +2274,11 @@ const servicesUrl = `/#service`;
 
     border-radius: 50%;
 
-    background:
-      radial-gradient(
-        circle,
-        rgba(37, 99, 235, 0.12),
-        transparent 70%
-      );
+    background: radial-gradient(
+      circle,
+      rgba(37, 99, 235, 0.12),
+      transparent 70%
+    );
   }
 
   .cta-content {
@@ -2810,11 +2872,7 @@ const servicesUrl = `/#service`;
           rgba(37, 99, 235, 0.13),
           transparent 35%
         ),
-        linear-gradient(
-          180deg,
-          #0b1220 0%,
-          #0f172a 100%
-        );
+        linear-gradient(180deg, #0b1220 0%, #0f172a 100%);
     }
 
     .hero-title {
